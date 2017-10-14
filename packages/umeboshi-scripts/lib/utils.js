@@ -66,6 +66,8 @@ const loadConfig = (filepath, resolvePaths = CONFIG_LOAD_PATHS) => {
 module.exports = {
     APP_PATH,
     LOCAL_PATH,
+    SCRIPTS_LOAD_PATHS,
+    CONFIG_LOAD_PATHS,
     toLocalPath,
     existsLocal,
     resolvePath,
