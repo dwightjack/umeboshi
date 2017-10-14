@@ -10,8 +10,8 @@
     "umeboshi"
   ],
   "peerDependencies": {
-    "webpack": "^3.7.0",
-    "jest": "^21.2.0"
+    "webpack": "^3.0.0",
+    "jest": "^21.0.0"
   },
   "dependencies": {
     "autoprefixer": "7.1.5",

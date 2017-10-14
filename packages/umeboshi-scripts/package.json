@@ -11,7 +11,7 @@
     "umeboshi"
   ],
   "peerDependencies": {
-    "webpack": "^3.7.0"
+    "webpack": "^3.0.0"
   },
   "dependencies": {
     "connect-history-api-fallback": "1.4.0",

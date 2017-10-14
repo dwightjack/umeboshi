@@ -15,7 +15,7 @@
   ],
   "peerDependencies": {
     "eslint": ">= 4.8.0",
-    "webpack": "^3.7.0"
+    "webpack": "^3.0.0"
   },
   "dependencies": {
     "babel-eslint": "8.0.1",
