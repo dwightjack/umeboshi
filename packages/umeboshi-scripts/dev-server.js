@@ -8,12 +8,12 @@ const { loadConfig, loadScript } = require('./lib/utils');
 const paths = loadConfig('paths.js');
 const localhost = loadConfig('hosts.js').local;
 const middlewares = loadScript('middlewares');
-const webpackConfig = Object.assign({}, loadConfig('webpack.server.js') || {});
+const webpackConfig = Object.assign({}, loadConfig('webpack/webpack.server.js') || {});
 const { devServer } = webpackConfig;
 
 webpackConfig.devServer = null;
 
-const config = merge.smart(webpackConfig, loadConfig('webpack.dev.js'));
+const config = merge.smart(webpackConfig, loadConfig('webpack/webpack.dev.js'));
 
 const compiler = webpack(config);
 
