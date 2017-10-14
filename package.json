@@ -1,8 +1,18 @@
 {
-	"private": true,
+  "name": "umeboshi",
+  "private": true,
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
 	"workspaces": [
 		"packages/*"
-	],
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "umeboshi"
+  ],
 	"devDependencies": {
 		"eslint": "4.8.0",
 		"eslint-config-airbnb-base": "12.0.2",
