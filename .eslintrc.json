@@ -23,10 +23,13 @@
         "arrow-parens": ["error", "always"],
         "spaced-comment": "off",
         "object-curly-spacing": ["error", "always"],
-        "import/no-unresolved": ["error", { "commonjs": true }],
-        "import/no-dynamic-require": "off",
         "global-require": "off",
         "eol-last": ["warn", "never"],
-        "max-len": "off"
+        "max-len": "off",
+        "prefer-template": "off",
+        "function-paren-newline": "off",
+
+        "import/no-dynamic-require": "off",
+        "import/no-unresolved": ["error", { "commonjs": true }]
     }
 }
