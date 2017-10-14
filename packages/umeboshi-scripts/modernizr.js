@@ -3,6 +3,7 @@ const fs = require('fs');
 const { loadConfig } = require('./lib/utils');
 
 const paths = loadConfig('paths.js');
+const fullConfig = loadConfig('modernizr.conf.json');
 
 const filePath = paths.toPath('dist.assets/vendors/modernizr');
 
@@ -21,23 +22,7 @@ if (process.env.NODE_ENV === 'production') {
         dest: false,
 
         // Based on default settings on http://modernizr.com/download/
-        options: [
-            'addTest',
-            'atRule',
-            'domPrefixes',
-            'hasEvent',
-            'html5shiv',
-            'html5printshiv',
-            'load',
-            'mq',
-            'prefixed',
-            'prefixes',
-            'prefixedCSS',
-            'setClasses',
-            'testAllProps',
-            'testProp',
-            'testStyles'
-        ],
+        options: fullConfig.options,
 
         // By default, source is uglified before saving
         uglify: true,
@@ -84,7 +69,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     //full build
     const modernizr = require('modernizr'); //eslint-disable-line global-require
-    const fullConfig = loadConfig('modernizr.conf.json');
+
     modernizr.build(fullConfig, (result) => {
         const destPath = filePath + '/modernizr.js';
         fs.writeFile(destPath, result, () => {
