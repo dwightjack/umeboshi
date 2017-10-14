@@ -25,7 +25,8 @@ const SCRIPTS_LOAD_PATHS = [
 
 const CONFIG_LOAD_PATHS = [
     path.resolve(APP_PATH, 'config'),
-    ...umeboshiConfigs.map((p) => path.resolve(APP_PATH, 'node_modules', p))
+    ...umeboshiConfigs.map((p) => path.resolve(APP_PATH, 'node_modules', p)),
+    path.resolve(APP_PATH, 'node_modules', 'umeboshi-config')
 ];
 
 const toLocalPath = (...paths) => path.join(APP_PATH, ...paths);
