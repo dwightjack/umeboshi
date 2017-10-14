@@ -1,10 +1,15 @@
 {
   "name": "umeboshi-scripts",
   "version": "0.1.0",
-  "description": "Base Scripts",
-  "main": "index.js",
+  "description": "Umeboshi build scripts",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-scripts",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "scripts",
+    "umeboshi"
+  ],
   "dependencies": {
     "connect-history-api-fallback": "1.4.0",
     "customizr": "1.0.0-alpha",
