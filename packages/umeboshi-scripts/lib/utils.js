@@ -47,14 +47,20 @@ const resolve = (filepath, paths) => resolvePath(
     paths.map((p) => path.join(p, filepath))
 );
 
-const loadScript = (filepath, resolvePaths = SCRIPTS_LOAD_PATHS) => {
+const load = (filepath, resolvePaths) => {
     const realpath = resolve(filepath, resolvePaths);
+    if (realpath === false) {
+        throw new Error(`Unable to load file ${filepath}. Resolve folders: ${resolvePaths.join(', ')}`);
+    }
     return require(realpath);
 };
 
+const loadScript = (filepath, resolvePaths = SCRIPTS_LOAD_PATHS) => {
+    return load(filepath, resolvePaths);
+};
+
 const loadConfig = (filepath, resolvePaths = CONFIG_LOAD_PATHS) => {
-    const realpath = resolve(filepath, resolvePaths);
-    return require(realpath);
+    return load(filepath, resolvePaths);
 };
 
 module.exports = {
