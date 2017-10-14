@@ -1,0 +1,21 @@
+{
+  "name": "babel-preset-umeboshi-base",
+  "version": "0.1.0",
+  "description": "Default Babel preset for Umeboshi",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi-base",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "main": "index.js",
+  "keywords": [
+    "preset",
+    "babel",
+    "umeboshi"
+  ],
+  "dependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.6.0",
+    "babel-preset-stage-2": "6.24.1"
+  }
+}
