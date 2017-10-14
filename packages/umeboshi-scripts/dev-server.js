@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const merge = require('webpack-merge');
 const address = require('ip').address();
 
 const { loadConfig, loadScript } = require('./lib/utils');
@@ -13,9 +12,7 @@ const { devServer } = webpackConfig;
 
 webpackConfig.devServer = null;
 
-const config = merge.smart(webpackConfig, loadConfig('webpack/webpack.dev.js'));
-
-const compiler = webpack(config);
+const compiler = webpack(webpackConfig);
 
 const server = new WebpackDevServer(compiler, Object.assign({
     after(app) {
@@ -23,7 +20,7 @@ const server = new WebpackDevServer(compiler, Object.assign({
             middlewares.forEach((middleware) => app.use(middleware));
         }
     }
-}, (devServer || {}), { stats: config.stats }));
+}, (devServer || {}), { stats: webpackConfig.stats }));
 
 server.app.get('*', (req, res) => {
     compiler.outputFileSystem.readFile(paths.toAbsPath('dist.root') + '/index.html', (err, file) => {
