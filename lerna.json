@@ -9,10 +9,7 @@
   "commands": {
     "publish": {
       "ignore": [
-        "*.md",
-        "test/**",
-        "codemods/**",
-        "experimental/**"
+        "test/**"
       ]
     }
   }
