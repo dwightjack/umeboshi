@@ -1,10 +1,10 @@
 {
-  "name": "babel-preset-umeboshi-base",
+  "name": "babel-preset-umeboshi",
   "version": "0.1.0",
   "description": "Default Babel preset for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
-  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi-base",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi",
   "bugs": "https://github.com/dwightjack/umeboshi/issues",
   "main": "index.js",
   "keywords": [
