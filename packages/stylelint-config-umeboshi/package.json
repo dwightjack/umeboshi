@@ -1,0 +1,23 @@
+{
+  "name": "stylelint-config-umeboshi",
+  "version": "0.1.0",
+  "description": "Default Stylelint config for Umeboshi",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/stylelint-config-umeboshi",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "umeboshi"
+  ],
+  "dependencies": {
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-order": "~0.7.0",
+    "stylelint-scss": "~2.1.0"
+  },
+  "peerDependencies": {
+    "stylelint": "^8.0.0"
+  }
+}
