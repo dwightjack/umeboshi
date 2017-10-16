@@ -36,7 +36,7 @@
       "!**/__mocks__/**",
       "!**/__tests__/**"
     ],
-    "collectCoverage": true,
+    "collectCoverage": false,
     "testEnvironment": "node",
     "testMatch": [
       "**/*.test.js"
