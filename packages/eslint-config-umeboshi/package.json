@@ -24,6 +24,9 @@
     "eslint-plugin-import": "2.7.0",
     "umeboshi-scripts": "~0.1.0"
   },
+  "devDependencies": {
+    "eslint": ">= 4.8.0"
+  },
   "engines": {
     "node": ">= 6.9.0"
   }
