@@ -1,0 +1,27 @@
+{
+  "name": "babel-preset-umeboshi-react",
+  "version": "0.1.1",
+  "description": "React Babel preset for Umeboshi",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi-react",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "main": "index.js",
+  "keywords": [
+    "preset",
+    "babel",
+    "umeboshi",
+    "react"
+  ],
+  "dependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-react-constant-elements": "6.23.0",
+    "babel-plugin-transform-react-inline-elements": "6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.10",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.6.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
+    "babel-preset-umeboshi": "^0.1.0"
+  }
+}
