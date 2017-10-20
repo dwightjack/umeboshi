@@ -10,7 +10,7 @@ const middlewares = loadScript('middlewares');
 const webpackConfig = Object.assign({}, loadConfig('webpack/webpack.server.js') || {});
 const { devServer } = webpackConfig;
 
-webpackConfig.devServer = null;
+delete webpackConfig.devServer;
 
 const compiler = webpack(webpackConfig);
 
