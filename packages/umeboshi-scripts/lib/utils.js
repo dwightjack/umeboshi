@@ -44,7 +44,7 @@ const resolvePath = (...paths) => {
 };
 
 const resolve = (filepath, paths) => resolvePath(
-    paths.map((p) => path.join(p, filepath))
+    ...paths.map((p) => path.join(p, filepath))
 );
 
 const load = (filepath, resolvePaths) => {
