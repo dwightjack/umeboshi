@@ -1,0 +1,22 @@
+{
+  "name": "umeboshi-config-react",
+  "version": "0.1.0",
+  "description": "Umeboshi React configuration files",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-config-react",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "umeboshi",
+    "config",
+    "react"
+  ],
+  "peerDependencies": {
+    "jest": "^21.0.0",
+    "webpack": "^3.0.0"
+  },
+  "dependencies": {
+    "react-hot-loader": "^3.1.0",
+    "umeboshi-config": "^0.1.0"
+  }
+}
