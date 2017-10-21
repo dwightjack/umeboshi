@@ -1,24 +1,39 @@
-const presetEnv = require('babel-preset-env');
-const presetStage2 = require('babel-preset-stage-2');
-const transformRuntime = require('babel-plugin-transform-runtime');
-
 const isTest = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
 
-module.exports = {
-    presets: [
-        [presetEnv, {
+let presetEnv;
+
+if (isTest) {
+
+    presetEnv = [
+        require('babel-preset-env').default, {
+            targets: {
+                node: 'current'
+            }
+        }
+    ];
+
+} else {
+    presetEnv = [
+        require.resolve('babel-preset-env'), {
             modules: false,
             loose: true,
             useBuiltIns: 'entry',
             targets: {
                 browsers: ['> 1%', 'last 2 versions', 'not ie < 11']
             }
-        }],
-        presetStage2
+        }
+    ];
+}
+
+module.exports = {
+    presets: [
+        presetEnv,
+        require.resolve('babel-preset-stage-2')
     ],
 
     plugins: [
-        (isTest ? require('babel-plugin-transform-es2015-modules-commonjs') : null),
-        [transformRuntime, { polyfill: false, regenerator: false }]
+        (isTest ? require.resolve('babel-plugin-transform-es2015-modules-commonjs') : null),
+        (isTest ? require.resolve('babel-plugin-dynamic-import-node') : null),
+        [require.resolve('babel-plugin-transform-runtime'), { polyfill: false, regenerator: false }]
     ].filter(Boolean)
 };
