@@ -15,5 +15,7 @@ module.exports = Object.assign({}, config, {
 
     plugins: (config.plugins || []).concat([
         new webpack.HotModuleReplacementPlugin()
-    ])
+    ]),
+
+    devServer: Object.assign({}, config.devServer, { hot: true })
 });
