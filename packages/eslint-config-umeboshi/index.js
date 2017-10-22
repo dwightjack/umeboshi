@@ -1,4 +1,4 @@
-const { resolve, CONFIG_LOAD_PATHS } = require('umeboshi-scripts/lib/utils');
+const { resolve, CONFIG_LOAD_PATHS } = require('umeboshi-dev-utils');
 
 const webpackConfPath = resolve('webpack/webpack.base.js', CONFIG_LOAD_PATHS);
 

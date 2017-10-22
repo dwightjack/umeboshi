@@ -48,7 +48,7 @@ describe('eslint-config-umeboshi', () => {
 
         beforeEach(() => {
             jest.resetModules();
-            utils = require('umeboshi-scripts/lib/utils');
+            utils = require('umeboshi-dev-utils');
         });
 
         it('should try to resolve webpack base config', () => {
