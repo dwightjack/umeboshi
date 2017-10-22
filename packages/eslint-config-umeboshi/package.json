@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Default ESLint config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "eslint-config-airbnb-base": "12.0.2",
     "eslint-import-resolver-webpack": "0.8.3",
     "eslint-plugin-import": "^2.7.0",
-    "umeboshi-dev-utils": "^0.1.0"
+    "umeboshi-dev-utils": "^0.1.4"
   },
   "devDependencies": {
     "eslint": ">= 4.8.0"
