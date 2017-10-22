@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
-const { loadConfig } = require('umeboshi-scripts/lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const webpackConf = loadConfig('webpack/webpack.base.js');
 const paths = loadConfig('paths.js');

@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { APP_PATH } = require('umeboshi-scripts/lib/utils');
+const { APP_PATH } = require('umeboshi-dev-utils');
 
 module.exports = {
     verbose: true,

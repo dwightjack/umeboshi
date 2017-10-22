@@ -1,5 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { loadConfig } = require('umeboshi-scripts/lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 

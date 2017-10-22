@@ -1,4 +1,4 @@
-const { loadConfig } = require('umeboshi-scripts/lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 

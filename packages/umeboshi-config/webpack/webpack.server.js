@@ -3,7 +3,7 @@
  */
 const address = require('ip').address();
 const merge = require('webpack-merge');
-const { loadConfig } = require('umeboshi-scripts/lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 const localhost = loadConfig('hosts.js').local;

@@ -1,7 +1,7 @@
 const path = require('path');
 const get = require('lodash/get');
 const glob = require('glob');
-const { APP_PATH } = require('umeboshi-scripts/lib/utils');
+const { APP_PATH } = require('umeboshi-dev-utils');
 
 const paths = {
 

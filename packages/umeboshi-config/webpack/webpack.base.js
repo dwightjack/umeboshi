@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const { loadConfig } = require('umeboshi-scripts/lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 
