@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const address = require('ip').address();
 
-const { loadConfig, loadScript } = require('./lib/utils');
+const { loadConfig, loadScript } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 const localhost = loadConfig('hosts.js').local;

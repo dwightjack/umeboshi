@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const fs = require('fs');
-const { loadConfig } = require('./lib/utils');
+const { loadConfig } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 const fullConfig = loadConfig('modernizr.conf.json');
