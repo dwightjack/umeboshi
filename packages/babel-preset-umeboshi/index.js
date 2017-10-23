@@ -1,39 +1,49 @@
-const isTest = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
+module.exports = (context, opts = {}) => {
 
-let presetEnv;
+    const isTest = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
 
-if (isTest) {
+    let presetEnv;
 
-    presetEnv = [
-        require('babel-preset-env').default, {
-            targets: {
-                node: 'current'
+    if (isTest) {
+
+        presetEnv = [
+            require('babel-preset-env').default, {
+                targets: {
+                    node: 'current'
+                }
             }
-        }
-    ];
+        ];
 
-} else {
-    presetEnv = [
-        require.resolve('babel-preset-env'), {
-            modules: false,
-            loose: true,
-            useBuiltIns: 'entry',
-            targets: {
-                browsers: ['> 1%', 'last 2 versions', 'not ie < 11']
+    } else {
+        presetEnv = [
+            require.resolve('babel-preset-env'), {
+                modules: false,
+                loose: true,
+                useBuiltIns: 'entry',
+                targets: {
+                    browsers: ['> 1%', 'last 2 versions', 'not ie < 11']
+                }
             }
-        }
-    ];
-}
+        ];
+    }
 
-module.exports = {
-    presets: [
-        presetEnv,
-        require.resolve('babel-preset-stage-2')
-    ],
+    const { asyncImport, async } = Object.assign({
+        async: false,
+        asyncImport: false
+    }, opts);
 
-    plugins: [
-        (isTest ? require.resolve('babel-plugin-transform-es2015-modules-commonjs') : null),
-        (isTest ? require.resolve('babel-plugin-dynamic-import-node') : null),
-        [require.resolve('babel-plugin-transform-runtime'), { polyfill: false, regenerator: false }]
-    ].filter(Boolean)
+    return {
+        presets: [
+            presetEnv,
+            require.resolve('babel-preset-stage-2')
+        ],
+
+        plugins: [
+            (isTest ? require.resolve('babel-plugin-transform-es2015-modules-commonjs') : null),
+            (isTest ? require.resolve('babel-plugin-dynamic-import-node') : null),
+            [require.resolve('babel-plugin-transform-runtime'), { polyfill: false, regenerator: (asyncImport || async) }],
+            ((asyncImport || async) ? [require.resolve('babel-plugin-transform-regenerator'), { async: false }] : null)
+        ].filter(Boolean)
+    };
+
 };

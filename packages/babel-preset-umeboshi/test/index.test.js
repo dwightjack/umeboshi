@@ -1,6 +1,4 @@
-const preset = require('../index');
-const env = require('babel-preset-env');
-const stage2 = require('babel-preset-stage-2');
+const presetFn = require('../index');
 
 const recurseMatch = (arr, matcher) => {
     for (let i = 0; i < arr.length; i += 1) {
@@ -28,20 +26,51 @@ const recurseFind = (arr, match) => {
 
 describe('babel-preset-umeboshi', () => {
 
+    let presets;
+
 
     describe('presets', () => {
 
+        beforeEach(() => {
+            process.env.NODE_ENV = 'development';
+        });
+
         it('has `env` as first preset', () => {
-            expect(preset.presets[0][0]).toBe(env);
+            expect(presets[0][0]).toBe(require.resolve('babel-preset-env'));
         });
 
         it('enforces useBuiltIns option to `entry`', () => {
-            const options = preset.presets[0][1];
+
+            const options = presets[0][1];
             expect(options).toMatchObject({ useBuiltIns: 'entry' });
         });
 
         it('has `stage-2` preset as 2nd entry', () => {
-            expect(preset.presets[1]).toBe(stage2);
+            expect(presets[1]).toBe(require.resolve('babel-preset-stage-2'));
+        });
+
+        afterEach(() => {
+            process.env.NODE_ENV = 'test';
+        });
+    });
+
+    describe('NODE_ENV=test presets', () => {
+
+        it('should set env preset to current node on test', () => {
+            process.env.NODE_ENV = 'test';
+            const { presets } = presetFn(); //eslint-disable-line no-shadow;
+            expect(presets[0][1].targets).toEqual({ node: 'current' });
+        });
+
+        it('should set env preset to current node on test when BABEL_ENV=test', () => {
+            process.env.NODE_ENV = 'development';
+            process.env.BABEL_ENV = 'test';
+
+            const { presets } = presetFn(); //eslint-disable-line no-shadow;
+            expect(presets[0][1].targets).toEqual({ node: 'current' });
+
+            process.env.NODE_ENV = 'test';
+
         });
     });
 
@@ -51,8 +80,8 @@ describe('babel-preset-umeboshi', () => {
 
 
         beforeEach(() => {
-            jest.resetModules();
-            commonJSTransform = require('babel-plugin-transform-es2015-modules-commonjs');
+            process.env.NODE_ENV = 'development';
+            commonJSTransform = require.resolve('babel-plugin-transform-es2015-modules-commonjs');
         });
 
         afterEach(() => {
@@ -62,19 +91,19 @@ describe('babel-preset-umeboshi', () => {
 
         it('DOES NOT add `transform-es2015-modules-commonjs` plugin on `NODE_ENV != "test"`', () => {
             process.env.NODE_ENV = 'development';
-            const { plugins } = require('../index');
+            const { plugins } = presetFn();
             expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(false);
         });
 
         it('adds `transform-es2015-modules-commonjs` plugin on `BABEL_ENV != "test"`', () => {
             process.env.NODE_ENV = 'development';
             process.env.BABEL_ENV = 'test';
-            const { plugins } = require('../index');
-            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).not.toBe(false);
+            const { plugins } = presetFn();
+            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(true);
         });
 
         it('adds `transform-es2015-modules-commonjs` plugin on test environments', () => {
-            const { plugins } = require('../index');
+            const { plugins } = presetFn();
             expect(recurseMatch(plugins, (i) => i === commonJSTransform)).not.toBe(false);
         });
 
@@ -86,10 +115,15 @@ describe('babel-preset-umeboshi', () => {
         let match;
 
         beforeEach(() => {
-            jest.resetModules();
-            runtime = require('babel-plugin-transform-runtime');
-            const { plugins } = require('../index');
+            process.env.NODE_ENV = 'development';
+            runtime = require.resolve('babel-plugin-transform-runtime');
+            const { plugins } = presetFn();
             match = recurseFind(plugins, runtime);
+        });
+
+        afterEach(() => {
+            //jest default
+            process.env.NODE_ENV = 'test';
         });
 
         it('should have runtime-plugin with options', () => {
