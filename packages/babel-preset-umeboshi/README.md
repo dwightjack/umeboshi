@@ -32,3 +32,19 @@ Add the preset to `.babelrc` file in your project's root folder.
   "presets": ["umeboshi"]
 }
 ```
+
+## Preset options
+
+By default both `async/await` and async `import()` are supported. Anyway in order to support older environments the preset needs to transpile them to generators and include the related runtime. This will result in an increased bundle size.  
+If you plan not to use such features, you can disable them with the following setup:
+
+```json
+{
+  "presets": [
+      ["umeboshi", {
+          async: false,
+          asyncImport: false
+    }]
+  ]
+}
+```
