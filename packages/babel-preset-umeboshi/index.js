@@ -28,8 +28,8 @@ module.exports = (context, opts = {}) => {
     }
 
     const { asyncImport, async } = Object.assign({
-        async: false,
-        asyncImport: false
+        async: true,
+        asyncImport: true
     }, opts);
 
     return {
