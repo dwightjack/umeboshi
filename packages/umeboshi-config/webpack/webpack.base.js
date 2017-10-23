@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const { loadConfig } = require('umeboshi-dev-utils');
+const { loadConfig, APP_PATH } = require('umeboshi-dev-utils');
 
 const paths = loadConfig('paths.js');
 
@@ -58,7 +58,7 @@ module.exports = {
                     module.resource &&
                     /\.js$/.test(module.resource) &&
                     module.resource.indexOf(
-                        path.join(__dirname, '../node_modules')
+                        path.join(APP_PATH, 'node_modules')
                     ) === 0
                 );
             }
