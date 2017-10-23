@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const history = require('connect-history-api-fallback');
 const address = require('ip').address();
-const { loadScript, loadConfig, APP_PATH } = require('');
+const { loadScript, loadConfig, APP_PATH } = require('umeboshi-dev-utils');
 
 const middlewares = loadScript('middlewares');
 const localhost = loadConfig('hosts.js').local;
