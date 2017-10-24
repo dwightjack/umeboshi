@@ -26,15 +26,6 @@ module.exports = {
         __PRODUCTION__: true
     },
 
-    parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-        ecmaFeatures: {
-            experimentalObjectRestSpread: true,
-            jsx: false
-        }
-    },
-
     rules: {
         indent: [2, 4],
         'no-multiple-empty-lines': [2, { max: 3 }],
