@@ -17,12 +17,12 @@
   "peerDependencies": {
     "eslint-config-umeboshi": "^0.1.0"
   },
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "devDependencies": {
     "eslint": ">= 4.8.0",
     "eslint-plugin-import": "^2.7.0"
-  },
-  "engines": {
-    "node": ">= 6.9.0"
   },
   "dependencies": {
     "eslint-config-airbnb": "^16.1.0",

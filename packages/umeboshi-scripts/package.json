@@ -10,6 +10,9 @@
     "scripts",
     "umeboshi"
   ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "peerDependencies": {
     "webpack": "^3.0.0"
   },

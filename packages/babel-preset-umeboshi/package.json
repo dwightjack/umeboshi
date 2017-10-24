@@ -12,6 +12,9 @@
     "babel",
     "umeboshi"
   ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "dependencies": {
     "babel-plugin-dynamic-import-node": "1.1.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",

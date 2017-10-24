@@ -10,6 +10,9 @@
     "utils",
     "umeboshi"
   ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "scripts": {
     "docs": "documentation build index.js -f md -o docs/index.md"
   },

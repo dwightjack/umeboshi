@@ -12,6 +12,9 @@
     "stylelint-config",
     "umeboshi"
   ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "dependencies": {
     "stylelint-config-standard": "^17.0.0",
     "stylelint-order": "~0.7.0",

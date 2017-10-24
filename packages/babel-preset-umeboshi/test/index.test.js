@@ -58,7 +58,7 @@ describe('babel-preset-umeboshi', () => {
 
         it('should set env preset to current node on test', () => {
             process.env.NODE_ENV = 'test';
-            const { presets } = presetFn(); //eslint-disable-line no-shadow;
+            const { presets } = presetFn(); //eslint-disable-line no-shadow
             expect(presets[0][1].targets).toEqual({ node: 'current' });
         });
 
@@ -66,7 +66,7 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'development';
             process.env.BABEL_ENV = 'test';
 
-            const { presets } = presetFn(); //eslint-disable-line no-shadow;
+            const { presets } = presetFn(); //eslint-disable-line no-shadow
             expect(presets[0][1].targets).toEqual({ node: 'current' });
 
             process.env.NODE_ENV = 'test';

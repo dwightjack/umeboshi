@@ -11,6 +11,9 @@
     "config",
     "react"
   ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "peerDependencies": {
     "jest": "^21.0.0",
     "webpack": "^3.0.0"
