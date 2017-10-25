@@ -19,7 +19,7 @@
     "webpack": "^3.0.0"
   },
   "dependencies": {
-    "react-hot-loader": "^3.1.0",
+    "react-hot-loader": "~3.1.0",
     "umeboshi-config": "^0.1.6"
   }
 }
