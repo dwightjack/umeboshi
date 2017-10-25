@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-umeboshi",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Default Babel preset for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
