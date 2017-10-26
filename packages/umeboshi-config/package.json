@@ -19,7 +19,6 @@
   "dependencies": {
     "autoprefixer": "7.1.5",
     "babel-core": "6.26.0",
-    "babel-jest": "21.2.0",
     "babel-loader": "7.1.2",
     "css-loader": "0.28.7",
     "eventsource-polyfill": "0.9.6",
