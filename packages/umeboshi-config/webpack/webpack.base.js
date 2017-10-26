@@ -8,7 +8,9 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 const srcPath = paths.toAbsPath('src.assets');
 const destPath = paths.toAbsPath('dist.assets');
 
-const { loaders } = loadConfig('webpack/style-loaders.js');
+const {
+    css, scss, postcss, resolveUrl, createLoader
+} = loadConfig('webpack/style-loaders.js');
 
 module.exports = {
     context: process.cwd(),
@@ -85,7 +87,7 @@ module.exports = {
             }, {
                 test: /\.(scss|css)$/,
                 exclude: /(node_modules|vendors)/,
-                use: loaders
+                use: createLoader([css, postcss, resolveUrl, scss])
             }, {
                 test: /\.(eot|svg|ttf|woff|woff2|jpe?g|png|gif)$/,
                 include: [

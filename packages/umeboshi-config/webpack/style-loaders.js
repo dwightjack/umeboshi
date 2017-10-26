@@ -20,7 +20,7 @@ const postcss = { loader: 'postcss-loader', options: { sourceMap: true } };
 
 const resolveUrl = { loader: 'resolve-url-loader', options: { sourceMap: true } };
 
-const sass = {
+const scss = {
     loader: 'sass-loader',
     options: {
         sourceMap: true,
@@ -33,22 +33,17 @@ const sass = {
     }
 };
 
-const loaders = [
-    css,
-    postcss,
-    resolveUrl,
-    sass
-];
+const createLoader = (use, fallback = 'style-loader') => {
+    return (PRODUCTION ? ExtractTextPlugin.extract({
+        fallback,
+        use
+    }) : [fallback, ...use]);
+};
 
 module.exports = {
-
-    loaders: (PRODUCTION ? ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: loaders
-    }) : ['style-loader', ...loaders]),
-
+    createLoader,
     css,
     postcss,
     resolveUrl,
-    sass
+    scss
 };
