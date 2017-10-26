@@ -1,20 +1,15 @@
-const eslintConfig = require('eslint-config-umeboshi');
+const {
+    globals, parser, settings, rules, env
+} = require('eslint-config-umeboshi');
 
-module.exports = Object.assign({}, eslintConfig, {
+module.exports = {
+
+    parser,
+    env,
+    settings,
+    globals,
+
     extends: ['airbnb'],
-
-    plugins: [
-        'react'
-    ],
-
-    parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-        ecmaFeatures: {
-            experimentalObjectRestSpread: true,
-            jsx: true
-        }
-    },
 
     rules: Object.assign({
         'import/extensions': 0,
@@ -24,5 +19,6 @@ module.exports = Object.assign({}, eslintConfig, {
         'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
         'react/prefer-stateless-function': 0,
         'jsx-a11y/html-has-lang': 0
-    }, eslintConfig.rules)
-});
+    }, rules)
+
+};
