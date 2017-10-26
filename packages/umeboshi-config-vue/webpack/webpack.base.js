@@ -7,31 +7,33 @@ const { localIdentName, camelCase } = css.options;
 
 module.exports = Object.assign({}, config, {
 
-    rules: config.rules.concat([
-        {
-            test: /\.vue$/,
-            include: [
-                paths.toAbsPath('src.assets/js')
-            ],
-            loader: 'vue-loader',
-            options: {
-                loaders: vueLoaders,
-                preserveWhitespace: false,
-                cssModules: {
-                    camelCase,
-                    localIdentName,
-                    importLoaders: 1,
-                    sourceMap: true
-                },
-                transformToRequire: {
-                    video: 'src',
-                    source: 'src',
-                    img: 'src',
-                    image: 'xlink:href'
+    module: {
+        rules: config.module.rules.concat([
+            {
+                test: /\.vue$/,
+                include: [
+                    paths.toAbsPath('src.assets/js')
+                ],
+                loader: 'vue-loader',
+                options: {
+                    loaders: vueLoaders,
+                    preserveWhitespace: false,
+                    cssModules: {
+                        camelCase,
+                        localIdentName,
+                        importLoaders: 1,
+                        sourceMap: true
+                    },
+                    transformToRequire: {
+                        video: 'src',
+                        source: 'src',
+                        img: 'src',
+                        image: 'xlink:href'
+                    }
                 }
             }
-        }
-    ]),
+        ])
+    },
 
     resolve: Object.assign({
         extensions: ['.js', '.vue', '.json']
