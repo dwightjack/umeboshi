@@ -1,0 +1,25 @@
+{
+  "name": "stylelint-config-umeboshi-vue",
+  "version": "0.1.0",
+  "description": "Vue.js Stylelint config for Umeboshi",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/stylelint-config-umeboshi-vue",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "umeboshi",
+    "vue"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "dependencies": {
+    "stylelint-config-umeboshi": "^0.1.0"
+  },
+  "peerDependencies": {
+    "stylelint": "^8.2.0"
+  }
+}
