@@ -8,6 +8,6 @@ module.exports = Object.assign(config, {
     },
     transform: {
         '^.+\\.js$': 'babel-jest',
-        '.*\\.(vue)$': 'vue-jest'
+        '.*\\.(vue)$': 'jest-vue-preprocessor'
     }
 });
