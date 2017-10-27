@@ -35,6 +35,8 @@ module.exports = {
         'eol-last': ['warn', 'never'],
         'max-len': 'off',
         'prefer-template': 'off',
-        'function-paren-newline': 'off'
+        'function-paren-newline': 'off',
+
+        'node/no-unpublished-require': 'off'
     }
 };
