@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const merge = require('webpack-merge');
 const { loadConfig } = require('umeboshi-dev-utils');
 
@@ -29,10 +28,6 @@ module.exports = merge.smart(webpackConf, {
             filename: paths.toAbsPath('dist.root') + '/index.html',
             modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
             chunksSortMode: 'dependency'
-        }),
-        new ScriptExtHtmlWebpackPlugin({
-            //@see https://calendar.perfplanet.com/2016/prefer-defer-over-async/
-            defaultAttribute: 'defer'
         })
     ]
 });

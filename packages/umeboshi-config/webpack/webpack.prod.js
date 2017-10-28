@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const { loadConfig } = require('umeboshi-dev-utils');
@@ -57,10 +56,6 @@ module.exports = merge.smart(webpackConf, {
             modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
             inject: true,
             chunksSortMode: 'dependency'
-        }),
-        new ScriptExtHtmlWebpackPlugin({
-            //@see https://calendar.perfplanet.com/2016/prefer-defer-over-async/
-            defaultAttribute: 'defer'
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
