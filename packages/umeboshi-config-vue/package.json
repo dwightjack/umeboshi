@@ -17,7 +17,8 @@
   "peerDependencies": {
     "avoriaz": "~6.0.0",
     "jest": "^21.0.0",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "css-loader": "^0.28.7"
   },
   "dependencies": {
     "babel-jest": "~21.2.0",
