@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-vue",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Umeboshi Vue.js configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -16,9 +16,9 @@
   },
   "peerDependencies": {
     "avoriaz": "~6.0.0",
+    "css-loader": "^0.28.7",
     "jest": "^21.0.0",
-    "webpack": "^3.0.0",
-    "css-loader": "^0.28.7"
+    "webpack": "^3.0.0"
   },
   "dependencies": {
     "babel-jest": "~21.2.0",
