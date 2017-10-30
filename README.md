@@ -1,4 +1,4 @@
-# umeboshi development ecosystem (WIP)
+# umeboshi development ecosystem
 
 > Development packages and configurations for Umeboshi templates
 
@@ -8,6 +8,8 @@
 * npm or [yarn](https://yarnpkg.com/lang/en/)
 
 ## Installation and usage
+
+These packages are used by [umeboshi-cli](https://github.com/dwightjack/umeboshi-cli) official templates, but could be used as individual packages as well.
 
 See each package under the `packages` folder for installation and usage documentation.
 
