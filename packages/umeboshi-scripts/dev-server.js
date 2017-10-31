@@ -22,8 +22,9 @@ const server = new WebpackDevServer(compiler, Object.assign({
     }
 }, (devServer || {}), { stats: webpackConfig.stats }));
 
+const templatePath = paths.toAbsPath('dist.root/index.html');
 server.app.get('*', (req, res) => {
-    compiler.outputFileSystem.readFile(paths.toAbsPath('dist.root') + '/index.html', (err, file) => {
+    compiler.outputFileSystem.readFile(templatePath, (err, file) => {
         if (err) {
             res.sendStatus(404);
         } else {

@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
 const merge = require('webpack-merge');
 const { loadConfig } = require('umeboshi-dev-utils');
 
@@ -10,14 +11,14 @@ const paths = loadConfig('paths.js');
 module.exports = merge.smart(webpackConf, {
     entry: {
         app: [
-            './' + paths.toPath('src.assets/styles') + '/index.js',
-            './' + paths.toPath('src.assets/js') + '/app.js'
+            `.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`,
+            `.${path.sep}/${paths.toPath('./src.assets/js/app.js')}`
         ]
     },
 
     output: {
-        filename: paths.js + '/[name].[chunkhash].js',
-        chunkFilename: paths.js + '/[name].[chunkhash].chunk.js'
+        filename: paths.toPath('js/[name].[chunkhash].js'),
+        chunkFilename: paths.toPath('js/[name].[chunkhash].chunk.js')
     },
 
     plugins: [
@@ -35,12 +36,12 @@ module.exports = merge.smart(webpackConf, {
         }),
 
         new ExtractTextPlugin({
-            filename: paths.styles + '/[name].[contenthash:10].css'
+            filename: paths.toPath('styles/[name].[contenthash:10].css')
         }),
 
         new HtmlWebpackPlugin({
-            template: paths.toPath('src.root/templates') + '/index.ejs',
-            filename: paths.toAbsPath('dist.root') + '/index.html',
+            template: paths.toPath('src.root/templates/index.ejs'),
+            filename: paths.toAbsPath('dist.root/index.html'),
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,

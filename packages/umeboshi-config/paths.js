@@ -30,7 +30,14 @@ const paths = {
 
 module.exports = paths;
 
-const translatePath = (pathMatch) => pathMatch.split('/').map((frag) => get(paths, frag, frag));
+const EXCLUDE_REGEXP = /\.(js|css|scss|html|ejs|\*)$/;
+
+const translatePath = (pathMatch) => (
+    pathMatch.split('/').map((frag) => (
+        //exclude common file extensions from path resolution
+        (EXCLUDE_REGEXP.test(frag) || frag === '.') ? frag : get(paths, frag, frag))
+    )
+);
 
 module.exports.toPath = (pathMatch) => path.join(...translatePath(pathMatch));
 
