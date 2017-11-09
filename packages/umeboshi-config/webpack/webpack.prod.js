@@ -36,6 +36,7 @@ module.exports = merge.smart(webpackConf, {
         }),
 
         new ExtractTextPlugin({
+            allChunks: true,
             filename: paths.toPath('styles/[name].[contenthash:10].css')
         }),
 
