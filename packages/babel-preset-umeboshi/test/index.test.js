@@ -26,26 +26,27 @@ const recurseFind = (arr, match) => {
 
 describe('babel-preset-umeboshi', () => {
 
-    let presets;
-
 
     describe('presets', () => {
+
 
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
         });
 
         it('has `env` as first preset', () => {
+            const { presets } = presetFn();
             expect(presets[0][0]).toBe(require.resolve('babel-preset-env'));
         });
 
         it('enforces useBuiltIns option to `entry`', () => {
-
+            const { presets } = presetFn();
             const options = presets[0][1];
             expect(options).toMatchObject({ useBuiltIns: 'entry' });
         });
 
         it('has `stage-2` preset as 2nd entry', () => {
+            const { presets } = presetFn();
             expect(presets[1]).toBe(require.resolve('babel-preset-stage-2'));
         });
 
@@ -58,7 +59,7 @@ describe('babel-preset-umeboshi', () => {
 
         it('should set env preset to current node on test', () => {
             process.env.NODE_ENV = 'test';
-            const { presets } = presetFn(); //eslint-disable-line no-shadow
+            const { presets } = presetFn();
             expect(presets[0][1].targets).toEqual({ node: 'current' });
         });
 
@@ -66,7 +67,7 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'development';
             process.env.BABEL_ENV = 'test';
 
-            const { presets } = presetFn(); //eslint-disable-line no-shadow
+            const { presets } = presetFn();
             expect(presets[0][1].targets).toEqual({ node: 'current' });
 
             process.env.NODE_ENV = 'test';
@@ -91,6 +92,7 @@ describe('babel-preset-umeboshi', () => {
 
         it('DOES NOT add `transform-es2015-modules-commonjs` plugin on `NODE_ENV != "test"`', () => {
             process.env.NODE_ENV = 'development';
+            process.env.BABEL_ENV = '';
             const { plugins } = presetFn();
             expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(false);
         });
@@ -134,8 +136,30 @@ describe('babel-preset-umeboshi', () => {
             expect(match[0]).toBe(runtime);
         });
 
-        it('polyfill and generator runtime should be disabled', () => {
-            expect(match[1]).toEqual({ polyfill: false, regenerator: false });
+        it('polyfill is disabled', () => {
+            expect(match[1].polyfill).toBe(false);
+        });
+
+        it('regenerator is on by default', () => {
+            expect(match[1].regenerator).toBe(true);
+        });
+
+        it('can disable regenerator with a configuration flag', () => {
+            const { plugins } = presetFn(null, { async: false, asyncImport: false });
+            const [, matched] = recurseFind(plugins, runtime);
+            expect(matched.regenerator).toBe(false);
+        });
+
+        it('includes regenerator if `async` option is true', () => {
+            const { plugins } = presetFn(null, { async: true, asyncImport: false });
+            const [, matched] = recurseFind(plugins, runtime);
+            expect(matched.regenerator).toBe(true);
+        });
+
+        it('includes regenerator if `asyncImport` option is true', () => {
+            const { plugins } = presetFn(null, { async: false, asyncImport: true });
+            const [, matched] = recurseFind(plugins, runtime);
+            expect(matched.regenerator).toBe(true);
         });
     });
 
