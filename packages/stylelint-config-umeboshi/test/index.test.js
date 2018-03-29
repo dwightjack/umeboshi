@@ -1,9 +1,30 @@
+const pkg = require('../package.json');
+
 describe('stylelint-config-umeboshi', () => {
 
     let config;
 
     beforeEach(() => {
         config = require('../index');
+    });
+
+    describe('Dependencies', () => {
+
+        test('stylelint is a peer', () => {
+            expect(pkg).toHaveProperty('peerDependencies.stylelint');
+        });
+
+        [
+            'stylelint-config-standard',
+            'stylelint-order',
+            'stylelint-scss'
+        ].forEach((key) => {
+            test(`${key} is a dependency`, () => {
+                expect(pkg.dependencies).toHaveProperty(key);
+            });
+        });
+
+
     });
 
     describe('Features', () => {
