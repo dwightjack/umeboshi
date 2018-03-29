@@ -8,11 +8,11 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'development';
         });
 
-        it('has `umeboshi` as first preset. Without options', () => {
+        test('has `umeboshi` as first preset. Without options', () => {
             expect(preset().presets[0]).toBe(require.resolve('babel-preset-umeboshi'));
         });
 
-        it('has `react` as second preset. Without options', () => {
+        test('has `react` as second preset. Without options', () => {
             expect(preset().presets[1]).toBe(require.resolve('babel-preset-react'));
         });
 
@@ -32,12 +32,12 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'test';
         });
 
-        it('DOES NOT have any plugin in development', () => {
+        test('DOES NOT have any plugin in development', () => {
             process.env.NODE_ENV = 'development';
             expect(preset().plugins.length).toBe(0);
         });
 
-        it('adds 3 plugins in production', () => {
+        test('adds 3 plugins in production', () => {
             process.env.NODE_ENV = 'production';
 
             const expected = [

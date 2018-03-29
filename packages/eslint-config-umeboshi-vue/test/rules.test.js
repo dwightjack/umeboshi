@@ -6,7 +6,7 @@ describe('eslint-config-vue/rules', () => {
         rules = require('../rules');
     });
 
-    it('should allow extension omission for .js and .vue files', () => {
+    test('should allow extension omission for .js and .vue files', () => {
         const expected = [
             'error',
             'always',
@@ -15,7 +15,7 @@ describe('eslint-config-vue/rules', () => {
         expect(rules['import/extensions']).toEqual(expected);
     });
 
-    it('should disable `eol-last` rule', () => {
+    test('should disable `eol-last` rule', () => {
         expect(rules['eol-last']).toBe(0);
     });
 

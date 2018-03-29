@@ -25,23 +25,23 @@ describe('eslint-config-umeboshi', () => {
 
     describe('Features', () => {
 
-        it('shares env with `eslint-config-umeboshi`', () => {
+        test('shares env with `eslint-config-umeboshi`', () => {
             expect(config.env).toBe(baseConfig.env);
         });
 
-        it('shares parser with `eslint-config-umeboshi`', () => {
+        test('shares parser with `eslint-config-umeboshi`', () => {
             expect(config.parser).toBe(baseConfig.parser);
         });
 
-        it('shares settings with `eslint-config-umeboshi`', () => {
+        test('shares settings with `eslint-config-umeboshi`', () => {
             expect(config.settings).toBe(baseConfig.settings);
         });
 
-        it('shares globals with `eslint-config-umeboshi`', () => {
+        test('shares globals with `eslint-config-umeboshi`', () => {
             expect(config.globals).toBe(baseConfig.globals);
         });
 
-        it('extends `airbnb` preset', () => {
+        test('extends `airbnb` preset', () => {
             expect(config.extends).toEqual(['airbnb']);
         });
 
@@ -49,7 +49,7 @@ describe('eslint-config-umeboshi', () => {
 
     describe('Specific rules', () => {
 
-        it('should allow `.js` file extension', () => {
+        test('should allow `.js` file extension', () => {
             const { rules } = config;
             const rule = rules['react/jsx-filename-extension'];
             const [flag, options] = rule;
@@ -57,7 +57,7 @@ describe('eslint-config-umeboshi', () => {
             expect(options.extensions).toEqual(['.js', '.jsx']);
         });
 
-        it('should contain all of the rules of `eslint-config-umeboshi`', () => {
+        test('should contain all of the rules of `eslint-config-umeboshi`', () => {
             const expectedRules = Object.keys(baseConfig.rules);
             const rulesKey = Object.keys(config.rules);
 
@@ -66,7 +66,7 @@ describe('eslint-config-umeboshi', () => {
             });
         });
 
-        it('should disable `react/prefer-stateless-function`', () => {
+        test('should disable `react/prefer-stateless-function`', () => {
             expect(config.rules['react/prefer-stateless-function']).toBe(0);
         });
     });

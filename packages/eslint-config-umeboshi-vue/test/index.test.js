@@ -8,15 +8,15 @@ describe('eslint-config-umeboshi-vue', () => {
 
     describe('Features', () => {
 
-        it('should extend eslint-config-umeboshi', () => {
+        test('should extend eslint-config-umeboshi', () => {
             expect(config.extends).toEqual(['eslint-config-umeboshi']);
         });
 
-        it('should use `html` plugin', () => {
+        test('should use `html` plugin', () => {
             expect(config.plugins).toEqual(['html']);
         });
 
-        it('should expose shared rules', () => {
+        test('should expose shared rules', () => {
             const rules = require('../rules');
 
             expect(config.rules).toBe(rules);
