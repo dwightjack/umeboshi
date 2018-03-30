@@ -8,7 +8,15 @@ const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/serv
 
 const serverConf = loadConfig('webpack/webpack.server.js');
 const devConf = loadConfig('webpack/webpack.dev.js');
+const $loaders = loadConfig('webpack/loaders.js');
+const $plugins = loadConfig('webpack/plugins.js');
+
+
 const webpackConfig = merge.smart(serverConf, devConf);
+webpackConfig.module.rules.push(...$loaders.toLoaders());
+webpackConfig.plugins.push(...$plugins.toPlugins());
+
+
 const { devServer, stats } = webpackConfig;
 const umeDevServer = loadUmeboshiConfig('devServer');
 
@@ -16,7 +24,7 @@ delete webpackConfig.devServer;
 
 const compiler = webpack(webpackConfig);
 
-const serverConf = Object.assign({
+const devServerConf = Object.assign({
     after(app) {
         if (middlewares.length > 0) {
             middlewares.forEach((middleware) => app.use(middleware));
@@ -24,7 +32,7 @@ const serverConf = Object.assign({
     }
 }, devServer, { stats });
 
-const server = new WebpackDevServer(compiler, mergeConfig(serverConf, umeDevServer));
+const server = new WebpackDevServer(compiler, mergeConfig(devServerConf, umeDevServer));
 
 const templatePath = paths.toAbsPath('dist.root/index.html');
 

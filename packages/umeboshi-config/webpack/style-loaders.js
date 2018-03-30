@@ -1,7 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { loadConfig } = require('umeboshi-dev-utils');
 
-const paths = loadConfig('paths.js');
+const { paths } = require('umeboshi-dev-utils');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -33,15 +32,21 @@ const scss = {
     }
 };
 
-const createLoader = (use, fallback = 'style-loader') => {
-    return (PRODUCTION ? ExtractTextPlugin.extract({
-        fallback,
-        use
-    }) : [fallback, ...use]);
+const createExtractLoader = (config = {}, loaders = [], fallback = 'style-loader') => {
+
+    return () => {
+        const use = (PRODUCTION ? ExtractTextPlugin.extract({
+            fallback,
+            use: loaders
+        }) : [fallback, ...loaders]);
+
+        return Object.assign({ use }, config);
+    };
+
 };
 
 module.exports = {
-    createLoader,
+    createExtractLoader,
     css,
     postcss,
     resolveUrl,

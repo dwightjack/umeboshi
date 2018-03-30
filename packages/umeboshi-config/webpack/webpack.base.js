@@ -1,16 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
-const { loadConfig, APP_PATH } = require('umeboshi-dev-utils');
-
-const paths = loadConfig('paths.js');
+const { paths } = require('umeboshi-dev-utils');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
-const srcPath = paths.toAbsPath('src.assets');
 const destPath = paths.toAbsPath('dist.assets');
-
-const {
-    css, scss, postcss, resolveUrl, createLoader
-} = loadConfig('webpack/style-loaders.js');
 
 module.exports = {
     context: process.cwd(),
@@ -42,64 +33,10 @@ module.exports = {
         chunkFilename: paths.js + '/[name].chunk.js',
         filename: paths.js + '/[name].js'
     },
-    plugins: [
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.DefinePlugin({
-            __PRODUCTION__: PRODUCTION,
-            'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
-        }),
-
-        // @see https://github.com/vuejs-templates/webpack/blob/master/template/build/webpack.prod.conf.js#L67
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendors',
-            minChunks(module) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(APP_PATH, 'node_modules')
-                    ) === 0
-                );
-            }
-        })
-    ],
+    plugins: [],
     module: {
         rules: [
-            { parser: { amd: false } },
-            {
-                test: /\.js$/,
-                include: [path.join(srcPath, paths.js), path.join(srcPath, paths.styles)],
-                loader: 'babel-loader',
-                options: {
-                    cacheDirectory: true
-                }
-            }, {
-                test: /\.html$/,
-                exclude: /(node_modules|vendors)/,
-                loader: 'raw-loader'
-            }, {
-                test: /\.json$/,
-                exclude: /(node_modules|vendors)/,
-                loader: 'json-loader'
-            }, {
-                test: /\.(scss|css)$/,
-                exclude: /(node_modules|vendors)/,
-                use: createLoader([css, postcss, resolveUrl, scss])
-            }, {
-                test: /\.(eot|svg|ttf|woff|woff2|jpe?g|png|gif)$/,
-                include: [
-                    paths.toAbsPath('src.assets/images'),
-                    paths.toAbsPath('src.assets/fonts')
-                ],
-                loader: 'file-loader',
-                options: {
-                    name: (PRODUCTION ? '[path][name].[hash:10].[ext]' : '[path][name].[ext]'),
-                    context: paths.toPath('src.assets')
-                }
-            }
+            { parser: { amd: false } }
         ]
     },
     node: {

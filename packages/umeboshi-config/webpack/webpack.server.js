@@ -1,9 +1,8 @@
 /**
  * Development Server Config
  */
-const address = require('ip').address();
 const { paths } = require('umeboshi-dev-utils');
-const { localhost, address } = require('umeboshi-dev-utils/server.helper');
+const { localhost, address } = require('umeboshi-dev-utils/lib/server');
 
 const publicPath = `http://${address}:${localhost.port}${paths.get('publicPath')}`;
 

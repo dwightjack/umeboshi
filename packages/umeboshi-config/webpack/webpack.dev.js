@@ -1,10 +1,8 @@
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
 const { paths } = require('umeboshi-dev-utils');
 
-const webpackConf = require('./webpack/webpack.base');
+const webpackConf = require('./webpack.base');
 
 module.exports = merge.smart(webpackConf, {
     entry: {
@@ -14,20 +12,5 @@ module.exports = merge.smart(webpackConf, {
         ]
     },
 
-    cache: true,
-
-    plugins: [
-
-        new webpack.NamedModulesPlugin(),
-        new webpack.NamedChunksPlugin(),
-
-        new HtmlWebpackPlugin({
-            template: paths.toPath('src.root/templates/index.ejs'),
-            inject: true,
-            minify: false,
-            filename: paths.toAbsPath('dist.root/index.html'),
-            modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
-            chunksSortMode: 'dependency'
-        })
-    ]
+    cache: true
 });
