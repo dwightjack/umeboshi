@@ -1,7 +1,6 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { loadConfig } = require('umeboshi-dev-utils');
 const merge = require('webpack-merge');
-const webpackConf = loadConfig('webpack/webpack.prod.js');
+const webpackConf = require('./webpack.prod');
 
 
 module.exports = merge(webpackConf, {
