@@ -2,10 +2,9 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
-const { loadConfig } = require('umeboshi-dev-utils');
+const { paths } = require('umeboshi-dev-utils');
 
-const paths = loadConfig('paths.js');
-const webpackConf = loadConfig('webpack/webpack.base.js');
+const webpackConf = require('./webpack/webpack.base');
 
 module.exports = merge.smart(webpackConf, {
     entry: {

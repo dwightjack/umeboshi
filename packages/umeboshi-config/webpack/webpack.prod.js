@@ -3,10 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const merge = require('webpack-merge');
-const { loadConfig } = require('umeboshi-dev-utils');
+const { paths } = require('umeboshi-dev-utils');
 
-const webpackConf = loadConfig('webpack/webpack.base.js');
-const paths = loadConfig('paths.js');
+const webpackConf = require('./webpack.base');
 
 module.exports = merge.smart(webpackConf, {
     entry: {

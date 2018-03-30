@@ -1,14 +1,15 @@
 const config = require('umeboshi-config/webpack/webpack.base');
-const { loadConfig } = require('umeboshi-dev-utils');
+const { loadConfig, paths } = require('umeboshi-dev-utils');
 
-const paths = loadConfig('paths.js');
 const { vueLoaders, css } = loadConfig('webpack/style-loaders.js');
 const { localIdentName, camelCase } = css.options;
+const { rules } = config.module;
 
 module.exports = Object.assign({}, config, {
 
     module: {
-        rules: config.module.rules.concat([
+        rules: [
+            ...rules,
             {
                 test: /\.vue$/,
                 include: [
@@ -32,7 +33,7 @@ module.exports = Object.assign({}, config, {
                     }
                 }
             }
-        ])
+        ]
     },
 
     resolve: Object.assign({
