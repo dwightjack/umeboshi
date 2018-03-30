@@ -1,10 +1,16 @@
 const path = require('path');
 const fs = require('fs');
 const readPkgUp = require('read-pkg-up');
+const Paths = require('./lib/paths');
+const get = require('lodash/get');
+const merge = require('lodash/merge');
+const isFunction = require('lodash/isFunction');
 
 const { pkg, path: pkgPath } = readPkgUp.sync({
     cwd: fs.realpathSync(process.cwd())
 });
+
+const fileCheckCache = {};
 
 const APP_PATH = path.dirname(pkgPath);
 const UME_SCRIPTS_REGEXP = /^umeboshi-scripts-/;
@@ -23,10 +29,35 @@ const SCRIPTS_LOAD_PATHS = [
 ];
 
 const CONFIG_LOAD_PATHS = [
-    path.resolve(APP_PATH, 'config'),
+    //path.resolve(APP_PATH, 'config'),
     ...umeboshiConfigs.map((p) => path.resolve(APP_PATH, 'node_modules', p)),
     path.resolve(APP_PATH, 'node_modules', 'umeboshi-config')
 ];
+
+/**
+ * Checks if value is a function and executes it with passed-in `args`, else returns it as-is.
+ *
+ * @param {*} value Object to evaluate.
+ * @param {...*} args Function arguments
+ * @return {*}
+ */
+const evaluate = (value, ...args) => (
+    isFunction(value) ? value(...args) : value
+);
+
+/**
+ *
+ * @param {object} config Destination object
+ * @param {object|function} source Object to merge with destination. If a function, it will be executed with the `config` object as parameter
+ * @param {...*} args Optional arguments passed to the function
+ * @return {object}
+ */
+const mergeConfig = (config, source, ...args) => {
+    if (isFunction(source)) {
+        return source(config, ...args);
+    }
+    return deep ? merge(config, source) : Object.assign(config, source);
+};
 
 /**
  * Resolves a path local to the project root folder.
@@ -38,24 +69,42 @@ const CONFIG_LOAD_PATHS = [
 const toLocalPath = (...paths) => path.resolve(APP_PATH, ...paths);
 
 /**
- * Checks if a given path exists in the project root folder
+ * Checks if a file or directory exists
+ *
+ * Results are cached to improve performances.
+ *
+ * @param {string} filepath - Path to the file or directory to be checked
+ * @return {boolean}
+ */
+const exists = (filepath) => {
+    if (fileCheckCache[filepath] !== undefined) {
+        return true;
+    }
+    fileCheckCache[filepath] = fs.existsSync(filepath);
+    return fileCheckCache[filepath];
+};
+
+/**
+ * Checks if a given path exists in the project root folder.
  *
  * @see toLocalPath
+ * @see exists
  * @param {...string} paths - Path chain to resolve
  * @return {boolean}
  */
-const existsLocal = (...paths) => fs.existsSync(toLocalPath(...paths));
+const existsLocal = (...paths) => exists(toLocalPath(...paths));
 
 /**
  * Checks a list of paths for existence (`fs.existsSync`) and returns the first match.
  * Returns `false` if all checks fail.
  *
+ * @see exists
  * @param {...string} paths - Paths to match
  * @return {string|boolean}
  */
 const resolvePath = (...paths) => {
     for (let i = 0, l = paths.length; i < l; i += 1) {
-        if (fs.existsSync(paths[i])) {
+        if (exists(paths[i])) {
             return paths[i];
         }
     }
@@ -112,14 +161,44 @@ const loadConfig = (filepath, resolvePaths = CONFIG_LOAD_PATHS) => {
     return load(filepath, resolvePaths);
 };
 
+/**
+ * Tries to load a `umeboshi.config.js` file from the project root folder and returns it.
+ *
+ * If not found returns `undefined`.
+ *
+ * @param {string} [frag] Return a specific property from the configuration object
+ * @return {*}
+ */
+const loadUmeboshiConfig = (frag) => {
+    if (!existsLocal('umeboshi.config.js')) {
+        return undefined;
+    }
+
+    try {
+        const conf = require(toLocalPath('umeboshi.config.js'));
+        return frag ? get(conf, frag) : conf;
+    } catch (e) {
+        console.error(e); //eslint-disable-line no-console
+        return undefined;
+    }
+
+};
+
+const paths = mergeConfig(loadConfig('paths.js'), loadUmeboshiConfig('paths'));
+
 module.exports = {
+    paths: Paths(APP_PATH, paths),
     APP_PATH,
     SCRIPTS_LOAD_PATHS,
     CONFIG_LOAD_PATHS,
     toLocalPath,
+    exists,
     existsLocal,
     resolvePath,
     loadScript,
     loadConfig,
-    resolve
+    loadUmeboshiConfig,
+    resolve,
+    evaluate,
+    mergeConfig
 };
