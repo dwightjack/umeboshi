@@ -2,16 +2,12 @@
  * Development Server Config
  */
 const address = require('ip').address();
-const merge = require('webpack-merge');
-const { loadConfig } = require('umeboshi-dev-utils');
+const { paths } = require('umeboshi-dev-utils');
+const { localhost, address } = require('umeboshi-dev-utils/server.helper');
 
-const paths = loadConfig('paths.js');
-const localhost = loadConfig('hosts.js').local;
-const webpackDevConf = loadConfig('webpack/webpack.dev.js');
+const publicPath = `http://${address}:${localhost.port}${paths.get('publicPath')}`;
 
-const publicPath = `http://${address}:${localhost.port}${paths.publicPath}`;
-
-module.exports = merge.smart({
+module.exports = {
     entry: {
         app: [
             'eventsource-polyfill',
@@ -35,4 +31,4 @@ module.exports = merge.smart({
             'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
         }
     }
-}, webpackDevConf); //kept last so that entrypoints will be appended
+};
