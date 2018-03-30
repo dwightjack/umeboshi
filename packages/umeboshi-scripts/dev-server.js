@@ -1,28 +1,33 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const address = require('ip').address();
+const merge = require('webpack-merge');
+const {
+    loadConfig, paths, loadUmeboshiConfig, mergeConfig
+} = require('umeboshi-dev-utils');
+const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/server');
 
-const { loadConfig, loadScript } = require('umeboshi-dev-utils');
-
-const paths = loadConfig('paths.js');
-const localhost = loadConfig('hosts.js').local;
-const middlewares = loadScript('middlewares');
-const webpackConfig = Object.assign({}, loadConfig('webpack/webpack.server.js') || {});
-const { devServer } = webpackConfig;
+const serverConf = loadConfig('webpack/webpack.server.js');
+const devConf = loadConfig('webpack/webpack.dev.js');
+const webpackConfig = merge.smart(serverConf, devConf);
+const { devServer, stats } = webpackConfig;
+const umeDevServer = loadUmeboshiConfig('devServer');
 
 delete webpackConfig.devServer;
 
 const compiler = webpack(webpackConfig);
 
-const server = new WebpackDevServer(compiler, Object.assign({
+const serverConf = Object.assign({
     after(app) {
         if (middlewares.length > 0) {
             middlewares.forEach((middleware) => app.use(middleware));
         }
     }
-}, (devServer || {}), { stats: webpackConfig.stats }));
+}, devServer, { stats });
+
+const server = new WebpackDevServer(compiler, mergeConfig(serverConf, umeDevServer));
 
 const templatePath = paths.toAbsPath('dist.root/index.html');
+
 server.app.get('*', (req, res) => {
     compiler.outputFileSystem.readFile(templatePath, (err, file) => {
         if (err) {
