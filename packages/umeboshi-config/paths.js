@@ -1,9 +1,4 @@
-const path = require('path');
-const get = require('lodash/get');
-const glob = require('glob');
-const { APP_PATH } = require('umeboshi-dev-utils');
-
-const paths = {
+module.exports = {
 
     src: {
         root: 'app',
@@ -26,24 +21,4 @@ const paths = {
     vendors: 'vendors',
 
     tmp: '.tmp'
-};
-
-module.exports = paths;
-
-const EXCLUDE_REGEXP = /\.(js|css|scss|html|ejs|\*)$/;
-
-const translatePath = (pathMatch) => (
-    pathMatch.split('/').map((frag) => (
-        //exclude common file extensions from path resolution
-        (EXCLUDE_REGEXP.test(frag) || frag === '.') ? frag : get(paths, frag, frag))
-    )
-);
-
-module.exports.toPath = (pathMatch) => path.join(...translatePath(pathMatch));
-
-module.exports.toAbsPath = (pathMatch) => path.join(APP_PATH, ...translatePath(pathMatch));
-
-module.exports.assetsPath = (match) => {
-    const filepath = glob.sync(match, { cwd: paths.toAbsPath('dist.assets/') }).pop();
-    return filepath;
 };
