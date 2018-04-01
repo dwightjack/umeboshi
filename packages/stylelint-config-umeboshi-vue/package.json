@@ -1,6 +1,6 @@
 {
   "name": "stylelint-config-umeboshi-vue",
-  "version": "0.2.0-0",
+  "version": "0.2.1-0",
   "description": "Vue.js Stylelint config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "node": ">=6.9.0"
   },
   "dependencies": {
-    "stylelint-config-umeboshi": "^0.2.0-0",
+    "stylelint-config-umeboshi": "^0.2.1-0",
     "stylelint-processor-html": "1.0.0"
   },
   "peerDependencies": {
