@@ -56,7 +56,7 @@ const mergeConfig = (config, source, ...args) => {
     if (isFunction(source)) {
         return source(config, ...args);
     }
-    return deep ? merge(config, source) : Object.assign(config, source);
+    return Object.assign(config, source);
 };
 
 /**
