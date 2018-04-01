@@ -40,7 +40,7 @@ const Paths = (APP_PATH, conf) => {
         },
 
         assetsPath(match, assets = 'dist.assets/') {
-            return glob.sync(match, { cwd: $paths.toAbsPath(assets) }).pop();
+            return glob.sync(match, { cwd: this.toAbsPath(assets) }).pop();
         }
     };
 };
