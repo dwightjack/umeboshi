@@ -18,10 +18,12 @@
     "avoriaz": "~6.0.0",
     "css-loader": "^0.28.7",
     "jest": "^21.0.0",
+    "vue": "^2.0.0",
     "webpack": "^3.0.0"
   },
   "dependencies": {
     "babel-jest": "~21.2.0",
+    "identity-obj-proxy": "3.0.0",
     "jest-vue-preprocessor": "~1.3.0",
     "umeboshi-config": "^0.1.10",
     "umeboshi-dev-utils": "^0.1.0",
@@ -29,5 +31,8 @@
     "vue-style-loader": "~3.0.0",
     "vue-template-compiler": "^2.x",
     "vue-template-es2015-compiler": "1.6.x"
+  },
+  "devDependencies": {
+    "vue": "^2.0.0"
   }
 }
