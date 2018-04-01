@@ -17,7 +17,7 @@ const $map = loaderMap();
 $map
     .set('js', {
         test: /\.js$/,
-        include: [path.join(srcPath, paths.js), path.join(srcPath, paths.styles)],
+        include: [path.join(srcPath, paths.get('js')), path.join(srcPath, paths.get('styles'))],
         loader: 'babel-loader',
         options: {
             cacheDirectory: true

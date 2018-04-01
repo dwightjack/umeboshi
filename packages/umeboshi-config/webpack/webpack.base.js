@@ -29,9 +29,9 @@ module.exports = {
     devtool: (PRODUCTION ? '#source-map' : '#cheap-module-source-map'),
     output: {
         path: destPath,
-        publicPath: paths.publicPath,
-        chunkFilename: paths.js + '/[name].chunk.js',
-        filename: paths.js + '/[name].js'
+        publicPath: paths.get('publicPath'),
+        chunkFilename: paths.get('js') + '/[name].chunk.js',
+        filename: paths.get('js') + '/[name].js'
     },
     plugins: [],
     module: {
