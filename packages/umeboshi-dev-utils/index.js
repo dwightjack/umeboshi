@@ -77,12 +77,12 @@ const toLocalPath = (...paths) => path.resolve(APP_PATH, ...paths);
  * @return {boolean}
  */
 const exists = (filepath) => {
-    if (fileCheckCache[filepath] !== undefined) {
-        return true;
+    if (fileCheckCache[filepath] === undefined) {
+        fileCheckCache[filepath] = fs.existsSync(filepath);
     }
-    fileCheckCache[filepath] = fs.existsSync(filepath);
     return fileCheckCache[filepath];
 };
+
 
 /**
  * Checks if a given path exists in the project root folder.
