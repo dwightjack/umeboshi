@@ -58,7 +58,8 @@ const pluginMap = () => {
             const arr = this.toArray();
             return arr.map((p) => {
                 const { plugin, options = [] } = evaluate(p, map);
-                return new plugin(...options); //eslint-disable-line new-cap
+                const opts = Array.isArray(options) ? options : [options];
+                return new plugin(...opts); //eslint-disable-line new-cap
             });
         }
     });
