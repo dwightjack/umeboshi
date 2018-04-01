@@ -2,7 +2,7 @@
 const path = require('path');
 const glob = require('glob');
 const get = require('lodash/get');
-const merge = require('lodash/get');
+const merge = require('lodash/merge');
 
 const EXCLUDE_REGEXP = /\.(js|css|scss|html|ejs|\*)$/;
 
