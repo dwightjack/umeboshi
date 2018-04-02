@@ -16,14 +16,8 @@ $loaders.set('vue', {
     loader: 'vue-loader',
     options: {
         loaders: {
-            scss: createExtractLoader({
-                test: /\.(scss|css)$/,
-                exclude: /(node_modules|vendors)/
-            }, [vuecss, resolveUrl, scss], 'vue-style-loader'),
-            css: createExtractLoader({
-                test: /\.css$/,
-                exclude: /(node_modules|vendors)/
-            }, [vuecss], 'vue-style-loader')
+            scss: createExtractLoader({}, [vuecss, resolveUrl, scss], 'vue-style-loader')().use,
+            css: createExtractLoader({}, [vuecss], 'vue-style-loader')().use
         },
         preserveWhitespace: false,
         cssModules: {
