@@ -14,7 +14,7 @@
     "umeboshi"
   ],
   "peerDependencies": {
-    "umeboshi-scripts": "^0.1.0"
+    "umeboshi-scripts": "^0.3.0"
   },
   "dependencies": {
     "babel-eslint": "8.2.2",
