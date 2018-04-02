@@ -1,4 +1,10 @@
-const webpackConfPath = require.resolve('umeboshi-scripts/webpack');
+let webpackConfPath;
+
+try {
+    webpackConfPath = require.resolve('umeboshi-scripts/webpack');
+} catch (e) {
+    console.warn('Skipping webpack configuration resolver'); //eslint-disable-line no-console
+}
 
 module.exports = {
     parser: 'babel-eslint',
