@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi",
-  "version": "0.2.1-0",
+  "version": "0.3.0",
   "description": "Default ESLint config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -14,8 +14,7 @@
     "umeboshi"
   ],
   "peerDependencies": {
-    "eslint": ">= 4.8.0",
-    "webpack": "^3.0.0"
+    "umeboshi-scripts": "^0.1.0"
   },
   "dependencies": {
     "babel-eslint": "8.2.2",
@@ -28,8 +27,5 @@
   },
   "engines": {
     "node": ">= 6.9.0"
-  },
-  "peerDependencies": {
-    "umeboshi-scripts": "^0.1.0"
   }
 }
