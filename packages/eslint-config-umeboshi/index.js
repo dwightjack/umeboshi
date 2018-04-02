@@ -1,6 +1,4 @@
-const path = require('path');
-
-const webpackConfPath = path.resolve('umeboshi-scripts/webpack');
+const webpackConfPath = require.resolve('umeboshi-scripts/webpack');
 
 module.exports = {
     parser: 'babel-eslint',
