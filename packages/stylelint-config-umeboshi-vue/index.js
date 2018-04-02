@@ -2,7 +2,7 @@ module.exports = {
     extends: ['stylelint-config-umeboshi'],
 
     processors: [
-        require.resolve('stylelint-processor-html')
+        require.resolve('@mapbox/stylelint-processor-arbitrary-tags')
     ],
 
     rules: {
