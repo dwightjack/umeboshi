@@ -1,4 +1,5 @@
 const { loadConfig, loadUmeboshiConfig, mergeConfig } = require('umeboshi-dev-utils');
+const isFunction = require('lodash/isFunction');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -11,6 +12,10 @@ module.exports = (env) => {
     const webpackConfig = env && env.analyze ? loadConfig('webpack/webpack.analyze.js') : loadConfig(`webpack/webpack.${PRODUCTION ? 'prod' : 'dev'}.js`);
 
     const config = mergeConfig(webpackConfig, umeWebpack, env, $loaders, $plugins);
+
+    if (isFunction(config)) {
+        return config();
+    }
 
     config.module.rules.push(...$loaders.toLoaders());
     config.plugins.push(...$plugins.toPlugins());
