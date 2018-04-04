@@ -46,6 +46,7 @@ const evaluate = (value, ...args) => (
 );
 
 /**
+ * Merges two configuration objects. If `source` is a function, executes it with `config` as it's first argument.
  *
  * @param {object} config Destination object
  * @param {object|function} source Object to merge with destination. If a function, it will be executed with the `config` object as parameter
