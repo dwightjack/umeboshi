@@ -16,7 +16,7 @@ describe('stylelint-config-umeboshi', () => {
 
         [
             'stylelint-config-umeboshi',
-            'stylelint-processor-html'
+            '@mapbox/stylelint-processor-arbitrary-tags'
         ].forEach((key) => {
             test(`${key} is a dependency`, () => {
                 expect(pkg.dependencies).toHaveProperty(key);
@@ -30,8 +30,8 @@ describe('stylelint-config-umeboshi', () => {
             expect(config.extends).toEqual(['stylelint-config-umeboshi']);
         });
 
-        test('uses html processors', () => {
-            expect(config.processors).toContain(require.resolve('stylelint-processor-html'));
+        test('uses arbitrary-tags processors', () => {
+            expect(config.processors).toContain(require.resolve('@mapbox/stylelint-processor-arbitrary-tags'));
         });
     });
 
