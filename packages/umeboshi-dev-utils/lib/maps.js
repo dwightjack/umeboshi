@@ -1,8 +1,8 @@
 const { evaluate } = require('../index');
 
-const chainMap = () => {
+const chainMap = (src) => {
 
-    const $map = new Map();
+    const $map = new Map(src);
 
     return {
         $isMap: true,
@@ -16,7 +16,7 @@ const chainMap = () => {
             $map.set(key, value);
             return this;
         },
-        toArray: () => Array.from($map.values()),
+        toArray: (mapFn) => Array.from($map.values(), mapFn),
         toObject() {
             const ret = {};
 
@@ -24,20 +24,24 @@ const chainMap = () => {
                 ret[key] = value;
             });
             return Object.freeze(ret);
+        },
+        clone() {
+            const factory = this.$cloneFactory || chainMap;
+            return factory($map);
         }
     };
 };
 
 chainMap.isMap = (obj) => !!obj.$isMap;
 
-const loaderMap = () => {
+const loaderMap = (src) => {
 
-    const map = chainMap();
+    const map = chainMap(src);
 
     return Object.assign(map, {
+        $cloneFactory: loaderMap,
         toLoaders() {
-            const arr = this.toArray();
-            return arr.map((l) => {
+            return this.toArray((l) => {
                 const loader = evaluate(l, map);
                 const { use } = loader;
                 if (use && chainMap.isMap(use)) {
@@ -49,14 +53,14 @@ const loaderMap = () => {
     });
 };
 
-const pluginMap = () => {
+const pluginMap = (src) => {
 
-    const map = chainMap();
+    const map = chainMap(src);
 
     return Object.assign(map, {
+        $cloneFactory: pluginMap,
         toPlugins() {
-            const arr = this.toArray();
-            return arr.map((p) => {
+            return this.toArray((p) => {
                 const { plugin, options = [] } = evaluate(p, map);
                 const opts = Array.isArray(options) ? options : [options];
                 return new plugin(...opts); //eslint-disable-line new-cap
