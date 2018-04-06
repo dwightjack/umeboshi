@@ -43,7 +43,6 @@ describe('eslint-config-umeboshi [integration tests]', () => {
         cli = new CLIEngine({
             useEslintrc: false,
             baseConfig: conf,
-
             rules: {
                 // It is okay to import devDependencies in tests.
                 'import/no-extraneous-dependencies': [2, { devDependencies: true }]
