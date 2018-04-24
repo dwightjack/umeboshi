@@ -1,12 +1,13 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const merge = require('webpack-merge');
-const webpackConf = require('./webpack.prod');
 
+module.exports = (env) => {
+    const config = require('./webpack.prod')(env);
 
-module.exports = merge(webpackConf, {
-    plugins: [
-        new BundleAnalyzerPlugin({
+    config.plugin('bundle-analyzer')
+        .use(BundleAnalyzerPlugin, {
             analyzerHost: '0.0.0.0'
-        })
-    ]
-});
+        });
+
+    return config;
+
+};

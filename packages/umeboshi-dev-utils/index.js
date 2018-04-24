@@ -3,8 +3,8 @@ const fs = require('fs');
 const readPkgUp = require('read-pkg-up');
 const Paths = require('./lib/paths');
 const get = require('lodash/get');
-const merge = require('lodash/merge');
 const isFunction = require('lodash/isFunction');
+const WebpackChain = require('webpack-chain');
 
 const { pkg, path: pkgPath } = readPkgUp.sync({
     cwd: fs.realpathSync(process.cwd())
@@ -38,7 +38,7 @@ const CONFIG_LOAD_PATHS = [
  * Checks if value is a function and executes it with passed-in `args`, else returns it as-is.
  *
  * @param {*} value Object to evaluate.
- * @param {...*} args Function arguments
+ * @param {...*} [args] Function arguments
  * @return {*}
  */
 const evaluate = (value, ...args) => (
@@ -49,11 +49,14 @@ const evaluate = (value, ...args) => (
  * Merges two configuration objects. If `source` is a function, executes it with `config` as it's first argument.
  *
  * @param {object} config Destination object
- * @param {object|function} source Object to merge with destination. If a function, it will be executed with the `config` object as parameter
- * @param {...*} args Optional arguments passed to the function
+ * @param {object|function} [source] Object to merge with destination. If a function, it will be executed with the `config` object as parameter
+ * @param {...*} [args] Optional arguments passed to the function
  * @return {object}
  */
 const mergeConfig = (config, source, ...args) => {
+    if (!source) {
+        return config;
+    }
     if (isFunction(source)) {
         return source(config, ...args);
     }
@@ -185,6 +188,13 @@ const loadUmeboshiConfig = (frag) => {
 
 };
 
+/**
+ * Returns a new instance of `webpack-chain`
+ *
+ * @return {WebpackChain}
+ */
+const webpackConfig = () => new WebpackChain();
+
 const paths = mergeConfig(loadConfig('paths.js'), loadUmeboshiConfig('paths'));
 
 module.exports = {
@@ -201,5 +211,6 @@ module.exports = {
     loadUmeboshiConfig,
     resolve,
     evaluate,
-    mergeConfig
+    mergeConfig,
+    webpackConfig
 };

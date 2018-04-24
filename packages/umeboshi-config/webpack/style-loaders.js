@@ -1,10 +1,6 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const { paths } = require('umeboshi-dev-utils');
 
-const PRODUCTION = process.env.NODE_ENV === 'production';
-
-const css = {
+const css = () => ({
     loader: 'css-loader',
     options: {
         modules: true,
@@ -13,13 +9,13 @@ const css = {
         sourceMap: true,
         localIdentName: '[name]__[local]---[hash:base64:5]'
     }
-};
+});
 
-const postcss = { loader: 'postcss-loader', options: { sourceMap: true } };
+const postcss = () => ({ loader: 'postcss-loader', options: { sourceMap: true } });
 
-const resolveUrl = { loader: 'resolve-url-loader', options: { sourceMap: true } };
+const resolveUrl = () => ({ loader: 'resolve-url-loader', options: { sourceMap: true } });
 
-const scss = {
+const scss = () => ({
     loader: 'sass-loader',
     options: {
         sourceMap: true,
@@ -30,23 +26,34 @@ const scss = {
         ],
         outputStyle: 'expanded'
     }
+});
+/* eslint-disable indent */
+const addCSSRule = (config, {
+    test, loaders, name, extract = false
+}) => {
+
+    const rule = config.module
+        .rule(name)
+            .test(test)
+            .exclude(/(node_modules|vendors)/);
+
+    if (extract) {
+        rule.use('extract-css-loader').merge({
+            loader: 'extract-text-webpack-plugin/loader', options: { omit: 1, remove: true }
+        });
+    }
+    rule.use('style-loader').loader('style-loader');
+
+    loaders.forEach((factory) => {
+        const { loader, options } = factory(config);
+        rule.use(loader).loader(loader).options(options);
+    });
+
 };
-
-const createExtractLoader = (config = {}, loaders = [], fallback = 'style-loader') => {
-
-    return () => {
-        const use = (PRODUCTION ? ExtractTextPlugin.extract({
-            fallback,
-            use: loaders
-        }) : [fallback, ...loaders]);
-
-        return Object.assign({ use }, config);
-    };
-
-};
+/* eslint-enable indent */
 
 module.exports = {
-    createExtractLoader,
+    addCSSRule,
     css,
     postcss,
     resolveUrl,

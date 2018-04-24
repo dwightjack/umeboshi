@@ -20,7 +20,8 @@
     "glob": "7.1.2",
     "ip": "1.1.5",
     "lodash": "4.17.5",
-    "read-pkg-up": "^2.0.0"
+    "read-pkg-up": "^2.0.0",
+    "webpack-chain": "4.6.0"
   },
   "devDependencies": {
     "documentation": "5.3.3"

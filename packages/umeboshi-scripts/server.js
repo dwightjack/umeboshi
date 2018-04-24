@@ -1,8 +1,10 @@
 const express = require('express');
+const { green } = require('chalk');
 const history = require('connect-history-api-fallback');
-const { paths, loadConfig, loadUmeboshiConfig, mergeConfig } = require('umeboshi-dev-utils');
+const portfinder = require('portfinder');
+const { paths } = require('umeboshi-dev-utils');
 const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/server');
-
+const { port } = localhost;
 const app = express();
 
 app.use(history());
@@ -12,6 +14,8 @@ if (middlewares.length > 0) {
     middlewares.forEach((middleware) => app.use(middleware));
 }
 
-app.listen(localhost.port, () => {
-    console.log(`Listening on http://${address}:${localhost.port}`); //eslint-disable-line no-console
+portfinder.getPortPromise({ port }).then((p) => {
+    app.listen(p, () => {
+        console.log(green(`Listening on http://${address}:${p}`)); //eslint-disable-line no-console
+    });
 });

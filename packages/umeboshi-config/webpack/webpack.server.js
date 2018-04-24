@@ -4,30 +4,32 @@
 const { paths } = require('umeboshi-dev-utils');
 const { localhost, address } = require('umeboshi-dev-utils/lib/server');
 
-const publicPath = `http://${address}:${localhost.port}${paths.get('publicPath')}`;
+module.exports = (env = {}, config) => {
 
-module.exports = {
-    entry: {
-        app: [
-            'eventsource-polyfill',
-            'webpack-dev-server/client?http://' + address + ':' + localhost.port
-        ]
-    },
-    output: {
-        publicPath
-    },
-    devServer: {
-        public: address,
-        contentBase: paths.toAbsPath('dist.root'),
-        compress: false,
-        hot: false,
-        historyApiFallback: true,
-        //TODO: temporary fix for https://github.com/mxstbr/react-boilerplate/issues/370 and https://github.com/webpack/style-loader/pull/96
-        publicPath,
-        headers: {
+    const port = env.port || localhost.port;
+
+    const baseUrl = `http://${address}:${port}`;
+    const publicPath = baseUrl + paths.get('publicPath');
+
+
+    config.entry('app')
+        .prepend('eventsource-polyfill')
+        .prepend(`webpack-dev-server/client?${baseUrl}`);
+
+    config.output
+        .publicPath(publicPath);
+
+    config.devServer
+        .public(address)
+        .contentBase(paths.toAbsPath('dist.root'))
+        .compress(false)
+        .hot(false)
+        .historyApiFallback(true)
+        .publicPath(publicPath)
+        .headers({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
             'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-        }
-    }
+        });
+    return config;
 };
