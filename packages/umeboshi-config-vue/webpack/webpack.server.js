@@ -1,20 +1,23 @@
 const webpack = require('webpack');
-const config = require('umeboshi-config/webpack/webpack.server');
+const serverConf = require('umeboshi-config/webpack/webpack.server');
 
-const app = [
-    'eventsource-polyfill', // Necessary for hot reloading with IE
-    ...config.entry.app.slice(1),
-    'webpack/hot/only-dev-server'
-];
+module.exports = (env, cfg) => {
 
-module.exports = Object.assign({}, config, {
-    entry: {
-        app
-    },
+    const config = serverConf(env, cfg);
 
-    plugins: (config.plugins || []).concat([
-        new webpack.HotModuleReplacementPlugin()
-    ]),
+    //eventsource-polyfill must be at the beginning
+    const entries = config.entry('app').delete('eventsource-polyfill').values();
 
-    devServer: Object.assign({}, config.devServer, { hot: true })
-});
+    config.entry('app').clear().merge([
+        'eventsource-polyfill', // Necessary for hot reloading with IE
+        ...entries,
+        'webpack/hot/only-dev-server'
+    ]);
+
+    config.devServer
+        .hot(true);
+
+    config.plugin('hmr')
+        .use(webpack.HotModuleReplacementPlugin);
+
+};

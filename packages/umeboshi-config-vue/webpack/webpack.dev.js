@@ -1,4 +1,7 @@
-const resolve = require('./resolve');
-const config = require('umeboshi-config/webpack/webpack.dev');
+const devConfig = require('umeboshi-config/webpack/webpack.dev');
+const commonConf = require('./common');
 
-module.exports = resolve(config);
+module.exports = (env) => {
+    const config = devConfig(env);
+    return commonConf(config);
+};
