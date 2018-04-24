@@ -144,7 +144,7 @@ const load = (filepath, resolvePaths) => {
 };
 
 /**
- * Loads a script. Default resolution order: current project, `umeboshi-script-` package, `umeboshi-scripts-x` package plugins.
+ * Loads a script. Default resolution order: current project, `umeboshi-script-*` custom packages, `umeboshi-scripts` package.
  *
  * @see load
  * @param {string} filepath - File path to load
@@ -155,7 +155,7 @@ const loadScript = (filepath, resolvePaths = SCRIPTS_LOAD_PATHS) => {
 };
 
 /**
- * Loads a configuration. Default resolution order: current project, `umeboshi-config-` package, `umeboshi-config-x` package plugins.
+ * Loads a configuration. Default resolution order: current project, `umeboshi-config-*` custom packages `umeboshi-config` package.
  *
  * @see load
  * @param {string} filepath - File path to load
