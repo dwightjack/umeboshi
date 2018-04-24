@@ -24,29 +24,29 @@ module.exports = (env) => {
             .use(webpack.HashedModuleIdsPlugin)
             .end()
         .plugin('uglify')
-            .use(webpack.optimize.UglifyJsPlugin, {
+            .use(webpack.optimize.UglifyJsPlugin, [{
                 sourceMap: true,
                 compressor: {
                     warnings: false
                 }
-            })
+            }])
             .end()
         .plugin('loader-options')
-            .use(webpack.LoaderOptionsPlugin, {
+            .use(webpack.LoaderOptionsPlugin, [{
                 minimize: true
-            })
+            }])
             .end()
         .plugin('extract')
-            .use(ExtractTextPlugin, {
+            .use(ExtractTextPlugin, [{
                 allChunks: true,
                 filename: paths.toPath('styles/[name].[contenthash:10].css')
-            })
+            }])
             .end()
         .plugin('manifest')
-            .use(webpack.optimize.CommonsChunkPlugin, {
+            .use(webpack.optimize.CommonsChunkPlugin, [{
                 name: 'manifest',
                 chunks: ['vendors']
-            })
+            }])
             .end();
     /* eslint-enable indent */
     return config;

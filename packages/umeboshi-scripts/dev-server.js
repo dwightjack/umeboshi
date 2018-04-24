@@ -13,7 +13,7 @@ let devConf = loadConfig('webpack/webpack.dev.js')();
 const umeDevServer = loadUmeboshiConfig('devServer');
 
 if (Array.isArray(devConf)) {
-    devConf = devConf.find((config) => config.get('env') === 'client');
+    devConf = devConf.find((config) => config.get('target') === 'web');
 }
 
 if (!devConf) {
@@ -64,6 +64,3 @@ portfinder.getPortPromise({ port }).then((p) => {
     });
 
 });
-
-
-

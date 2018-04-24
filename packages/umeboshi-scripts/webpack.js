@@ -11,8 +11,8 @@ module.exports = (env) => {
     const packageConfig = webpackConfig(env);
 
     if (Array.isArray(packageConfig)) {
-        return packageConfig.map((c) => mergeConfig(c, umeWebpack, env));
+        return packageConfig.map((c) => mergeConfig(c, umeWebpack, env).toConfig());
     }
 
-    return mergeConfig(packageConfig, umeWebpack, env);
+    return mergeConfig(packageConfig, umeWebpack, env).toConfig();
 };

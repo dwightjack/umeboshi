@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { paths } = require('umeboshi-dev-utils');
 
-const baseConf = require('./webpack.base')();
+const baseConf = require('./webpack.base');
 
 module.exports = (env) => {
     const config = baseConf(env);

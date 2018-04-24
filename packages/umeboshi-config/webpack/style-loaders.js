@@ -35,7 +35,9 @@ const addCSSRule = (config, {
     const rule = config.module
         .rule(name)
             .test(test)
-            .exclude(/(node_modules|vendors)/);
+            .exclude
+                .add(/(node_modules|vendors)/)
+                .end();
 
     if (extract) {
         rule.use('extract-css-loader').merge({

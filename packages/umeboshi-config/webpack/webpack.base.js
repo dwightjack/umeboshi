@@ -21,7 +21,6 @@ module.exports = (/*env*/) => {
 
     /* eslint-disable indent */
     config
-        .set('env', 'client')
         .target('web') // Make web variables accessible to webpack, e.g. window,
         .context(process.cwd())
         .stats({
@@ -100,14 +99,18 @@ module.exports = (/*env*/) => {
     config.module
         .rule('html')
             .test(/\.html$/)
-            .exclude(/(node_modules|vendors)/)
+            .exclude
+                .add(/(node_modules|vendors)/)
+                .end()
             .use('raw')
                 .loader('raw-loader');
 
     config.module
         .rule('json')
             .test(/\.json$/)
-            .exclude(/(node_modules|vendors)/)
+            .exclude
+                .add(/(node_modules|vendors)/)
+                .end()
             .use('json')
                 .loader('json-loader');
 
@@ -142,16 +145,16 @@ module.exports = (/*env*/) => {
         .plugin('error')
             .use(webpack.NoEmitOnErrorsPlugin).end()
         .plugin('define')
-            .use(webpack.DefinePlugin, {
+            .use(webpack.DefinePlugin, [{
                 __PRODUCTION__: PRODUCTION,
                 'process.env': {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
                 }
-            })
+            }])
             .end()
         // @see https://github.com/vuejs-templates/webpack/blob/master/template/build/webpack.prod.conf.js#L67
         .plugin('vendors-chunk')
-            .use(webpack.optimize.CommonsChunkPlugin, {
+            .use(webpack.optimize.CommonsChunkPlugin, [{
                 name: 'vendors',
                 minChunks(module) {
                     // any required modules inside node_modules are extracted to vendor
@@ -163,10 +166,10 @@ module.exports = (/*env*/) => {
                         ) === 0
                     );
                 }
-            })
+            }])
             .end()
         .plugin('html')
-            .use(HtmlWebpackPlugin, {
+            .use(HtmlWebpackPlugin, [{
                 template: paths.toPath('src.root/templates/index.ejs'),
                 filename: paths.toAbsPath('dist.root/index.html'),
                 modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
@@ -184,7 +187,7 @@ module.exports = (/*env*/) => {
                     minifyCSS: true,
                     minifyURLs: true
                 } : false)
-            })
+            }])
             .end();
 
     return config;
