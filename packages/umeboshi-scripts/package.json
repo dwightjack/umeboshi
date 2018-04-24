@@ -21,6 +21,7 @@
     "chalk": "2.4.0",
     "connect-history-api-fallback": "1.4.0",
     "customizr": "1.0.0-alpha",
+    "del": "3.0.0",
     "express": "4.16.2",
     "lodash": "4.17.5",
     "mkdirp": "0.5.1",
