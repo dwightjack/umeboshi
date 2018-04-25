@@ -21,4 +21,6 @@ module.exports = (env, cfg) => {
     config.plugin('hmr')
         .use(webpack.HotModuleReplacementPlugin);
 
+    return config;
+
 };
