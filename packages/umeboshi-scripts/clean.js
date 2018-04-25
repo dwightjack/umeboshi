@@ -9,5 +9,7 @@ del([
     paths.toPath('dist.root/**'),
     `!${paths.toPath('dist.root')}`
 ]).then((deleted) => {
-    console.log(blue('Deleted files and folders:\n'), deleted.join('\n')); //eslint-disable-line no-console
+    if (deleted.length > 0) {
+        console.log(blue('Deleted files and folders:\n'), deleted.join('\n')); //eslint-disable-line no-console
+    }
 });
