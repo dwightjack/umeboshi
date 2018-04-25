@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-umeboshi-react",
-  "version": "0.4.0-1",
+  "version": "0.4.0-2",
   "description": "React Babel preset for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
