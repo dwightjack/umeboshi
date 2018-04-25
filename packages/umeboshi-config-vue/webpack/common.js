@@ -1,5 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { css, scss, resolveUrl } = require('umeboshi-config/webpack/style-loaders');
+const { css, scss, resolveUrl, createExtractLoader } = require('umeboshi-config/webpack/style-loaders');
 const { paths } = require('umeboshi-dev-utils');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
@@ -30,8 +30,8 @@ module.exports = (config) => {
                 .loader('vue-loader')
                 .options({
                     loaders: {
-                        scss: vueLoaders([vuecss(), resolveUrl(), scss()]),
-                        css: vueLoaders([vuecss()])
+                        scss: createExtractLoader([vuecss(), resolveUrl(), scss()], 'vue-style-loader'),
+                        css: createExtractLoader([vuecss()], 'vue-style-loader')
                     },
                     preserveWhitespace: false,
                     cssModules: {

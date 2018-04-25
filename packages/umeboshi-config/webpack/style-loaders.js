@@ -1,6 +1,8 @@
 const { paths } = require('umeboshi-dev-utils');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const PRODUCTION = process.env.NODE_ENV === 'production';
+
 const css = () => ({
     loader: 'css-loader',
     options: {
@@ -55,8 +57,17 @@ const addCSSRule = (config, {
 };
 /* eslint-enable indent */
 
+const createExtractLoader = (loaders = [], fallback = 'style-loader') => {
+
+    return (PRODUCTION ? ExtractTextPlugin.extract({
+            fallback,
+            use: loaders
+        }) : [fallback, ...loaders]);
+};
+
 module.exports = {
     addCSSRule,
+    createExtractLoader,
     css,
     postcss,
     resolveUrl,
