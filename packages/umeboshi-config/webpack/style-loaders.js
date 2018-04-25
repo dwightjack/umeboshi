@@ -1,4 +1,5 @@
 const { paths } = require('umeboshi-dev-utils');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const css = () => ({
     loader: 'css-loader',
@@ -39,15 +40,15 @@ const addCSSRule = (config, {
                 .add(/(node_modules|vendors)/)
                 .end();
 
+    const fallback = 'style-loader';
     if (extract) {
-        rule.use('extract-css-loader').merge({
-            loader: 'extract-text-webpack-plugin/loader', options: { omit: 1, remove: true }
-        });
+        const [extractLoader] = ExtractTextPlugin.extract({ fallback });
+        rule.use('extract-css-loader').merge(extractLoader);
     }
-    rule.use('style-loader').loader('style-loader');
+    rule.use(fallback).loader(fallback);
 
     loaders.forEach((factory) => {
-        const { loader, options } = factory(config);
+        const { loader, options = {} } = factory(config);
         rule.use(loader).loader(loader).options(options);
     });
 
