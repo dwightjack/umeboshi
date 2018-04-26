@@ -21,6 +21,6 @@
     "stylelint-config-umeboshi": "^0.3.0"
   },
   "peerDependencies": {
-    "stylelint": "^8.2.0"
+    "stylelint": "^9.0.0"
   }
 }
