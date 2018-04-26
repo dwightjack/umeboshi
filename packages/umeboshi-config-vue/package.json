@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-vue",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Umeboshi Vue.js configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -22,15 +22,15 @@
     "webpack": "^3.0.0"
   },
   "dependencies": {
-    "babel-jest": "^22.0.0",
     "babel-core": "^6.0.0",
+    "babel-jest": "^22.0.0",
+    "css-loader": "*",
     "identity-obj-proxy": "^3.0.0",
     "jest-vue-preprocessor": "~1.4.0",
     "lodash.merge": "^4.6.0",
-    "umeboshi-config": "^0.4.0",
-    "umeboshi-dev-utils": "^0.4.0",
+    "umeboshi-config": "^0.4.2",
+    "umeboshi-dev-utils": "^0.4.1",
     "vue-loader": "^14.0.0",
-    "css-loader": "*",
     "vue-style-loader": "~3.0.0",
     "vue-template-compiler": "^2.0.0",
     "vue-template-es2015-compiler": "~1.6.0"

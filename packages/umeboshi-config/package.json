@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Umeboshi standard configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "resolve-url-loader": "^2.0.0",
     "sass-loader": "^7.0.0",
     "style-loader": "^0.21.0",
-    "umeboshi-dev-utils": "^0.4.0",
+    "umeboshi-dev-utils": "^0.4.1",
     "webpack-merge": "~4.1.0"
   },
   "devDependencies": {
