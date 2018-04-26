@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { CLIEngine } = require('eslint');
 
-const mockWebpackConf = path.resolve(__dirname, './fixtures/webpack.conf.js');
+const mockWebpackConf = require('./fixtures/webpack.conf.js');
 
 
 describe('eslint-config-umeboshi [integration tests]', () => {
@@ -25,16 +25,7 @@ describe('eslint-config-umeboshi [integration tests]', () => {
         expect(count).toBe(0);
     };
 
-    jest.mock('umeboshi-dev-utils', () => {
-        return {
-            resolve(webpackFile) {
-                if (webpackFile === 'webpack/webpack.base.js') {
-                    return mockWebpackConf;
-                }
-                return false;
-            }
-        };
-    });
+    jest.mock('umeboshi-scripts/webpack', () => mockWebpackConf);
 
     beforeEach(() => {
 

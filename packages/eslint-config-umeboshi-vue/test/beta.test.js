@@ -38,7 +38,7 @@ describe('eslint-config-umeboshi-vue/beta', () => {
 
     test('mixes custom vue rules with recommended from `eslint-plugin-vue`', () => {
         const customRules = require('../rules');
-        const vueRules = require('eslint-plugin-vue/lib/recommended-rules');
+        const vueRules = require('eslint-plugin-vue/lib/configs/recommended');
         const expected = Object.assign({}, customRules, vueRules);
 
         expect(rules).toEqual(expected);

@@ -1,5 +1,5 @@
 const rules = require('./rules');
-const vueRules = require('eslint-plugin-vue/lib/recommended-rules');
+const vueRules = require('eslint-plugin-vue/lib/configs/recommended');
 
 module.exports = {
 

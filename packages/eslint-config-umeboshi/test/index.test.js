@@ -29,39 +29,26 @@ describe('eslint-config-umeboshi', () => {
 
     describe('webpack importer', () => {
 
-        let utils;
+        let mockWebpackConf;
 
         beforeEach(() => {
-            jest.resetModules();
-            utils = require('umeboshi-dev-utils');
-        });
-
-        test('should try to resolve webpack base config', () => {
-            utils.resolve = jest.fn(() => false);
-            require('../index');
-
-            expect(utils.resolve).toHaveBeenCalledWith('webpack/webpack.base.js', utils.CONFIG_LOAD_PATHS);
+            mockWebpackConf = jest.fn(() => '/test/mock.js');
+            jest.mock('umeboshi-scripts/webpack', () => mockWebpackConf);
         });
 
         test('should add importer/resolve for webpack', () => {
-            utils.resolve = jest.fn(() => '/test/mock.js');
             const { settings } = require('../index');
+            const realpath = require.resolve('umeboshi-scripts/webpack');
 
             const expected = {
                 'import/resolver': {
                     webpack: {
-                        config: '/test/mock.js'
+                        config: realpath
                     }
                 }
             };
 
             expect(settings).toEqual(expected);
-        });
-
-        test('should NOT add importer/resolve for webpack when webpack file resolution fails', () => {
-            utils.resolve = jest.fn(() => false);
-            const { settings } = require('../index');
-            expect(settings).toEqual({});
         });
 
     });

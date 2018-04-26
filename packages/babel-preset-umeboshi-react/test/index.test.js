@@ -1,6 +1,6 @@
 const preset = require('../index');
 
-describe('babel-preset-umeboshi', () => {
+describe('babel-preset-umeboshi-react', () => {
 
     describe('presets', () => {
 
@@ -32,9 +32,9 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'test';
         });
 
-        test('DOES NOT have any plugin in development', () => {
+        test('Has HOT reload plugin in development', () => {
             process.env.NODE_ENV = 'development';
-            expect(preset().plugins.length).toBe(0);
+            expect(preset().plugins).toEqual(['react-hot-loader/babel']);
         });
 
         test('adds 3 plugins in production', () => {
