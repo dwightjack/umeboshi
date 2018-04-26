@@ -13,9 +13,9 @@
     "node": ">=6.9.0"
   },
   "peerDependencies": {
-    "jest": "^21.0.0",
+    "jest": "^22.0.0",
     "webpack": "^3.0.0",
-    "webpack-bundle-analyzer": "2.9.1"
+    "webpack-bundle-analyzer": "^2.0.0"
   },
   "dependencies": {
     "autoprefixer": "7.1.5",
