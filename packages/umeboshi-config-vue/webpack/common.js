@@ -1,18 +1,10 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { css, scss, resolveUrl, createExtractLoader } = require('umeboshi-config/webpack/style-loaders');
+const {
+    css, scss, resolveUrl, createExtractLoader
+} = require('umeboshi-config/webpack/style-loaders');
 const { paths } = require('umeboshi-dev-utils');
-
-const PRODUCTION = process.env.NODE_ENV === 'production';
 
 const { camelCase, localIdentName } = css().options;
 const vuecss = () => ({ loader: 'css-loader', options: { sourceMap: true } });
-
-const vueLoaders = (loaders) => {
-    return PRODUCTION ? ExtractTextPlugin.extract({
-        fallback: 'vue-style-loader',
-        use: loaders
-    }) : ['vue-style-loader', ...loaders];
-};
 
 module.exports = (config) => {
 

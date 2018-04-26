@@ -60,9 +60,9 @@ const addCSSRule = (config, {
 const createExtractLoader = (loaders = [], fallback = 'style-loader') => {
 
     return (PRODUCTION ? ExtractTextPlugin.extract({
-            fallback,
-            use: loaders
-        }) : [fallback, ...loaders]);
+        fallback,
+        use: loaders
+    }) : [fallback, ...loaders]);
 };
 
 module.exports = {
