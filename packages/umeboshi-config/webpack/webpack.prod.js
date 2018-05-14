@@ -25,10 +25,12 @@ module.exports = (env) => {
     config.optimization
         .minimizer([
             new UglifyJSPlugin({
-                sourceMap: true,
-                compressor: {
-                    warnings: false
-                }
+                uglifyOptions: {
+                    compressor: {
+                        warnings: false
+                    }
+                },
+                sourceMap: true
             }),
             new OptimizeCssAssetsPlugin({
                 canPrint: false,
