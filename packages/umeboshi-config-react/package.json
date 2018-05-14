@@ -18,7 +18,7 @@
     "enzyme": "~3.3.0",
     "enzyme-adapter-react-16": "~1.1.0",
     "jest": "^22.0.0",
-    "webpack": "^3.0.0"
+    "webpack": "^4.0.0"
   },
   "dependencies": {
     "umeboshi-config": "^0.4.2"

@@ -1,6 +1,5 @@
-const path = require('path');
 const webpack = require('webpack');
-const { paths, APP_PATH, webpackConfig } = require('umeboshi-dev-utils');
+const { paths, webpackConfig } = require('umeboshi-dev-utils');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const {
@@ -38,7 +37,8 @@ module.exports = (/*env*/) => {
             source: false,
             errorDetails: false
         })
-        .devtool(PRODUCTION ? '#source-map' : '#cheap-module-source-map');
+        .devtool(PRODUCTION ? '#source-map' : '#cheap-module-source-map')
+        .mode(PRODUCTION ? 'production' : 'development');
 
     config
         .performance
@@ -106,15 +106,6 @@ module.exports = (/*env*/) => {
                 .loader('raw-loader');
 
     config.module
-        .rule('json')
-            .test(/\.json$/)
-            .exclude
-                .add(/(node_modules|vendors)/)
-                .end()
-            .use('json')
-                .loader('json-loader');
-
-    config.module
         .rule('assets')
             .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac|eot|svg|ttf|woff|woff2|jpe?g|png|gif)(\?.*)?$/)
             .include
@@ -139,33 +130,25 @@ module.exports = (/*env*/) => {
         loaders: [css, postcss, resolveUrl, scss]
     });
 
+    config.optimization
+        .noEmitOnErrors(true)
+        .splitChunks({
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
+        });
+
     // PLUGINS
 
+
     config
-        .plugin('error')
-            .use(webpack.NoEmitOnErrorsPlugin).end()
         .plugin('define')
             .use(webpack.DefinePlugin, [{
-                __PRODUCTION__: PRODUCTION,
-                'process.env': {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-                }
-            }])
-            .end()
-        // @see https://github.com/vuejs-templates/webpack/blob/master/template/build/webpack.prod.conf.js#L67
-        .plugin('vendors-chunk')
-            .use(webpack.optimize.CommonsChunkPlugin, [{
-                name: 'vendors',
-                minChunks(module) {
-                    // any required modules inside node_modules are extracted to vendor
-                    return (
-                        module.resource &&
-                        /\.js$/.test(module.resource) &&
-                        module.resource.indexOf(
-                            path.join(APP_PATH, 'node_modules')
-                        ) === 0
-                    );
-                }
+                __PRODUCTION__: PRODUCTION
             }])
             .end()
         .plugin('html')

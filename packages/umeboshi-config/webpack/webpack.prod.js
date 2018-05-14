@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { paths } = require('umeboshi-dev-utils');
 
 const baseConf = require('./webpack.base');
@@ -19,33 +21,33 @@ module.exports = (env) => {
         .chunkFilename(paths.toPath('js/[name].[chunkhash].chunk.js'));
 
     /* eslint-disable indent */
-    config
-        .plugin('hashed-modules')
-            .use(webpack.HashedModuleIdsPlugin)
-            .end()
-        .plugin('uglify')
-            .use(webpack.optimize.UglifyJsPlugin, [{
+
+    config.optimization
+        .minimizer([
+            new UglifyJSPlugin({
                 sourceMap: true,
                 compressor: {
                     warnings: false
                 }
-            }])
-            .end()
-        .plugin('loader-options')
-            .use(webpack.LoaderOptionsPlugin, [{
-                minimize: true
-            }])
+            }),
+            new OptimizeCssAssetsPlugin({
+                canPrint: false,
+                cssProcessorOptions: {
+                    safe: true,
+                    autoprefixer: { disable: true },
+                    mergeLonghand: false
+                }
+            })
+        ]);
+
+    config
+        .plugin('hashed-modules')
+            .use(webpack.HashedModuleIdsPlugin)
             .end()
         .plugin('extract')
-            .use(ExtractTextPlugin, [{
-                allChunks: true,
+            .use(MiniCssExtractPlugin, [{
+                chunkFilename: paths.toPath('styles/[name].[id].[contenthash:10].css'),
                 filename: paths.toPath('styles/[name].[contenthash:10].css')
-            }])
-            .end()
-        .plugin('manifest')
-            .use(webpack.optimize.CommonsChunkPlugin, [{
-                name: 'manifest',
-                chunks: ['vendors']
             }])
             .end();
     /* eslint-enable indent */

@@ -1,5 +1,5 @@
 const { paths } = require('umeboshi-dev-utils');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -42,12 +42,8 @@ const addCSSRule = (config, {
                 .add(/(node_modules|vendors)/)
                 .end();
 
-    const fallback = 'style-loader';
-    if (extract) {
-        const [extractLoader] = ExtractTextPlugin.extract({ fallback });
-        rule.use('extract-css-loader').merge(extractLoader);
-    }
-    rule.use(fallback).loader(fallback);
+    rule.use('style-loader')
+        .loader(extract ? MiniCssExtractPlugin.loader : 'style-loader');
 
     loaders.forEach((factory) => {
         const { loader, options = {} } = factory(config);
@@ -59,10 +55,10 @@ const addCSSRule = (config, {
 
 const createExtractLoader = (loaders = [], fallback = 'style-loader') => {
 
-    return (PRODUCTION ? ExtractTextPlugin.extract({
-        fallback,
-        use: loaders
-    }) : [fallback, ...loaders]);
+    return [
+        (PRODUCTION ? MiniCssExtractPlugin.loader : fallback),
+        ...loaders
+    ];
 };
 
 module.exports = {

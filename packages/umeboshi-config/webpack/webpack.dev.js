@@ -16,9 +16,6 @@ module.exports = (env) => {
             .add(`.${path.sep}/${paths.toPath('./src.assets/js/app.js')}`);
 
     config
-        .plugin('named-modules')
-            .use(webpack.NamedModulesPlugin)
-            .end()
         .plugin('named-chunks')
             .use(webpack.NamedChunksPlugin);
     /* eslint-enable indent */
