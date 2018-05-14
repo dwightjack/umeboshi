@@ -18,7 +18,7 @@ module.exports = (env) => {
 
     config.output
         .filename(paths.toPath('js/[name].[chunkhash].js'))
-        .chunkFilename(paths.toPath('js/[name].[chunkhash].chunk.js'));
+        .chunkFilename(paths.toPath('js/[name].[chunkhash].js'));
 
     /* eslint-disable indent */
 
@@ -46,7 +46,7 @@ module.exports = (env) => {
             .end()
         .plugin('extract')
             .use(MiniCssExtractPlugin, [{
-                chunkFilename: paths.toPath('styles/[name].[id].[contenthash:10].css'),
+                chunkFilename: paths.toPath('styles/[name].[contenthash:10].css'),
                 filename: paths.toPath('styles/[name].[contenthash:10].css')
             }])
             .end();

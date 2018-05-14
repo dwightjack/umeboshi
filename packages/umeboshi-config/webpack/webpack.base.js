@@ -48,7 +48,7 @@ module.exports = (/*env*/) => {
         .output
             .path(destPath)
             .publicPath(paths.get('publicPath'))
-            .chunkFilename(paths.get('js') + '/[name].chunk.js')
+            .chunkFilename(paths.get('js') + '/[name].js')
             .filename(paths.get('js') + '/[name].js');
 
     config
@@ -131,13 +131,16 @@ module.exports = (/*env*/) => {
     });
 
     config.optimization
+        .occurrenceOrder(true)
         .noEmitOnErrors(true)
+        .runtimeChunk('single')
         .splitChunks({
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
-                    chunks: 'all'
+                    chunks: 'all',
+                    enforce: true
                 }
             }
         });
