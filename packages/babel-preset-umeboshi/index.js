@@ -21,7 +21,7 @@ module.exports = (context, opts = {}) => {
                 loose: true,
                 useBuiltIns: 'entry',
                 targets: {
-                    browsers: ['> 0.25%', 'not dead', 'not op_mini all']
+                    browsers: ['> 0.25%', 'not op_mini all', 'not ie < 11']
                 }
             }
         ];
