@@ -7,6 +7,7 @@ const {
 
 del([
     paths.toPath('dist.root/**'),
+    paths.toPath('tmp'),
     `!${paths.toPath('dist.root')}`
 ]).then((deleted) => {
     if (deleted.length > 0) {
