@@ -131,7 +131,7 @@ module.exports = (/*env*/) => {
         loaders: baseStyleLoaders
     });
 
-    if (umeStyles.scss !== false) {
+    if (umeStyles.scss) {
         addCSSRule(config, {
             name: 'scss',
             extract: PRODUCTION,
