@@ -10,10 +10,10 @@ const { modules, sourceMap } = umeStyles;
 
 const createStyleLoader = (loader, defs = {}) => (options) => ({
     loader,
-    options: Object.assign(defs, options)
+    options: Object.assign({}, defs, options)
 });
 
-const applyLoaders = (rule, loaders, extract = false, styleLoader = 'style-loader') => {
+const applyLoaders = (rule, loaders = [], extract = false, styleLoader = 'style-loader') => {
     if (extract) {
         rule.use('extract-css-loader').loader(MiniCssExtractPlugin.loader);
     } else {
@@ -27,7 +27,7 @@ const applyLoaders = (rule, loaders, extract = false, styleLoader = 'style-loade
 
 /* eslint-disable indent */
 const addCSSRule = (config, {
-    test, loaders, name, extract = false, styleLoader = 'style-loader'
+    test, loaders = [], name, extract = false, styleLoader = 'style-loader'
 }) => {
 
     const rule = config.module
@@ -37,7 +37,7 @@ const addCSSRule = (config, {
                 .add(/(node_modules|vendors)/)
                 .end();
 
-    if (loaders.length === 0) {
+    if (!loaders || loaders.length === 0) {
         return rule;
     }
 
