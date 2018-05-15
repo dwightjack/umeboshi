@@ -14,7 +14,7 @@ module.exports = (env) => {
         .cache(true)
         .entry('app')
             .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`) //eslint-disable-line indent
-            .add(`.${path.sep}/${paths.toPath('./src.assets/js/app.js')}`); //eslint-disable-line indent
+            .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`); //eslint-disable-line indent
 
     config.output
         .filename(paths.toPath('js/[name].[chunkhash].js'))

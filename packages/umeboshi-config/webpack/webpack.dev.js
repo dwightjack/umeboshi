@@ -13,7 +13,7 @@ module.exports = (env) => {
         .cache(true)
         .entry('app')
             .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`)
-            .add(`.${path.sep}/${paths.toPath('./src.assets/js/app.js')}`);
+            .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
 
     config
         .plugin('named-chunks')
