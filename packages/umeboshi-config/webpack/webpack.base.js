@@ -7,13 +7,12 @@ const {
     postcss,
     resolveUrl,
     scss,
-    addCSSRule
+    addCSSRule,
+    umeStyles
 } = require('./style-loaders');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const destPath = paths.toAbsPath('dist.assets');
-
-
 
 module.exports = (/*env*/) => {
     const config = webpackConfig();
@@ -123,12 +122,24 @@ module.exports = (/*env*/) => {
                     }
                 });
 
+    const baseStyleLoaders = [css(), postcss()];
+
     addCSSRule(config, {
-        name: 'styles',
+        name: 'css',
         extract: PRODUCTION,
-        test: /\.(scss|css)$/,
-        loaders: [css, postcss, resolveUrl, scss]
+        test: /\.css$/,
+        loaders: baseStyleLoaders
     });
+
+    if (umeStyles.scss !== false) {
+        addCSSRule(config, {
+            name: 'scss',
+            extract: PRODUCTION,
+            test: /\.scss$/,
+            loaders: [...baseStyleLoaders, resolveUrl(), scss()]
+        });
+    }
+
 
     config.optimization
         .occurrenceOrder(true)
