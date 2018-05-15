@@ -6,7 +6,7 @@ module.exports = (env, cfg) => {
     const config = serverConf(env, cfg);
 
     config.entry('app')
-    .add('webpack/hot/only-dev-server');
+        .add('webpack/hot/only-dev-server');
 
     config.devServer
         .hot(true);
