@@ -3,7 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const umeStyles = Object.assign({
     modules: true,
-    sourceMap: true
+    sourceMap: true,
+    scss: true
 }, loadUmeboshiConfig('styles'));
 const { modules, sourceMap } = umeStyles;
 
