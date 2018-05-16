@@ -15,10 +15,11 @@
     "node": ">=6.9.0"
   },
   "peerDependencies": {
-    "avoriaz": "^6.0.0",
+    "@vue/test-utils": "~1.0.0-beta.16",
     "css-loader": "^0.28.0",
     "jest": "^22.0.0",
     "vue": "~2.5.0",
+    "vue-template-compiler": "~2.5.0",
     "webpack": "^4.0.0"
   },
   "dependencies": {
@@ -28,15 +29,13 @@
     "css-loader": "*",
     "globby": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest-vue-preprocessor": "~1.4.0",
     "lodash.merge": "^4.6.0",
-    "umeboshi-config": "^0.5.0-3",
+    "umeboshi-config": "^0.5.0-4",
     "umeboshi-dev-utils": "^0.4.1",
     "vinyl": "^2.1.0",
+    "vue-jest": "~2.5.0",
     "vue-loader": "^15.0.0",
-    "vue-style-loader": "~4.1.0",
-    "vue-template-compiler": "^2.0.0",
-    "vue-template-es2015-compiler": "~1.6.0"
+    "vue-style-loader": "~4.1.0"
   },
   "devDependencies": {
     "vue": "~2.5.0"

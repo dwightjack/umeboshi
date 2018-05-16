@@ -9,6 +9,6 @@ module.exports = merge(config, {
     }, config.moduleNameMapper),
     transform: {
         '^.+\\.js$': 'babel-jest',
-        '.*\\.(vue)$': 'jest-vue-preprocessor'
+        '.*\\.(vue)$': 'vue-jest'
     }
 });
