@@ -1,7 +1,16 @@
 const rules = require('./rules');
 
 module.exports = {
-    extends: ['eslint-config-umeboshi'],
-    plugins: ['html'],
+    extends: [
+        require.resolve('eslint-config-umeboshi'),
+        'plugin:vue/strongly-recommended'
+    ],
+    parserOptions: {
+        parser: 'babel-eslint',
+        ecmaFeatures: {
+            jsx: false,
+            experimentalObjectRestSpread: true
+        }
+    },
     rules
 };

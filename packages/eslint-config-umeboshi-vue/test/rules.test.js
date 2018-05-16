@@ -19,4 +19,9 @@ describe('eslint-config-vue/rules', () => {
         expect(rules['eol-last']).toBe(0);
     });
 
+    test('should enforce 4 space indentation for vue templates', () => {
+        expect(rules['vue/html-indent'][0]).toBe('error');
+        expect(rules['vue/html-indent'][1]).toBe(4);
+    });
+
 });

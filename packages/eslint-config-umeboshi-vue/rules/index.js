@@ -3,5 +3,6 @@ module.exports = {
     'import/extensions': ['error', 'always', {
         js: 'never',
         vue: 'never'
-    }]
+    }],
+    'vue/html-indent': ['error', 4]
 };
