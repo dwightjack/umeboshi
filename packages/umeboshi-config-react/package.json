@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-react",
-  "version": "0.5.0-7",
+  "version": "0.5.0-8",
   "description": "Umeboshi React configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -21,6 +21,6 @@
     "webpack": "^4.0.0"
   },
   "dependencies": {
-    "umeboshi-config": "^0.5.0-7"
+    "umeboshi-config": "^0.5.0-8"
   }
 }
