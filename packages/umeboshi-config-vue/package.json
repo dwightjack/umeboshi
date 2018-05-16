@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@vue/component-compiler-utils": "^1.0.0",
-    "babel-core": "^6.0.0",
+    "babel-core": "^6.25.0",
     "babel-jest": "^22.0.0",
     "css-loader": "*",
     "globby": "^8.0.0",
