@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi-vue",
-  "version": "0.4.1",
+  "version": "0.5.0-1",
   "description": "Vue.js ESLint config for Umeboshi Templates",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
