@@ -10,5 +10,10 @@ module.exports = merge(config, {
     transform: {
         '^.+\\.js$': 'babel-jest',
         '.*\\.(vue)$': 'vue-jest'
+    },
+    globals: {
+        'vue-jest': {
+            experimentalCSSCompile: false
+        }
     }
 });
