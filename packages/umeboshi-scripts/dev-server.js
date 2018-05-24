@@ -56,7 +56,9 @@ portfinder.getPortPromise({ port }).then((p) => {
 
     serve(options).then((server) => {
         server.on('listening', () => {
-            console.log(green(`\nStarted a server at http://${address}:${p}\n`)); //eslint-disable-line no-console
+            console.log(green('`\nStarted a server at:\n')); //eslint-disable-line no-console
+            console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
+            console.log(green(`- http://${address}:${p}\n`)); //eslint-disable-line no-console
         });
     });
 
