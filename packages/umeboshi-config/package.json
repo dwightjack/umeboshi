@@ -36,7 +36,6 @@
     "sass-loader": "^7.0.0",
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "1.2.5",
-    "umeboshi-dev-utils": "^0.4.1",
-    "webpack-merge": "~4.1.0"
+    "umeboshi-dev-utils": "^0.4.1"
   }
 }
