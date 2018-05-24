@@ -64,6 +64,19 @@ const mergeConfig = (config, source, ...args) => {
 };
 
 /**
+ * Returns a plain webpack config or an array of configs
+ *
+ * @param {object|object[]} config Config to resolve. Either a plain object or a webpack-chain instance
+ * @return {object|object[]}
+ */
+const toWebpackConfig = (config) => {
+    if (Array.isArray(config)) {
+        return config.map(toWebpackConfig);
+    }
+    return isFunction(config.toConfig) ? config.toConfig() : config;
+};
+
+/**
  * Resolves a path local to the project root folder.
  * Works as `path.resolve` with the project root as its first argument
  *
@@ -212,5 +225,6 @@ module.exports = {
     resolve,
     evaluate,
     mergeConfig,
+    toWebpackConfig,
     webpackConfig
 };
