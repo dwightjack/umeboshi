@@ -1,18 +1,18 @@
-const express = require('express');
 const { green } = require('chalk');
-const history = require('connect-history-api-fallback');
 const portfinder = require('portfinder');
 const { paths } = require('umeboshi-dev-utils');
-const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/server');
+const { localhost, address } = require('umeboshi-dev-utils/lib/server');
+const {
+    loadUmeboshiConfig
+} = require('umeboshi-dev-utils');
+const { createServer } = require('./lib/server');
+const { appMode = 'spa' } = loadUmeboshiConfig();
+
 const { port } = localhost;
-const app = express();
-
-app.use(history());
-app.use(express.static(paths.toAbsPath('dist.root')));
-
-if (middlewares.length > 0) {
-    middlewares.forEach((middleware) => app.use(middleware));
-}
+const app = createServer({
+    appMode,
+    contentBase: paths.toAbsPath('dist.root')
+});
 
 portfinder.getPortPromise({ port }).then((p) => {
     app.listen(p, () => {
