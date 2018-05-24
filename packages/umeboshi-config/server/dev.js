@@ -12,7 +12,7 @@ module.exports = (env = {}, config = {}) => {
 
     return {
         content: [paths.toAbsPath('dist.root')],
-        hot: false,
+        hot: true,
         port,
         host: '0.0.0.0',
         dev: {
