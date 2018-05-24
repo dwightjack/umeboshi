@@ -2,7 +2,7 @@ const {
     css, scss, resolveUrl, postcss, addCSSRule, applyLoaders, umeStyles
 } = require('umeboshi-config/webpack/style-loaders');
 const { paths } = require('umeboshi-dev-utils');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 
