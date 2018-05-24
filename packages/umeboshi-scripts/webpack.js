@@ -9,8 +9,8 @@ const umeWebpack = loadUmeboshiConfig('webpack');
 
 module.exports = (env = {}) => {
 
-    const { analyze } = env;
-    const webpackConfig = loadConfig(`webpack/webpack.${PRODUCTION || analyze ? 'prod' : 'dev'}.js`);
+    const { analyze, production = PRODUCTION } = env;
+    const webpackConfig = loadConfig(`webpack/webpack.${production || analyze ? 'prod' : 'dev'}.js`);
 
     const addAnalyzer = analyze ? (config) => {
         config.plugin('bundle-analyzer')
