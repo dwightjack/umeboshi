@@ -2,7 +2,7 @@
  * Development Server Config
  */
 const { paths } = require('umeboshi-dev-utils');
-const { localhost, address } = require('umeboshi-dev-utils/lib/server');
+const { localhost } = require('umeboshi-dev-utils/lib/server');
 
 module.exports = (env = {}, config = {}) => {
 
@@ -14,7 +14,7 @@ module.exports = (env = {}, config = {}) => {
         content: [paths.toAbsPath('dist.root')],
         hot: false,
         port,
-        host: address,
+        host: '0.0.0.0',
         dev: {
             stats,
             port,
