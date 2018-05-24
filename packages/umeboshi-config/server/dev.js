@@ -15,6 +15,7 @@ module.exports = (env = {}, config = {}) => {
         hot: true,
         port,
         host: '0.0.0.0',
+        logLevel: 'warn',
         dev: {
             stats,
             port,
