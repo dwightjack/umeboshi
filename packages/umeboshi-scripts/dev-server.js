@@ -25,6 +25,7 @@ if (!config) {
 
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
+    config.output.publicPath = `http://${address}:${port}${config.output.publicPath}`;
     const compiler = webpack(config);
     const options = Object.assign(
         {
@@ -50,7 +51,7 @@ portfinder.getPortPromise({ port }).then((p) => {
 
             }
         },
-        mergeConfig(serverConf({ port: p }, config), devServer, compiler),
+        mergeConfig(serverConf({ port: p, publicPath: config.output.publicPath }, config), devServer, compiler),
         { compiler }
     );
 

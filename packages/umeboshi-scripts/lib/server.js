@@ -7,12 +7,17 @@ const { middlewares } = require('umeboshi-dev-utils/lib/server');
 const historyMiddleware = (conf) => convert(history(conf));
 
 const spaMode = (app, render) => {
+
     app.use(historyMiddleware());
 
-    app.get('/index.html', (req, res) => {
-        render(req)
-            .then((html) => res.end(html))
-            .catch(() => res.sendStatus(404));
+    app.use((ctx, next) => {
+        if (ctx.method === 'GET' && ctx.path === '/index.html') {
+            return render(ctx)
+                .then((html) => { ctx.body = html; })
+                .catch((err) => ctx.throw(404, err.toString()));
+
+        }
+        return next();
     });
 };
 
