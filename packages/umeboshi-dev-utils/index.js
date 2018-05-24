@@ -188,7 +188,7 @@ const loadConfig = (filepath, resolvePaths = CONFIG_LOAD_PATHS) => {
  */
 const loadUmeboshiConfig = (frag) => {
     if (!existsLocal('umeboshi.config.js')) {
-        return undefined;
+        return {};
     }
 
     try {
