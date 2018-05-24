@@ -16,6 +16,8 @@ const app = createServer({
 
 portfinder.getPortPromise({ port }).then((p) => {
     app.listen(p, () => {
-        console.log(green(`Listening on http://${address}:${p}`)); //eslint-disable-line no-console
+        console.log(green('Static server listening at:\n')); //eslint-disable-line no-console
+        console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
+        console.log(green(`- http://${address}:${p}`)); //eslint-disable-line no-console
     });
 });
