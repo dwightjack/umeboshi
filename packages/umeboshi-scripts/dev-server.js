@@ -1,66 +1,63 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
 const { green } = require('chalk');
-const WebpackDevServer = require('webpack-dev-server');
+const serve = require('webpack-serve');
 const {
     loadConfig, paths, loadUmeboshiConfig, mergeConfig
 } = require('umeboshi-dev-utils');
 const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/server');
+const { spaMode } = require('./lib/server');
 const { port } = localhost;
 
-const serverConf = loadConfig('webpack/webpack.server.js');
-let devConf = loadConfig('webpack/webpack.dev.js')();
-const umeDevServer = loadUmeboshiConfig('devServer');
+const serverConf = loadConfig('server/dev.js');
+let config = require('./webpack')({ analyze: false, production: false });
 
-if (Array.isArray(devConf)) {
-    devConf = devConf.find((config) => config.get('target') === 'web');
+const { devServer, appMode = 'spa' } = loadUmeboshiConfig();
+
+
+if (Array.isArray(config)) {
+    config = config.find(({ target }) => target === 'web');
 }
 
-if (!devConf) {
+if (!config) {
     throw new TypeError('Invalid webpack configuration');
 }
 
-const templatePath = paths.toAbsPath('dist.root/index.html');
-
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
-    const webpackConfig = serverConf({ port: p }, devConf);
-
-    const config = mergeConfig(webpackConfig, umeDevServer).toConfig();
-    const { devServer, stats } = config;
-
-    delete config.devServer;
-
     const compiler = webpack(config);
+    const options = Object.assign(
+        {
+            add(app) {
+                if (middlewares.length > 0) {
+                    middlewares.forEach((middleware) => app.use(middleware));
+                }
 
-    const devServerConf = Object.assign({
-        after(app) {
-            if (middlewares.length > 0) {
-                middlewares.forEach((middleware) => app.use(middleware));
+                if (appMode === 'spa') {
+                    const template = paths.toAbsPath('dist.root/index.html');
+                    const render = () => new Promise((resolve, reject) => {
+                        compiler.outputFileSystem.readFile(template, (err, file) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(file.toString());
+                            }
+                        });
+                    });
+
+                    spaMode(app, render);
+                }
+
             }
-        }
-    }, devServer, { stats });
+        },
+        mergeConfig(serverConf({ port: p }, config), devServer, compiler),
+        { compiler }
+    );
 
-    const server = new WebpackDevServer(compiler, devServerConf);
-
-    server.app.get('*', (req, res) => {
-        compiler.outputFileSystem.readFile(templatePath, (err, file) => {
-            if (err) {
-                res.sendStatus(404);
-            } else {
-                res.end(file.toString());
-            }
+    serve(options).then((server) => {
+        server.on('listening', () => {
+            console.log(green(`\nStarted a server at http://${address}:${p}\n`)); //eslint-disable-line no-console
         });
-    });
-
-    server.middleware.waitUntilValid(() => {
-        console.log(green(`\nStarted a server at http://${address}:${p}\n`)); //eslint-disable-line no-console
-    });
-
-    server.listen(p, (err) => {
-        if (err) {
-            console.error(err); //eslint-disable-line no-console
-        }
     });
 
 });
