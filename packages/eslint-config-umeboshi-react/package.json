@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi-react",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "React ESLint config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "eslint-config-airbnb": "~16.1.0",
-    "eslint-config-umeboshi": "^0.5.0",
+    "eslint-config-umeboshi": "^0.5.1",
     "eslint-plugin-import": "~2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.0",
     "eslint-plugin-react": "^7.4.0"
