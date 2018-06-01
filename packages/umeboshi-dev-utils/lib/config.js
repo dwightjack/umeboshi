@@ -49,11 +49,10 @@ const createConfig = (env = {}) => {
                 hosts: this.get('hosts') || {}
             };
             const config = [...$store].reduce((acc, [key, value]) => {
-                const frag = evaluate(value, api, e);
+                let frag = evaluate(value, api, e);
                 if ($extends.has(key)) {
-                    $extends.get(key).reduce((f, fn) => {
-                        fn(f, api, e);
-                        return f;
+                    frag = $extends.get(key).reduce((f, fn) => {
+                        return fn(f, api, e) || f;
                     }, frag);
                 }
                 acc[key] = frag;

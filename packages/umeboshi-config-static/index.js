@@ -37,7 +37,23 @@ const renderMiddleware = () => {
 
 };
 
-module.exports = ({ config }) => {
+module.exports = (config) => {
+
+    const env = config.get('env');
+
+    const webpack = config.get('webpack');
+
+
+
+
+
+
+    config.tap('webpack', (webpackConfig) => {
+        return [
+            webpackConfig,
+            webpackConfig
+        ];
+    })
 
     let baseConfig;
     try {
