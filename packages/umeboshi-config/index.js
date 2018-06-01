@@ -5,7 +5,9 @@ const customizr = require('./modernizr/prod');
 const modernizr = require('./modernizr/dev');
 const devServer = require('./server/dev');
 
-module.exports = (config, { production, analyze }) => {
+module.exports = (config) => {
+
+    const { production, analyze } = config.get('env');
 
     config.merge({
         hosts,

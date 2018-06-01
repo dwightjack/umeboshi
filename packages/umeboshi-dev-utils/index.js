@@ -202,23 +202,23 @@ const loadUmeboshiConfig = (frag) => {
 };
 
 
-const resolveExtends = (config = {}, $config, env) => {
+const resolveExtends = (config = {}, $config) => {
     if (config.extends) {
         const presets = config.extends;
-        Object.keys(presets).reduceRight(($config, p) => {
+        Object.keys(presets).reduceRight(($conf, p) => {
             const preset = require(p);
-            const options = Object.assign({}, presets[p], env);
-            const parentConfig = evaluate(preset, $config, env, options);
-            return $config;
+            const options = Object.assign({}, presets[p]);
+            preset($conf, options);
+            return $conf;
         }, $config);
     }
     return $config;
 };
 
 
-const resolveConfig = ($config, env) => {
+const resolveConfig = ($config) => {
     const config = loadUmeboshiConfig();
-    return resolveExtends({ extends: config.extends }, $config, env);
+    return resolveExtends({ extends: config.extends }, $config);
 };
 
 /**

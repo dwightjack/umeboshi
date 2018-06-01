@@ -4,7 +4,9 @@ const {
     staticMiddleware
 } = require('./middlewares');
 
-module.exports = (config, { server }) => {
+module.exports = (config) => {
+
+    const { server } = config.get('env');
 
     config.set('middlewares', (api) => {
 

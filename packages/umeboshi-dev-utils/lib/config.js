@@ -1,10 +1,13 @@
+const merge = require('lodash/merge');
 const { evaluate, APP_PATH } = require('../index');
 const paths = require('./paths');
 
-const createConfig = () => {
+const createConfig = (env = {}) => {
 
     const $store = new Map();
     const $extends = new Map();
+
+    $store.set('env', env);
 
     return {
         get(key) {
@@ -38,27 +41,28 @@ const createConfig = () => {
             $extends.get(key).push(fn);
             return this;
         },
-        evaluate(env) {
+        evaluate() {
+            const e = this.get('env');
             const api = {
-                paths: paths(APP_PATH, evaluate(this.get('paths') || {}, env)),
+                paths: paths(APP_PATH, evaluate(this.get('paths') || {}, e)),
                 address: require('ip').address(),
                 hosts: this.get('hosts') || {}
             };
             const config = [...$store].reduce((acc, [key, value]) => {
-                const frag = evaluate(value, api, env);
+                const frag = evaluate(value, api, e);
                 if ($extends.has(key)) {
                     $extends.get(key).reduce((f, fn) => {
-                        fn(f, api, env);
+                        fn(f, api, e);
                         return f;
-                    }, frag)
+                    }, frag);
                 }
-                acc[key] = frag
+                acc[key] = frag;
 
                 return acc;
             }, {});
             return { api, config };
         }
-    }
+    };
 };
 
 module.exports = createConfig;
