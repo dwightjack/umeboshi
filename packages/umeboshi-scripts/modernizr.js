@@ -2,11 +2,12 @@ const crypto = require('crypto');
 const fs = require('fs');
 
 const {
-    loadUmeboshiConfig, mergeConfig, paths, resolveConfig
+    loadUmeboshiConfig, mergeConfig, resolveConfig
 } = require('umeboshi-dev-utils');
+const createConfig = require('umeboshi-dev-utils/lib/config');
 
 
-const config = resolveConfig();
+const { config, api } = resolveConfig(createConfig()).evaluate();
 const umeModernizr = loadUmeboshiConfig('modernizr');
 const umeCustomizr = loadUmeboshiConfig('customizr');
 
@@ -14,7 +15,7 @@ const umeCustomizr = loadUmeboshiConfig('customizr');
 const devConfig = mergeConfig(config.modernizr, umeModernizr);
 const prodConfig = mergeConfig(config.customizr, umeCustomizr);
 
-const filePath = paths.toPath('dist.assets/vendors/modernizr');
+const filePath = api.paths.toPath('dist.assets/vendors/modernizr');
 
 require('mkdirp').sync(filePath);
 
