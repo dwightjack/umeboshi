@@ -7,32 +7,35 @@ const serve = require('webpack-serve');
 const {
     loadUmeboshiConfig, mergeConfig, evaluate, resolveConfig
 } = require('umeboshi-dev-utils');
-const { localhost, address } = require('umeboshi-dev-utils/lib/server');
-const { port } = localhost;
+const createConfig = require('umeboshi-dev-utils/lib/config');
 
-const config = require('./webpack')({ analyze: false, production: false, server: true });
+const webpackConfig = require('./webpack')({ analyze: false, production: false, server: true });
 let clientConfig;
 
-if (Array.isArray(config)) {
-    clientConfig = config.find(({ target }) => target === 'web');
+if (Array.isArray(webpackConfig)) {
+    clientConfig = webpackConfig.find(({ target }) => target === 'web');
 } else {
-    clientConfig = config;
+    clientConfig = webpackConfig;
 }
 
 if (!clientConfig) {
     throw new TypeError('Invalid webpack configuration');
 }
 
+const compiler = webpack(clientConfig);
+
+const env = { analyze: false, production: false, server: true, compiler };
+const { config, api } = resolveConfig(createConfig(env)).evaluate();
+const { middlewares, devServer, onServe = noop } = config;
+const { port } = api.hosts.local;
+
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
-    const compiler = webpack(clientConfig);
-    const env = { server: true, compiler };
-    const { middlewares, devServer, onServe = noop } = resolveConfig(env);
 
     const { devServer: umeDevServer, middlewares: umeMiddlewares, onServe: umeOnServe } = loadUmeboshiConfig();
 
-    const appMiddlewares = umeMiddlewares ? evaluate(umeMiddlewares, evaluate(middlewares, env), env) : middlewares;
-    const args = [{ port: p, publicPath: config.output.publicPath }, config, compiler];
+    const appMiddlewares = umeMiddlewares ? evaluate(umeMiddlewares, evaluate(middlewares, env), env) : evaluate(middlewares, env);
+    const args = [{ port: p, publicPath: webpackConfig.output.publicPath }, webpackConfig, compiler];
     const options = Object.assign(
         {
             add(app) {
@@ -54,7 +57,7 @@ portfinder.getPortPromise({ port }).then((p) => {
             server.on('listening', () => {
                 console.log(green('`\nStarted a server at:\n')); //eslint-disable-line no-console
                 console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
-                console.log(green(`- http://${address}:${p}\n`)); //eslint-disable-line no-console
+                console.log(green(`- http://${api.address}:${p}\n`)); //eslint-disable-line no-console
             });
         });
 
