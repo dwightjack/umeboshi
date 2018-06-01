@@ -1,6 +1,7 @@
 const { resolveConfig, loadUmeboshiConfig, mergeConfig } = require('umeboshi-dev-utils');
+const createConfig = require('umeboshi-dev-utils/lib/config');
 
-const { jest } = resolveConfig();
+const { config } = resolveConfig(createConfig()).evaluate();
 const umeJest = loadUmeboshiConfig('jest');
 
-module.exports = mergeConfig(jest, umeJest);
+module.exports = mergeConfig(config.jest || {}, umeJest);
