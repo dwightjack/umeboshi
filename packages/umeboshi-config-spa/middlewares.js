@@ -10,16 +10,20 @@ const spaRenderMiddleware = ({ compiler, templatePath }) => {
 
     const testRegexp = /(\.html|\/)$/;
 
+
     return (ctx, next) => {
         if (ctx.method === 'GET' && testRegexp.test(ctx.path)) {
-            compiler.outputFileSystem.readFile(templatePath, (err, file) => {
-                if (err) {
-                    ctx.throw(404, err.toString());
-                } else {
-                    ctx.body = file.toString();
-                }
+            return new Promise((resolve) => {
+                compiler.outputFileSystem.readFile(templatePath, (err, file) => {
+                    if (err) {
+                        ctx.throw(404, err.toString());
+                        resolve(err);
+                    } else {
+                        ctx.body = file.toString();
+                        resolve(file);
+                    }
+                });
             });
-            return Promise.resolve();
         }
         return next();
     };
