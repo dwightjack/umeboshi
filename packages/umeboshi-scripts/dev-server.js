@@ -1,65 +1,61 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
 const { green } = require('chalk');
+const noop = require('lodash/noop');
+const isFunction = require('lodash/isFunction');
 const serve = require('webpack-serve');
 const {
-    loadConfig, paths, loadUmeboshiConfig, mergeConfig
+    loadUmeboshiConfig, mergeConfig, evaluate, resolveConfig
 } = require('umeboshi-dev-utils');
-const { middlewares, localhost, address } = require('umeboshi-dev-utils/lib/server');
-const { spaMode } = require('./lib/server');
+const { localhost, address } = require('umeboshi-dev-utils/lib/server');
 const { port } = localhost;
 
-const serverConf = loadConfig('server/dev.js');
-let config = require('./webpack')({ analyze: false, production: false });
-
-const { devServer, appMode = 'spa' } = loadUmeboshiConfig();
-
+const config = require('./webpack')({ analyze: false, production: false, server: true });
+let clientConfig;
 
 if (Array.isArray(config)) {
-    config = config.find(({ target }) => target === 'web');
+    clientConfig = config.find(({ target }) => target === 'web');
+} else {
+    clientConfig = config;
 }
 
-if (!config) {
+if (!clientConfig) {
     throw new TypeError('Invalid webpack configuration');
 }
 
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
-    const compiler = webpack(config);
+    const compiler = webpack(clientConfig);
+    const env = { server: true, compiler };
+    const { middlewares, devServer, onServe = noop } = resolveConfig(env);
+
+    const { devServer: umeDevServer, middlewares: umeMiddlewares, onServe: umeOnServe } = loadUmeboshiConfig();
+
+    const appMiddlewares = umeMiddlewares ? evaluate(umeMiddlewares, evaluate(middlewares, env), env) : middlewares;
+    const args = [{ port: p, publicPath: config.output.publicPath }, config, compiler];
     const options = Object.assign(
         {
             add(app) {
-                if (middlewares.length > 0) {
-                    middlewares.forEach((middleware) => app.use(middleware));
-                }
-
-                if (appMode === 'spa') {
-                    const template = paths.toAbsPath('dist.root/index.html');
-                    const render = () => new Promise((resolve, reject) => {
-                        compiler.outputFileSystem.readFile(template, (err, file) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(file.toString());
-                            }
-                        });
-                    });
-
-                    spaMode(app, render);
+                if (appMiddlewares.length > 0) {
+                    appMiddlewares.forEach(
+                        (middleware) => app.use(middleware)
+                    );
                 }
 
             }
         },
-        mergeConfig(serverConf({ port: p, publicPath: config.output.publicPath }, config), devServer, compiler),
+        mergeConfig(devServer(...args), umeDevServer, ...args),
         { compiler }
     );
 
-    serve(options).then((server) => {
-        server.on('listening', () => {
-            console.log(green('`\nStarted a server at:\n')); //eslint-disable-line no-console
-            console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
-            console.log(green(`- http://${address}:${p}\n`)); //eslint-disable-line no-console
+    Promise.all([onServe(options, ...args), isFunction(umeOnServe) && umeOnServe(options, ...args)])
+        .then(() => serve(options))
+        .then((server) => {
+            server.on('listening', () => {
+                console.log(green('`\nStarted a server at:\n')); //eslint-disable-line no-console
+                console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
+                console.log(green(`- http://${address}:${p}\n`)); //eslint-disable-line no-console
+            });
         });
-    });
 
 });

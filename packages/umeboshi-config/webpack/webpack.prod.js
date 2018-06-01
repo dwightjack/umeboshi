@@ -3,12 +3,10 @@ const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const { paths } = require('umeboshi-dev-utils');
 
-const baseConf = require('./webpack.base');
-
-module.exports = (env) => {
-    const config = baseConf(env);
+module.exports = (api, env) => {
+    const config = require('./webpack.base')(api, env);
+    const { paths } = api;
 
     config
         .cache(true)

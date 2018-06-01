@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const { paths, webpackConfig } = require('umeboshi-dev-utils');
+const { webpackConfig } = require('umeboshi-dev-utils');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const {
@@ -11,11 +11,10 @@ const {
     umeStyles
 } = require('./style-loaders');
 
-const PRODUCTION = process.env.NODE_ENV === 'production';
-const destPath = paths.toAbsPath('dist.assets');
-
-module.exports = (/*env*/) => {
+module.exports = ({ paths } /*env*/) => {
     const config = webpackConfig();
+    const PRODUCTION = process.env.NODE_ENV === 'production';
+    const destPath = paths.toAbsPath('dist.assets');
 
     /* eslint-disable indent */
     config
@@ -136,7 +135,12 @@ module.exports = (/*env*/) => {
             name: 'scss',
             extract: PRODUCTION,
             test: /\.scss$/,
-            loaders: [...baseStyleLoaders, resolveUrl(), scss()]
+            loaders: [...baseStyleLoaders, resolveUrl(), scss({
+                includePaths: [
+                    paths.toAbsPath('src.assets/styles'),
+                    'node_modules'
+                ]
+            })]
         });
     }
 

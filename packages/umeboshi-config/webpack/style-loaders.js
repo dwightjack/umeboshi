@@ -1,4 +1,4 @@
-const { paths, loadUmeboshiConfig } = require('umeboshi-dev-utils');
+const { loadUmeboshiConfig } = require('umeboshi-dev-utils');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const umeStyles = Object.assign({
@@ -64,7 +64,7 @@ const scss = createStyleLoader('sass-loader', {
     sourceMap,
     precision: 10,
     includePaths: [
-        paths.toAbsPath('src.assets/styles'),
+        //paths.toAbsPath('src.assets/styles'),
         'node_modules'
     ],
     outputStyle: 'expanded'

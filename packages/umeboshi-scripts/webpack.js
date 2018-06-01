@@ -1,25 +1,27 @@
 const {
-    loadConfig, loadUmeboshiConfig, mergeConfig, toWebpackConfig
+    loadUmeboshiConfig, mergeConfig, toWebpackConfig, evaluate, resolveConfig
 } = require('umeboshi-dev-utils');
+const createConfig = require('umeboshi-dev-utils/lib/config');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const identity = require('lodash/identity');
+
 const PRODUCTION = process.env.NODE_ENV === 'production';
 
-const umeWebpack = loadUmeboshiConfig('webpack');
+module.exports = (e = {}) => {
 
-module.exports = (env = {}) => {
+    const env = Object.assign({ production: PRODUCTION }, e);
+    const { config } = resolveConfig(createConfig(), env).evaluate(env);
+    const webpackConfig = config.webpack;
+    const umeWebpack = loadUmeboshiConfig('webpack');
 
-    const { analyze, production = PRODUCTION } = env;
-    const webpackConfig = loadConfig(`webpack/webpack.${production || analyze ? 'prod' : 'dev'}.js`);
-
-    const addAnalyzer = analyze ? (config) => {
-        config.plugin('bundle-analyzer')
+    const addAnalyzer = env.analyze ? (cfg) => {
+        cfg.plugin('bundle-analyzer')
             .use(BundleAnalyzerPlugin, [{
                 analyzerHost: '0.0.0.0'
             }]);
-        return config;
+        return cfg;
     } : identity;
-    const packageConfig = webpackConfig(env);
+    const packageConfig = evaluate(webpackConfig, env);
 
     if (Array.isArray(packageConfig)) {
         return packageConfig.reduce(

@@ -1,0 +1,27 @@
+{
+  "name": "umeboshi-config-static",
+  "version": "0.1.1-1",
+  "description": "Umeboshi config to render static websites",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-config-static",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "umeboshi"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "dependencies": {
+    "require-uncached": "~1.0.0",
+    "start-server-webpack-plugin": "^2.2.5",
+    "umeboshi-config-spa": "^0.1.0",
+    "umeboshi-dev-utils": "^0.4.3-1",
+    "webpack": "^4.0.0",
+    "webpack-assets-manifest": "^3.0.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "peerDependencies": {
+    "webpack": "^4.0.0"
+  }
+}

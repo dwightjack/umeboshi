@@ -1,14 +1,11 @@
-const path = require('path');
 
-const { APP_PATH } = require('umeboshi-dev-utils');
-
-module.exports = {
+module.exports = ({ paths }) => ({
     verbose: true,
     bail: true,
     globals: {
         __PRODUCTION__: false
     },
-    rootDir: path.resolve(APP_PATH, 'app/assets/js'),
+    rootDir: paths.toAbsPath('src.assets/js'),
     collectCoverageFrom: [
         'components/**/*.{js,jsx}',
         'objects/**/*.{js,jsx}',
@@ -25,4 +22,4 @@ module.exports = {
         '\\.(css|scss)$': 'identity-obj-proxy',
         '^@[/](.+)': '<rootDir>/$1'
     }
-};
+});

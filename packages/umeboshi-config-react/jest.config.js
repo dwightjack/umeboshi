@@ -1,5 +1,3 @@
-const config = require('umeboshi-config/jest.config');
-
-module.exports = Object.assign(config, {
+module.exports = (jestConfig) => Object.assign(jestConfig, {
     setupFiles: [require.resolve('./lib/jest.setup')]
 });

@@ -1,11 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const { paths } = require('umeboshi-dev-utils');
 
-const baseConf = require('./webpack.base');
-
-module.exports = (env) => {
-    const config = baseConf(env);
+module.exports = (api, env) => {
+    const config = require('./webpack.base')(api, env);
+    const { paths } = api;
 
     /* eslint-disable indent */
 

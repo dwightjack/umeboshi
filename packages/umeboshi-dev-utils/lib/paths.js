@@ -3,12 +3,13 @@ const path = require('path');
 const glob = require('glob');
 const get = require('lodash/get');
 const merge = require('lodash/merge');
+const { APP_PATH } = require('../index');
 
 const EXCLUDE_REGEXP = /\.(js|css|scss|html|ejs|\*)$/;
 
-const Paths = (APP_PATH, conf) => {
+const paths = (APP_PATH, config) => {
 
-    const $paths = merge({}, conf);
+    const $paths = merge({}, config);
 
     return {
 
@@ -45,4 +46,4 @@ const Paths = (APP_PATH, conf) => {
     };
 };
 
-module.exports = Paths;
+module.exports = paths;

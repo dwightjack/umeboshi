@@ -2,16 +2,17 @@ const crypto = require('crypto');
 const fs = require('fs');
 
 const {
-    loadConfig, loadUmeboshiConfig, mergeConfig, paths
+    loadUmeboshiConfig, mergeConfig, paths, resolveConfig
 } = require('umeboshi-dev-utils');
 
+
+const config = resolveConfig();
 const umeModernizr = loadUmeboshiConfig('modernizr');
 const umeCustomizr = loadUmeboshiConfig('customizr');
 
-const devConfig = mergeConfig(loadConfig('modernizr/dev.js'), umeModernizr);
 
-
-const prodConfig = mergeConfig(loadConfig('modernizr/prod.js'), umeCustomizr);
+const devConfig = mergeConfig(config.modernizr, umeModernizr);
+const prodConfig = mergeConfig(config.customizr, umeCustomizr);
 
 const filePath = paths.toPath('dist.assets/vendors/modernizr');
 

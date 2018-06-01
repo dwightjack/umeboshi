@@ -1,14 +1,12 @@
 /**
  * Development Server Config
  */
-const { paths } = require('umeboshi-dev-utils');
-const { localhost } = require('umeboshi-dev-utils/lib/server');
+module.exports = ({ paths, hosts }) => (env = {}, webpackConfig = {}) => {
 
-module.exports = (env = {}, config = {}) => {
-
+    const { localhost = {} } = hosts;
     const port = env.port || localhost.port;
     const { publicPath } = env;
-    const { stats } = config;
+    const { stats } = webpackConfig;
 
     return {
         content: [paths.toAbsPath('dist.root')],

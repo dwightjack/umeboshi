@@ -1,7 +1,6 @@
-const { paths } = require('umeboshi-dev-utils');
 const { options } = require('./dev');
 
-module.exports = {
+module.exports = ({ paths }) => ({
 
     cache: true,
 
@@ -44,4 +43,4 @@ module.exports = {
 
     // Have custom Modernizr tests? Add them here.
     customTests: []
-};
+});

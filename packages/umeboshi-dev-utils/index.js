@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const readPkgUp = require('read-pkg-up');
-const Paths = require('./lib/paths');
 const get = require('lodash/get');
+const merge = require('lodash/merge');
 const isFunction = require('lodash/isFunction');
 const WebpackChain = require('webpack-chain');
 
@@ -201,6 +201,26 @@ const loadUmeboshiConfig = (frag) => {
 
 };
 
+
+const resolveExtends = (config = {}, $config, env) => {
+    if (config.extends) {
+        const presets = config.extends;
+        Object.keys(presets).reduceRight(($config, p) => {
+            const preset = require(p);
+            const options = Object.assign({}, presets[p], env);
+            const parentConfig = evaluate(preset, $config, env, options);
+            return $config;
+        }, $config);
+    }
+    return $config;
+};
+
+
+const resolveConfig = ($config, env) => {
+    const config = loadUmeboshiConfig();
+    return resolveExtends({ extends: config.extends }, $config, env);
+};
+
 /**
  * Returns a new instance of `webpack-chain`
  *
@@ -208,10 +228,7 @@ const loadUmeboshiConfig = (frag) => {
  */
 const webpackConfig = () => new WebpackChain();
 
-const paths = mergeConfig(loadConfig('paths.js'), loadUmeboshiConfig('paths'));
-
 module.exports = {
-    paths: Paths(APP_PATH, paths),
     APP_PATH,
     SCRIPTS_LOAD_PATHS,
     CONFIG_LOAD_PATHS,
@@ -226,5 +243,6 @@ module.exports = {
     evaluate,
     mergeConfig,
     toWebpackConfig,
-    webpackConfig
+    webpackConfig,
+    resolveConfig
 };

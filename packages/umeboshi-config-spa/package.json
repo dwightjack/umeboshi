@@ -1,0 +1,24 @@
+{
+  "name": "umeboshi-config-spa",
+  "version": "0.1.0",
+  "description": "Umeboshi config to serve Single Page Application",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-config-spa",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "keywords": [
+    "umeboshi"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "dependencies": {
+    "@shellscape/koa-static": "^4.0.0",
+    "connect-history-api-fallback": "^1.5.0",
+    "koa": "^2.5.0",
+    "koa-connect": "^2.0.0"
+  },
+  "peerDependencies": {
+    "umeboshi-dev-utils": "^0.4.0"
+  }
+}
