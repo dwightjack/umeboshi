@@ -76,7 +76,13 @@ module.exports = (config, { paths }, env = {}) => {
             nodeArgs.push('--inspect');
         }
 
-        config.plugins.clear();
+        //config.plugins.clear();
+        [...config.plugins.store]
+            .forEach(([key]) => {
+                if (key !== 'define') {
+                    config.plugins.delete(key);
+                }
+            });
 
         config
             .watch(true)
