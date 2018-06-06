@@ -4,9 +4,8 @@ const { green } = require('chalk');
 const webpackConfig = require('umeboshi-scripts/webpack')({
     analyze: false, production: false, server: true, target: 'node'
 });
-const {
-    resolveConfig, createConfig
-} = require('umeboshi-dev-utils');
+const { resolveConfig } = require('umeboshi-dev-utils');
+const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const jamServe = require('../lib/server');
 

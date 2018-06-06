@@ -17,10 +17,11 @@ module.exports = (config, { port = 9000 }) => {
 
     config.set('onServe', ({ paths }) => {
 
-        return (env, webpackConfig, clientCompiler) => {
-            oldServe(env, webpackConfig, clientCompiler);
+        return (...args) => {
+            oldServe(...args);
+            const [{ compiler }] = args;
 
-            clientCompiler.hooks.done('jamServerStart', once(() => {
+            compiler.hooks.done.tap('jamServerStart', once(() => {
                 execa('ume-jam-server', {
                     env: {
                         MANIFEST: paths.toAbsPath('dist.assets/manifest.json'),

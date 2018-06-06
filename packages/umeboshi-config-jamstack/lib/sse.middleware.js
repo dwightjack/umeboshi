@@ -1,6 +1,7 @@
 const fs = require('fs');
+const path = require('path');
 
-let clientScript = fs.readFileSync('./lib/client.js', { encoding: 'utf8' });
+let clientScript = fs.readFileSync(path.resolve(__dirname, './client.js'), { encoding: 'utf8' });
 
 clientScript = clientScript.replace(/[\n\s]+/g, ' ');
 
