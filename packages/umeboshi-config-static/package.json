@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "koa-proxy": "^0.9.0",
+    "lodash": "^4.17.10",
     "require-uncached": "~1.0.0",
+    "sse-channel": "^3.0.1",
     "start-server-webpack-plugin": "^2.2.5",
     "umeboshi-config-spa": "^0.1.0",
     "umeboshi-dev-utils": "^0.4.3-1",

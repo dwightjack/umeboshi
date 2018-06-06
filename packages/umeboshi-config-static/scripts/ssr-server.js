@@ -1,26 +1,21 @@
 const fs = require('fs');
+const path = require('path');
 const webpack = require('webpack');
-const createServer = require('umeboshi-config-spa/server');
+const createServer = require('umeboshi-config-spa/server')();
 const SseChannel = require('sse-channel');
-const {
-    resolveConfig
-} = require('umeboshi-dev-utils');
+const http = require('http');
 const config = require('umeboshi-scripts/webpack')({ analyze: false, production: false, server: true });
 
-const clientScript = fs.readFileSync('./lib/client.js', { encoding: 'utf8' });
+const ssrMiddleware = require('../lib/ssr.middleware');
+let clientScript = fs.readFileSync(path.resolve(__dirname, '../lib/client.js'), { encoding: 'utf8' });
+
+clientScript = clientScript.replace(/[\n\s]+/g, ' ');
 
 const serverCompiler = webpack(config);
 const sse = new SseChannel({
-    cors: { origins: ['*'] }
+    cors: { origins: ['*'] },
+    jsonEncode: true
 });
-
-const sseMiddleware = ({ req, res }, next) => {
-    if (req.url.indexOf('/channel/ssr-server') === 0) {
-        sse.addClient(req, res);
-        return Promise.resolve();
-    }
-    return next();
-};
 
 const sseClientMiddleware = (ctx, next) => {
     if (ctx.body && ctx.body.includes('</head>')) {
@@ -31,41 +26,56 @@ const sseClientMiddleware = (ctx, next) => {
 
 const htmlMiddleware = (ctx, next) => {
     if (ctx.method === 'GET' && /(\/|\.html)$/.test(ctx.path)) {
-        return `<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <title>Document</title>
-        </head>
-        <body>
-            <div>Test</div>
-        </body>
-        </html>`;
+
+        ctx.body = `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Document</title>
+            </head>
+            <body>
+                <div>Test</div>
+            </body>
+            </html>`;
     }
     return next();
 };
 
 const app = createServer({
     middlewares: [
-        sseMiddleware,
-        htmlMiddleware,
+        ssrMiddleware({
+            bundlePath: path.resolve(process.cwd(), '.tmp/ssr.js'),
+            templatePath: path.resolve(process.cwd(), 'app/templates'),
+            serverCompiler
+        }),
         sseClientMiddleware
     ]
 });
 
-serverCompiler.plugin('done', () => {
+let isFirst = true;
 
-    serverCompiler.watch(
-        {},
-        (stats) => {
-            sse.send({ data: stats.toString(), event: 'reload' })
+const callback = app.callback();
+
+serverCompiler.watch(
+    {},
+    (err, stats) => {
+
+        if (isFirst) {
+            http.createServer((req, res) => {
+                if (req.url.indexOf('/channel/ssr-server') === 0) {
+                    sse.addClient(req, res);
+                    sse.send({ event: 'attached' });
+                } else {
+                    callback(req, res);
+                }
+            }).listen(8080);
+            isFirst = false;
+            return;
         }
-    );
-});
 
-
-app.listen(8080, () => {
-    console.log('listening...');
-});
+        const data = stats.toJson('minimal');
+        sse.send({ data, event: 'reload' });
+    }
+);
