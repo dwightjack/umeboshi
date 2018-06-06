@@ -1,60 +1,49 @@
 const requireUncached = require('require-uncached');
-const fs = require('fs');
-const tmpl = require('lodash/template');
-
-const toTemplatePath = (template, tmplPath) => `${tmplPath}/${template}.ejs`;
-
-const getTemplate = (template, tmplPath, def = 'default') => {
-    let t = toTemplatePath(template, tmplPath);
-    if (fs.existsSync(t) === false) {
-        t = toTemplatePath(def, tmplPath);
-    }
-    return tmpl(fs.readFileSync(t, { encoding: 'utf8' }));
-};
+const { getTemplate } = require('./utils');
 
 const ssrMiddleware = ({
-    bundlePath,
     templatePath,
-    serverCompiler
+    compiler,
+    match = /(\/|\.html?)$/
 }) => {
 
     let render;
 
-    serverCompiler.hooks.afterEmit.tap('reloadBundle', () => {
-        render = requireUncached(bundlePath).render; //eslint-disable-line prefer-destructuring
+    compiler.hooks.afterEmit.tap('reloadBundle', ({ assets }) => {
+        const bundle = Object.keys(assets).filter(({ emitted }) => !!emitted).find((k) => k.endsWith('.js'));
+        if (bundle) {
+            render = requireUncached(bundle.existsAt).render; //eslint-disable-line prefer-destructuring
+        } else {
+            console.warn(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
+        }
     });
+
+    const matcher = typeof match === 'function' ? match : (ctx) => ctx.method === 'GET' && match.test(ctx.path);
 
     return (ctx, next) => {
 
-        if (ctx.method === 'GET' && /(\/|\.html)$/.test(ctx.path)) {
+        if (matcher(ctx)) {
 
-            let page = '';
-            if (ctx.path.endsWith('/')) {
-                page += `${ctx.path}/index.js`;
-            } else if (ctx.path.endsWith('.html')) {
-                page += ctx.path.replace(/\.html$/, '.js');
+            try {
+                const {
+                    html,
+                    head = {},
+                    template = 'default'
+                } = render(ctx);
+
+                const pageTmpl = getTemplate(template, templatePath);
+
+                const output = pageTmpl({
+                    html,
+                    head,
+                    webpack: {},
+                    modernizr: false
+                });
+
+                ctx.body = output;
+            } catch (e) {
+                console.log(e); //eslint-disable-line no-console
             }
-
-            page = page.replace(/\/+/g, '/').replace(/^\//, '');
-
-            const {
-                html,
-                head = {},
-                template = 'default'
-            } = render({
-                page
-            });
-
-            const pageTmpl = getTemplate(template, templatePath);
-
-            const output = pageTmpl({
-                html,
-                head,
-                webpack: {},
-                modernizr: false
-            });
-
-            ctx.body = output;
         }
 
         return next();
