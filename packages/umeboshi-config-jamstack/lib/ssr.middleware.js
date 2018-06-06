@@ -7,14 +7,15 @@ const ssrMiddleware = ({
     match = /(\/|\.html?)$/
 }) => {
 
-    const manifest = requireUncached(process.env.MANIFEST);
+    const manifest = process.env.MANIFEST ? requireUncached(process.env.MANIFEST) : {};
 
     let render;
 
     compiler.hooks.afterEmit.tap('reloadBundle', ({ assets }) => {
-        const bundle = Object.keys(assets).filter(({ emitted }) => !!emitted).find((k) => k.endsWith('.js'));
+        const bundle = Object.keys(assets).filter((k) => !!assets[k].emitted).find((k) => k.endsWith('.js'));
+
         if (bundle) {
-            render = requireUncached(bundle.existsAt).render; //eslint-disable-line prefer-destructuring
+            render = requireUncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
         } else {
             console.warn(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
         }
