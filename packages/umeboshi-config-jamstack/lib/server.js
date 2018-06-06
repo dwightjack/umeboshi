@@ -5,6 +5,7 @@ const http = require('http');
 /*const config = require('umeboshi-scripts/webpack')({
     analyze: false, production: false, server: true, target: 'node'
 });*/
+const address = require('ip').address();
 
 const ssrMiddleware = require('../lib/ssr.middleware');
 const sseClientMiddleware = require('../lib/sse.middleware');
@@ -20,20 +21,23 @@ const jamServe = ({ templatePath, compiler }) => {
         jsonEncode: true
     });
 
-    const app = createServer({
-        middlewares: [
-            ssrMiddleware({
-                templatePath,
-                compiler
-            }),
-            sseClientMiddleware
-        ]
-    });
-
     return {
         watcher: null,
         server: null,
         start(port, cb) {
+
+            const app = createServer({
+                middlewares: [
+                    ssrMiddleware({
+                        templatePath,
+                        compiler
+                    }),
+                    sseClientMiddleware(
+                        `http://${address}:${port}`
+                    )
+                ]
+            });
+
             const callback = app.callback();
             const ssemw = sseReloadMiddleware(sse);
             let isFirst = true;

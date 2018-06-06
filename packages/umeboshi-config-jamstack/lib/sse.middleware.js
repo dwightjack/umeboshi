@@ -5,11 +5,16 @@ let clientScript = fs.readFileSync(path.resolve(__dirname, './client.js'), { enc
 
 clientScript = clientScript.replace(/[\n\s]+/g, ' ');
 
-const sseClientMiddleware = (ctx, next) => {
-    if (ctx.body && ctx.body.includes('</head>')) {
-        ctx.body = ctx.body.replace('</head>', `<script>${clientScript}</script>`);
-    }
-    return next();
+const sseClientMiddleware = (host) => {
+
+    clientScript.replace('{{HOST}}', host);
+
+    return (ctx, next) => {
+        if (ctx.body && ctx.body.includes('</head>')) {
+            ctx.body = ctx.body.replace('</head>', `<script>${clientScript}</script>`);
+        }
+        return next();
+    };
 };
 
 module.exports = sseClientMiddleware;

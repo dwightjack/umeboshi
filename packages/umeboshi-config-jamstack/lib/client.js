@@ -15,7 +15,7 @@
         return source;
     }
 
-    src = subscribe('/channel/ssr-server');
+    src = subscribe('{{HOST}}/channel/ssr-server');
     src.addEventListener('reload', function reload() {
         win.location.reload();
     });
