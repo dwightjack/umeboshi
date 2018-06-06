@@ -2,6 +2,12 @@ module.exports = (context, opts = {}) => {
 
     const isTest = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
 
+    const { asyncImport, async, browserslist } = Object.assign({
+        async: true,
+        asyncImport: true,
+        browserslist: false
+    }, opts);
+
     let presetEnv;
 
     if (isTest) {
@@ -20,17 +26,12 @@ module.exports = (context, opts = {}) => {
                 modules: false,
                 loose: true,
                 useBuiltIns: 'entry',
-                targets: {
+                targets: browserslist && {
                     browsers: ['> 0.25%', 'not op_mini all', 'not ie < 11']
                 }
             }
         ];
     }
-
-    const { asyncImport, async } = Object.assign({
-        async: true,
-        asyncImport: true
-    }, opts);
 
     return {
         presets: [
