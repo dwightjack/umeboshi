@@ -1,10 +1,10 @@
 {
-  "name": "umeboshi-config-static",
+  "name": "umeboshi-config-jamstack",
   "version": "0.1.1-6",
-  "description": "Umeboshi config to render static websites",
+  "description": "Umeboshi config to render JAMstack-like websites",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
-  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-config-static",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-config-jamstack",
   "bugs": "https://github.com/dwightjack/umeboshi/issues",
   "keywords": [
     "umeboshi"
