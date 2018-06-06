@@ -1,6 +1,8 @@
 module.exports = (context, opts = {}) => {
 
-    const isTest = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
+    const IS_TEST = process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
+
+    const IS_NODE = IS_TEST || process.env.TARGET_ENV === 'node';
 
     const { asyncImport, async, browserslist } = Object.assign({
         async: true,
@@ -10,7 +12,7 @@ module.exports = (context, opts = {}) => {
 
     let presetEnv;
 
-    if (isTest) {
+    if (IS_NODE) {
 
         presetEnv = [
             require('babel-preset-env').default, {
@@ -40,8 +42,8 @@ module.exports = (context, opts = {}) => {
         ],
 
         plugins: [
-            (isTest ? require.resolve('babel-plugin-transform-es2015-modules-commonjs') : null),
-            (isTest ? require.resolve('babel-plugin-dynamic-import-node') : null),
+            (IS_NODE && require.resolve('babel-plugin-transform-es2015-modules-commonjs')),
+            (IS_NODE && require.resolve('babel-plugin-dynamic-import-node')),
             [require.resolve('babel-plugin-transform-runtime'), { polyfill: false, regenerator: (asyncImport || async) }],
             ((asyncImport || async) ? [require.resolve('babel-plugin-transform-regenerator'), { async: false }] : null)
         ].filter(Boolean)
