@@ -1,6 +1,6 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
-module.exports = (config) => {
+module.exports = (config, { paths }) => {
 
     config.plugins.delete('html');
 
@@ -17,6 +17,7 @@ module.exports = (config) => {
             },
             transform(assets) {
                 return {
+                    modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
                     publicPath: config.output.get('publicPath'),
                     assets
                 };
