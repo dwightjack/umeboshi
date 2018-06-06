@@ -3,9 +3,7 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 //const StartServerPlugin = require('start-server-webpack-plugin');
 
-module.exports = (config, env = {}) => {
-
-    const { paths } = require('umeboshi-dev-utils');
+module.exports = (config, { paths }, env = {}) => {
 
     config.plugins.delete('html');
 
