@@ -2,6 +2,8 @@ const {
     staticMiddleware
 } = require('umeboshi-config-spa/middlewares');
 
+const proxy = require('koa-proxy');
+
 module.exports = (config) => {
 
     config.tap('webpack', (...args) => {
@@ -12,9 +14,13 @@ module.exports = (config) => {
         }
     });
 
-    config.set('middlewares', ({ paths }) => {
+    config.set('middlewares', ({ paths, address }) => {
         return [
-            staticMiddleware(staticMiddleware(paths.toAbsPath('dist.root')))
+            proxy({
+                host: `http://${address}:8080`,
+                match: /(\.html?|\/)$/
+            }),
+            staticMiddleware(paths.toAbsPath('dist.root'))
         ];
     });
 
