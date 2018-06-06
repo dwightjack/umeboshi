@@ -10,7 +10,7 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 module.exports = (e = {}) => {
 
     const env = Object.assign({ production: PRODUCTION }, e);
-    const { config } = resolveConfig(createConfig(), env).evaluate(env);
+    const { config } = resolveConfig(createConfig(env)).evaluate();
     const webpackConfig = config.webpack;
     const umeWebpack = loadUmeboshiConfig('webpack');
 
