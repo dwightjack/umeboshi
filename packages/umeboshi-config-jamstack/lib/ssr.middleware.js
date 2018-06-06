@@ -7,6 +7,8 @@ const ssrMiddleware = ({
     match = /(\/|\.html?)$/
 }) => {
 
+    const manifest = requireUncached(process.env.MANIFEST);
+
     let render;
 
     compiler.hooks.afterEmit.tap('reloadBundle', ({ assets }) => {
@@ -36,7 +38,7 @@ const ssrMiddleware = ({
                 const output = pageTmpl({
                     html,
                     head,
-                    webpack: {},
+                    webpack: manifest,
                     modernizr: false
                 });
 
