@@ -24,7 +24,9 @@ if (!clientConfig) {
 
 const compiler = webpack(clientConfig);
 
-const env = { analyze: false, production: false, server: true, compiler };
+const env = {
+    analyze: false, production: false, server: true, compiler
+};
 const { config, api } = resolveConfig(createConfig(env)).evaluate();
 const { middlewares, devServer, onServe = noop } = config;
 const { port } = api.hosts.local;
