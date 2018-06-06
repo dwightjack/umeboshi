@@ -6,10 +6,10 @@ import { Helmet } from 'react-helmet';
 const render = ({ path }) => {
 
     let page = '';
-    if (ctx.path.endsWith('/')) {
-        page += `${ctx.path}/index.js`;
-    } else if (ctx.path.endsWith('.html')) {
-        page += ctx.path.replace(/\.html$/, '.js');
+    if (path.endsWith('/')) {
+        page += `${path}/index.js`;
+    } else if (path.endsWith('.html')) {
+        page += path.replace(/\.html$/, '.js');
     }
 
     page = page.replace(/\/+/g, '/').replace(/^\//, '');
