@@ -47,10 +47,19 @@ module.exports = (config, { paths }, env = {}) => {
         });
 
 
-    config.module
-        .rule('css').use('css-loader').loader(require.resolve('css-loader/locals'));
-    config.module
-        .rule('scss').use('css-loader').loader(require.resolve('css-loader/locals'));
+    ['css', 'scss'].forEach((lang) => {
+        const rule = config.module.rule(lang);
+
+        //we don't need this on the server
+        rule.uses.delete('style-loader');
+        //just export a reference for css modules (if used)
+        if (rule.use('css-loader').has('options')) {
+            const { modules } = rule.use('css-loader').get('options');
+            if (modules) {
+                rule.use('css-loader').loader(require.resolve('css-loader/locals'));
+            }
+        }
+    });
 
     const serverEntry = env.server ? './src.assets/js/ssr.js' : './src.assets/js/render.js';
 
@@ -67,15 +76,6 @@ module.exports = (config, { paths }, env = {}) => {
     if (env.server) {
         /* eslint-disable indent */
 
-        const nodeArgs = [];
-
-        // Add --inspect or --inspect-brk flag when enabled
-        if (process.env.INSPECT_BRK_ENABLED) {
-            nodeArgs.push('--inspect-brk');
-        } else if (process.env.INSPECT_ENABLED) {
-            nodeArgs.push('--inspect');
-        }
-
         //config.plugins.clear();
         [...config.plugins.store]
             .forEach(([key]) => {
@@ -86,21 +86,9 @@ module.exports = (config, { paths }, env = {}) => {
 
         config
             .watch(true)
-            // .entry('ssr')
-            //     .prepend('webpack/hot/poll?300')
-            //     .end()
-            // .plugin('ssr-server')
-            //     .use(StartServerPlugin, ['ssr.js'])
-            //     .end()
-            // .plugin('ssr-hot')
-            //     .use(webpack.HotModuleReplacementPlugin)
-            //     .end()
-
             .plugin('ignore')
-                .use(webpack.WatchIgnorePlugin, [[/manifest.json/]]);
+                .use(webpack.WatchIgnorePlugin, [[/manifest\.json/]]);
 
         /* eslint-enable indent */
     }
-
-    return config;
 };
