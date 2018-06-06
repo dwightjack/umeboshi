@@ -9,6 +9,9 @@
   "keywords": [
     "umeboshi"
   ],
+  "bin": {
+    "ume-jam-server": "./bin/jam-server"
+  },
   "engines": {
     "node": ">=6.9.0"
   },
