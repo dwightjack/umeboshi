@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-static",
-  "version": "0.1.1-1",
+  "version": "0.1.1-6",
   "description": "Umeboshi config to render static websites",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -18,13 +18,14 @@
     "require-uncached": "~1.0.0",
     "sse-channel": "^3.0.1",
     "start-server-webpack-plugin": "^2.2.5",
-    "umeboshi-config-spa": "^0.1.0",
-    "umeboshi-dev-utils": "^0.4.3-1",
+    "umeboshi-config-spa": "^0.1.1-4",
+    "umeboshi-dev-utils": "^0.4.3-4",
     "webpack": "^4.0.0",
     "webpack-assets-manifest": "^3.0.1",
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
+    "umeboshi-scripts": "^0.6.1-4",
     "webpack": "^4.0.0"
   }
 }
