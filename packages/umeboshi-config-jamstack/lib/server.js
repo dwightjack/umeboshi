@@ -54,11 +54,23 @@ const jamServe = ({ templatePath, compiler }) => {
 
                         this.server.listen(port, cb);
                         isFirst = false;
+
+                        if (err) {
+                            console.error(err);
+                        }
+
                         return;
                     }
 
-                    const data = stats.toJson('minimal');
-                    sse.send({ data, event: 'reload' });
+                    if (err) {
+                        console.error(err);
+                        sse.send({ message: err.toString(), event: 'error' });
+                    } else {
+                        const data = stats.toJson('minimal');
+                        console.log(data);
+                        sse.send({ data, event: 'reload' });
+                    }
+
                 }
             );
         },
