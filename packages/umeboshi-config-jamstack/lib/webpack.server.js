@@ -9,9 +9,9 @@ module.exports = (config, { paths }, env = {}) => {
 
     config
         .externals(nodeExternals({
-            // whitelist: [
-            //     env.server ? 'webpack/hot/poll?300' : null
-            // ].filter((x) => x)
+            whitelist: [
+                /^umeboshi-config-jamstack/
+            ].filter((x) => x)
         }));
 
 
