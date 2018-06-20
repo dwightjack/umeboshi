@@ -1,5 +1,5 @@
-const { createElement } = require('react');
-const { renderToStaticMarkup } = require('react-dom/server');
+const { createElement } = require('react'); //eslint-disable-line node/no-missing-require
+const { renderToStaticMarkup } = require('react-dom/server'); //eslint-disable-line node/no-missing-require
 
 const render = ({
     meta = true,
@@ -25,7 +25,7 @@ const render = ({
     let head = {};
 
     if (meta) {
-        const { Helmet } = require('react-helmet');
+        const { Helmet } = require('react-helmet'); //eslint-disable-line node/no-missing-require
         const helmet = Helmet.renderStatic();
         head = [
             'bodyAttributes',
