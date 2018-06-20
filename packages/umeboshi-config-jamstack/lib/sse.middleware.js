@@ -7,9 +7,11 @@ clientScript = clientScript.replace(/[\n\s]+/g, ' ');
 
 const sseClientMiddleware = (host) => {
 
+    clientScript = clientScript.replace('{{HOST}}', host);
+
     return (ctx, next) => {
         if (ctx.body && ctx.body.includes('</head>')) {
-            ctx.body = ctx.body.replace('</head>', `<script>${clientScript.replace('{{HOST}}', host)}</script>`);
+            ctx.body = ctx.body.replace('</head>', `<script>${clientScript}</script>`);
         }
         return next();
     };
