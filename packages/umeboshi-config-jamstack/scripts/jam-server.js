@@ -15,7 +15,7 @@ const compiler = webpack(webpackConfig);
 
 const server = jamServe({
     compiler,
-    templatePath: api.paths.toAbsPath('src.root/templates')
+    templatePath: api.paths.toAbsPath('tmp/templates')
 });
 
 portfinder.getPortPromise({ port: config.jamstack.port || 9000 })

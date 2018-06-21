@@ -2,7 +2,6 @@ const {
     staticMiddleware
 } = require('umeboshi-config-spa/middlewares');
 const webpack = require('webpack');
-const WebpackAssetsManifest = require('webpack-assets-manifest');
 const WebpackJamPlugin = require('./lib/webpack-jam');
 
 const proxy = require('koa-proxy');
@@ -15,22 +14,8 @@ module.exports = (config, { port = 9000 }) => {
 
     config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
         const serverConfig = require('umeboshi-scripts/webpack')(Object.assign({}, env, { target: 'node' }));
-        const jamPugin = new WebpackJamPlugin();
 
-        clientConfig.plugins.push(jamPugin.client);
-        serverConfig.plugins.push(jamPugin.server);
-
-        jamPugin.onComplete(([MANIFEST, SSR]) => {
-            execa('ume-jam-render', {
-                env: {
-                    MANIFEST,
-                    SSR,
-                    TARGET_ENV: 'node'
-                },
-                cwd: process.cwd(),
-                stdio: ['inherit', 'inherit', 'inherit']
-            });
-        });
+        serverConfig.plugins.push(new WebpackJamPlugin());
 
         return [clientConfig, serverConfig];
     });

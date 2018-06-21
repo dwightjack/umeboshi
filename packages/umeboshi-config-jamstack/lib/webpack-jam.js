@@ -1,54 +1,27 @@
-const WebpackAssetsManifest = require('webpack-assets-manifest');
+const execa = require('execa');
 
-class ClientPlugin {
-    attach(resolve) {
-        this.resolve = resolve;
-    }
-    apply(compiler) {
-        compiler.hooks.done.tap('jamServerStart', ({ compilation }) => {
-            const manifestPlugin = compilation.options.plugins.find((p) => p instanceof WebpackAssetsManifest);
-            this.resolve(manifestPlugin);
-        });
-    }
-}
+/* eslint-disable class-methods-use-this */
+class WebpackRenderPlugin {
 
-class ServerPlugin {
-    attach(resolve) {
-        this.resolve = resolve;
-    }
     apply(compiler) {
+
         compiler.hooks.afterEmit.tap('renderBundle', ({ assets }) => {
             const bundle = Object.keys(assets).filter((k) => !!assets[k].emitted).find((k) => k.endsWith('.js'));
             if (!bundle) {
                 console.warn(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
                 return;
             }
-            this.resolve(assets[bundle].existsAt);
+            execa('ume-jam-render', {
+                env: {
+                    SSR: assets[bundle].existsAt,
+                    TARGET_ENV: 'node'
+                },
+                cwd: process.cwd(),
+                stdio: ['inherit', 'inherit', 'inherit']
+            });
         });
     }
 }
-
-class WebpackRenderPlugin {
-
-    static listen(instance) {
-        return new Promise((resolve) => {
-            instance.attach(resolve);
-        });
-    }
-
-    constructor() {
-        this.client = new ClientPlugin();
-        this.server = new ServerPlugin();
-        this.clientPromise = WebpackRenderPlugin.listen(this.client);
-        this.serverPromise = WebpackRenderPlugin.listen(this.server);
-    }
-
-    onComplete(callback) {
-        Promise.all([
-            this.clientPromise,
-            this.serverPromise
-        ]).then(callback);
-    }
-}
+/* eslint-enable class-methods-use-this */
 
 module.exports = WebpackRenderPlugin;

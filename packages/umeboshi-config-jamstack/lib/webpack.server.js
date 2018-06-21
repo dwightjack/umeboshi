@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-//const StartServerPlugin = require('start-server-webpack-plugin');
+const WebpackJamPlugin = require('./webpack-jam');
 
 module.exports = (config, { paths }, env = {}) => {
 
@@ -87,6 +87,11 @@ module.exports = (config, { paths }, env = {}) => {
             .plugin('ignore')
                 .use(webpack.WatchIgnorePlugin, [[/manifest\.json/]]);
 
-        /* eslint-enable indent */
+    } else {
+        config
+            .plugin('jamstack')
+                .use(WebpackJamPlugin);
     }
+    /* eslint-enable indent */
+
 };

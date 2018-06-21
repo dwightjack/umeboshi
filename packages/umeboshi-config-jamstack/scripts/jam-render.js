@@ -47,4 +47,6 @@ globby.sync(
         output,
         { encoding: 'utf8' }
     );
+
+    console.log(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
 });

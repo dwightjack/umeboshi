@@ -1,22 +1,15 @@
-const WebpackAssetsManifest = require('webpack-assets-manifest');
-
 module.exports = (config, { paths }) => {
 
-    config.plugins.delete('html');
+    const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
-    config.plugin('assets')
-        .use(WebpackAssetsManifest, [{
-            writeToDisk: true,
-            publicPath: true,
-            sortManifest: false,
-            apply(manifest) {
-                manifest.set('modernizr.js', paths.assetsPath('vendors/modernizr/modernizr.*'))
-            },
-            customize(entry) {
-                if (entry.key.toLowerCase().endsWith('.map')) {
-                    return false;
-                }
-                return entry;
-            }
-        }]);
+    config.plugin('html')
+        .tap(([options]) => [
+            Object.assign(options, {
+                alwaysWriteToDisk: true,
+                filename: paths.toAbsPath('tmp/templates/default.ejs'),
+                template: paths.toPath('src.root/templates/default.ejs')
+            })
+        ]);
+    config.plugin('html-disk')
+        .use(HtmlWebpackHarddiskPlugin);
 };

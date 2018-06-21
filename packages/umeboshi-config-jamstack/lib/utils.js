@@ -8,7 +8,7 @@ const getTemplate = (template, tmplPath, def = 'default') => {
     if (fs.existsSync(t) === false) {
         t = toTemplatePath(def, tmplPath);
     }
-    return tmpl(fs.readFileSync(t, { encoding: 'utf8' }));
+    return tmpl(fs.readFileSync(t, { encoding: 'utf8' }).replace(/\\%/g, '%'));
 };
 
 module.exports = {
