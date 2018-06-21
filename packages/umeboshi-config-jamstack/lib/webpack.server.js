@@ -61,10 +61,8 @@ module.exports = (config, { paths }, env = {}) => {
         }
     });
 
-    const serverEntry = env.server ? './src.assets/js/ssr.js' : './src.assets/js/render.js';
-
     config.entryPoints.clear();
-    config.entry('ssr').add(`.${path.sep}${paths.toPath(serverEntry)}`);
+    config.entry('ssr').add(`.${path.sep}${paths.toPath('./src.assets/js/render.js')}`);
 
     config.output.merge({
         path: paths.toAbsPath('tmp'),

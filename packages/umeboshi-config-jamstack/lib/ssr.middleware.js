@@ -39,7 +39,7 @@ const ssrMiddleware = ({
                 const output = pageTmpl({
                     html,
                     head,
-                    webpack: manifest
+                    assets: manifest
                 });
 
                 ctx.body = output;

@@ -21,7 +21,7 @@ module.exports = (config, { port = 9000 }) => {
         serverConfig.plugins.push(jamPugin.server);
 
         jamPugin.onComplete(([MANIFEST, SSR]) => {
-            execa('ume-jam-server', {
+            execa('ume-jam-render', {
                 env: {
                     MANIFEST,
                     SSR,

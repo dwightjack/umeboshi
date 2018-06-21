@@ -9,18 +9,14 @@ module.exports = (config, { paths }) => {
             writeToDisk: true,
             publicPath: true,
             sortManifest: false,
+            apply(manifest) {
+                manifest.set('modernizr.js', paths.assetsPath('vendors/modernizr/modernizr.*'))
+            },
             customize(entry) {
                 if (entry.key.toLowerCase().endsWith('.map')) {
                     return false;
                 }
                 return entry;
-            },
-            transform(assets) {
-                return {
-                    modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
-                    publicPath: config.output.get('publicPath'),
-                    assets
-                };
             }
         }]);
 };

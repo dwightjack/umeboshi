@@ -1,6 +1,5 @@
 const { createElement } = require('react'); //eslint-disable-line node/no-missing-require
 const { renderToStaticMarkup } = require('react-dom/server'); //eslint-disable-line node/no-missing-require
-
 const render = ({
     meta = true,
     resolve = (page) => require(`@/pages/${page}`)
