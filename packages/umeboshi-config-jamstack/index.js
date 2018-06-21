@@ -38,11 +38,8 @@ module.exports = (config, { port = 9000 }) => {
     config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
 
         compiler.hooks.done.tap('jamServerStart', once(({ compilation }) => {
-            const manifestPlugin = compilation.options.plugins.find((p) => p instanceof WebpackAssetsManifest);
-            const MANIFEST = manifestPlugin ? manifestPlugin.getOutputPath() : null;
             execa('ume-jam-server', {
                 env: {
-                    MANIFEST,
                     TARGET_ENV: 'node'
                 },
                 cwd: process.cwd(),
