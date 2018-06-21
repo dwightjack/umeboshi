@@ -39,7 +39,7 @@ portfinder.getPortPromise({ port }).then((p) => {
     const options = Object.assign(
         {
             add(app) {
-                if (appMiddlewares.length > 0) {
+                if (appMiddlewares && appMiddlewares.length > 0) {
                     appMiddlewares.forEach(
                         (middleware) => app.use(middleware)
                     );

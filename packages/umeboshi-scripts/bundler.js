@@ -29,6 +29,8 @@ api.hooks.bundlerCompile.tap('bundlerLogger', (err, stats) => {
     }
 });
 
+api.hooks.bundlerConfig.tap('bundlerConfig', (config) => config);
+
 const webpackConfig = api.hooks.bundlerConfig.call(require('./webpack')(env), env);
 
 webpack(webpackConfig, (err, stats) => {
