@@ -2,39 +2,53 @@ const {
     staticMiddleware
 } = require('umeboshi-config-spa/middlewares');
 const webpack = require('webpack');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+const WebpackJamPlugin = require('./lib/webpack-jam');
 
 const proxy = require('koa-proxy');
 const once = require('lodash/once');
 const execa = require('execa');
 
-const noop = () => {};
-
 module.exports = (config, { port = 9000 }) => {
 
     config.set('jamstack', { port });
 
-    const oldServe = config.get('onServe') || noop;
+    config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
+        const serverConfig = require('umeboshi-scripts/webpack')(Object.assign({}, env, { target: 'node' }));
+        const jamPugin = new WebpackJamPlugin();
 
-    config.set('onServe', ({ paths }) => {
+        clientConfig.plugins.push(jamPugin.client);
+        serverConfig.plugins.push(jamPugin.server);
 
-        return (...args) => {
-            oldServe(...args);
-            const [{ compiler }] = args;
+        jamPugin.onComplete(([MANIFEST, SSR]) => {
+            execa('ume-jam-server', {
+                env: {
+                    MANIFEST,
+                    SSR,
+                    TARGET_ENV: 'node'
+                },
+                cwd: process.cwd(),
+                stdio: ['inherit', 'inherit', 'inherit']
+            });
+        });
 
-            compiler.hooks.done.tap('jamServerStart', once(() => {
-                execa('ume-jam-server', {
-                    env: {
-                        MANIFEST: paths.toAbsPath('dist.assets/manifest.json'),
-                        TARGET_ENV: 'node'
-                    },
-                    cwd: process.cwd(),
-                    stdio: ['inherit', 'inherit', 'inherit']
-                });
-            }));
+        return [clientConfig, serverConfig];
+    });
 
-            return true;
-        };
+    config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
 
+        compiler.hooks.done.tap('jamServerStart', once(({ compilation }) => {
+            const manifestPlugin = compilation.options.plugins.find((p) => p instanceof WebpackAssetsManifest);
+            const MANIFEST = manifestPlugin ? manifestPlugin.getOutputPath() : null;
+            execa('ume-jam-server', {
+                env: {
+                    MANIFEST,
+                    TARGET_ENV: 'node'
+                },
+                cwd: process.cwd(),
+                stdio: ['inherit', 'inherit', 'inherit']
+            });
+        }));
 
     });
 
