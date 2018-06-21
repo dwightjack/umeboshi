@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
 const { green } = require('chalk');
-const noop = require('lodash/noop');
-const isFunction = require('lodash/isFunction');
 const serve = require('webpack-serve');
 const {
     loadUmeboshiConfig, mergeConfig, evaluate, resolveConfig
@@ -28,13 +26,13 @@ const env = {
     analyze: false, production: false, server: true, compiler
 };
 const { config, api } = resolveConfig(createConfig(env)).evaluate();
-const { middlewares, devServer, onServe = noop } = config;
+const { middlewares, devServer } = config;
 const { port } = api.hosts.local;
 
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
 
-    const { devServer: umeDevServer, middlewares: umeMiddlewares, onServe: umeOnServe } = loadUmeboshiConfig();
+    const { devServer: umeDevServer, middlewares: umeMiddlewares } = loadUmeboshiConfig();
 
     const appMiddlewares = umeMiddlewares ? evaluate(umeMiddlewares, evaluate(middlewares, env), env) : evaluate(middlewares, env);
     const args = [{ port: p, publicPath: webpackConfig.output.publicPath }, webpackConfig, compiler];
@@ -53,7 +51,8 @@ portfinder.getPortPromise({ port }).then((p) => {
         { compiler }
     );
 
-    Promise.all([onServe(options, ...args), isFunction(umeOnServe) && umeOnServe(options, ...args)])
+
+    api.hooks.devServer.promise(options, { port: p })
         .then(() => serve(options))
         .then((server) => {
             server.on('listening', () => {

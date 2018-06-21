@@ -1,6 +1,8 @@
 const merge = require('lodash/merge');
+const { AsyncParallelHook, SyncBailHook } = require('tapable');
 const { evaluate, APP_PATH } = require('../index');
 const paths = require('./paths');
+
 
 const createConfig = (env = {}) => {
 
@@ -10,6 +12,12 @@ const createConfig = (env = {}) => {
     $store.set('env', env);
 
     return {
+        hooks: {
+            devServer: new AsyncParallelHook(['options', 'env']),
+            bundlerCompile: new SyncBailHook(['err', 'stats']),
+            bundlerConfig: new SyncBailHook(['config', 'env'])
+        },
+
         get(key) {
             return $store.get(key);
         },
@@ -46,7 +54,8 @@ const createConfig = (env = {}) => {
             const api = {
                 paths: paths(APP_PATH, evaluate(this.get('paths') || {}, e)),
                 address: require('ip').address(),
-                hosts: this.get('hosts') || {}
+                hosts: this.get('hosts') || {},
+                hooks: this.hooks
             };
             const config = [...$store].reduce((acc, [key, value]) => {
                 let frag = evaluate(value, api, e);
