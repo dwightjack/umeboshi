@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-umeboshi-react",
-  "version": "0.5.1-5",
+  "version": "0.5.1-6",
   "description": "React Babel preset for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "babel-plugin-transform-react-inline-elements": "~6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.0",
     "babel-preset-react": "~6.24.0",
-    "babel-preset-umeboshi": "^0.4.1-5",
+    "babel-preset-umeboshi": "^0.4.1-6",
     "react-hot-loader": "~4.1.0"
   }
 }
