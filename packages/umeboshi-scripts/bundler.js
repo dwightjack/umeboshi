@@ -1,12 +1,16 @@
 const webpack = require('webpack');
 const { resolveConfig } = require('umeboshi-dev-utils');
+const identity = require('lodash/identity');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const env = { production: PRODUCTION };
 const { api } = resolveConfig(createConfig(env)).evaluate();
 
-api.hooks.bundlerCompile.tap('bundlerLogger', (err, stats) => {
+api.hooks.bundlerConfig.tap('bundlerConfig', identity);
+api.hooks.bundlerCompiler.tap('bundlerConfig', identity);
+api.hooks.bundlerAfterCompile.tap('bundlerLogger', (err, stats) => {
     if (err) {
         logger.error(`An Error occurred while compiling the bundle: ${err}`);
     } else {
@@ -29,10 +33,13 @@ api.hooks.bundlerCompile.tap('bundlerLogger', (err, stats) => {
     }
 });
 
-api.hooks.bundlerConfig.tap('bundlerConfig', (config) => config);
 
 const webpackConfig = api.hooks.bundlerConfig.call(require('./webpack')(env), env);
 
-webpack(webpackConfig, (err, stats) => {
-    api.hooks.bundlerCompile.call(err, stats);
+logger.log('Starting bundle compilation...');
+
+const compiler = webpack(webpackConfig, (err, stats) => {
+    api.hooks.bundlerAfterCompile.call(err, stats);
 });
+
+api.hooks.bundlerCompiler.call(compiler);
