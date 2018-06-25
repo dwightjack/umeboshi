@@ -6,7 +6,6 @@ const once = require('lodash/once');
 const {
     staticMiddleware
 } = require('umeboshi-config-spa/middlewares');
-const WebpackJamPlugin = require('./lib/webpack-jam');
 
 
 module.exports = (config, { port = 9000 }) => {
@@ -15,16 +14,13 @@ module.exports = (config, { port = 9000 }) => {
 
     config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
         const serverConfig = require('umeboshi-scripts/webpack')(Object.assign({}, env, { target: 'node' }));
-
-        serverConfig.plugins.push(new WebpackJamPlugin());
-
         return [clientConfig, serverConfig];
     });
 
     config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
 
         compiler.hooks.done.tap('jamServerStart', once(() => {
-            execa('node', [path.resolve(__dirname, '../scripts/jam-server.js')], {
+            execa('node', [path.resolve(__dirname, './scripts/jam-server.js')], {
                 env: {
                     TARGET_ENV: 'node'
                 },
