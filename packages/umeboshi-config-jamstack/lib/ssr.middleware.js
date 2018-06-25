@@ -1,4 +1,5 @@
 const requireUncached = require('require-uncached');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const { getTemplate } = require('./utils');
 
 const ssrMiddleware = ({
@@ -15,7 +16,7 @@ const ssrMiddleware = ({
         if (bundle) {
             render = requireUncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
         } else {
-            console.warn(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
+            logger.warning(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
         }
     });
 
@@ -41,7 +42,7 @@ const ssrMiddleware = ({
 
                 ctx.body = output;
             } catch (e) {
-                console.log(e); //eslint-disable-line no-console
+                logger.error(e);
             }
         }
 

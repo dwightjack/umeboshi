@@ -17,6 +17,7 @@
     "docs": "documentation build index.js -f md -o docs/index.md"
   },
   "dependencies": {
+    "chalk": "^2.4.1",
     "glob": "~7.1.0",
     "ip": "~1.1.0",
     "lodash": "~4.17.0",

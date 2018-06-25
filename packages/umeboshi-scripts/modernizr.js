@@ -4,6 +4,7 @@ const fs = require('fs');
 const {
     loadUmeboshiConfig, mergeConfig, resolveConfig
 } = require('umeboshi-dev-utils');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 
@@ -27,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
         const hash = checksum(obj.result);
         const destPath = filePath + '/modernizr.' + hash + '.js';
         fs.writeFile(destPath, obj.result, () => {
-            console.log('File ' + destPath + ' created'); //eslint-disable-line no-console
+            logger.message('File ' + destPath + ' created'); //eslint-disable-line no-console
             process.exit(0);
         });
     });
@@ -38,7 +39,7 @@ if (process.env.NODE_ENV === 'production') {
     modernizr.build(devConfig, (result) => {
         const destPath = filePath + '/modernizr.js';
         fs.writeFile(destPath, result, () => {
-            console.log('File ' + destPath + ' created'); //eslint-disable-line no-console
+            logger.message('File ' + destPath + ' created'); //eslint-disable-line no-console
             process.exit(0);
         });
     });

@@ -1,10 +1,10 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
-const { green } = require('chalk');
 const serve = require('webpack-serve');
 const {
     loadUmeboshiConfig, mergeConfig, evaluate, resolveConfig
 } = require('umeboshi-dev-utils');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const webpackConfig = require('./webpack')({ analyze: false, production: false, server: true });
@@ -56,9 +56,9 @@ portfinder.getPortPromise({ port }).then((p) => {
         .then(() => serve(options))
         .then((server) => {
             server.on('listening', () => {
-                console.log(green('`\nStarted a server at:\n')); //eslint-disable-line no-console
-                console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
-                console.log(green(`- http://${api.address}:${p}\n`)); //eslint-disable-line no-console
+                logger.message('`\nStarted a server at:\n');
+                logger.message(`- http://localhost:${p}`);
+                logger.message(`- http://${api.address}:${p}\n`);
             });
         });
 

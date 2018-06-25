@@ -1,5 +1,6 @@
 //const webpack = require('webpack');
 const createServer = require('umeboshi-config-spa/server')();
+const logger = require('umeboshi-dev-utils/lib/logger');
 const SseChannel = require('sse-channel');
 const http = require('http');
 /*const config = require('umeboshi-scripts/webpack')({
@@ -56,19 +57,21 @@ const jamServe = ({ templatePath, compiler }) => {
                         isFirst = false;
 
                         if (err) {
-                            console.error(err);
+                            logger.error(err);
                         }
 
                         return;
                     }
 
                     if (err) {
-                        console.error(err);
+                        logger.error(err);
                         sse.send({ message: err.toString(), event: 'error' });
                     } else {
-                        const data = stats.toJson('minimal');
-                        console.log(data);
-                        sse.send({ data, event: 'reload' });
+                        if (logger.hasLevel(0)) {
+                            const data = stats.toJson('minimal');
+                            logger.verbose(data);
+                        }
+                        sse.send({ event: 'reload' });
                     }
 
                 }

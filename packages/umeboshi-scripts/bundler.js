@@ -8,9 +8,9 @@ const { api } = resolveConfig(createConfig(env)).evaluate();
 
 api.hooks.bundlerCompile.tap('bundlerLogger', (err, stats) => {
     if (err) {
-        console.log(err);
+        logger.error(`An Error occurred while compiling the bundle: ${err}`);
     } else {
-        console.log(stats.toString({
+        logger.log(stats.toString({
             colors: true,
             hash: false,
             timings: false,
@@ -25,7 +25,7 @@ api.hooks.bundlerCompile.tap('bundlerLogger', (err, stats) => {
             source: false,
             errorDetails: false
         }));
-        console.log('Completed!');
+        logger.message('Bundle created!');
     }
 });
 

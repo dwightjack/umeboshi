@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
-const { green } = require('chalk');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const webpackConfig = require('umeboshi-scripts/webpack')({
     analyze: false, production: false, server: true, target: 'node'
 });
@@ -21,6 +21,6 @@ const server = jamServe({
 portfinder.getPortPromise({ port: config.jamstack.port || 9000 })
     .then((port) => {
         server.start(port, () => {
-            console.log(green(`\nRendering server started at: http://${api.address}:${port}\n`)); //eslint-disable-line no-console
+            logger.message(`\nRendering server started at: http://${api.address}:${port}\n`);
         });
     });

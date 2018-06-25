@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const readPkgUp = require('read-pkg-up');
 const get = require('lodash/get');
-const merge = require('lodash/merge');
 const isFunction = require('lodash/isFunction');
 const WebpackChain = require('webpack-chain');
+const logger = require('./lib/logger');
 
 const { pkg, path: pkgPath } = readPkgUp.sync({
     cwd: fs.realpathSync(process.cwd())
@@ -195,7 +195,7 @@ const loadUmeboshiConfig = (frag) => {
         const conf = require(toLocalPath('umeboshi.config.js'));
         return frag ? get(conf, frag) : conf;
     } catch (e) {
-        console.error(e); //eslint-disable-line no-console
+        logger.error(e);
         return undefined;
     }
 

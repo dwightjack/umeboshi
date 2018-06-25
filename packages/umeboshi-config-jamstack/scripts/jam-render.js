@@ -1,11 +1,11 @@
+const fs = require('fs');
 const path = require('path');
 const globby = require('globby');
 const makeDir = require('make-dir');
-const fs = require('fs');
-const { getTemplate } = require('../lib/utils');
-
 const { resolveConfig } = require('umeboshi-dev-utils');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
+const { getTemplate } = require('../lib/utils');
 
 const { api } = resolveConfig(createConfig({})).evaluate();
 
@@ -48,5 +48,5 @@ globby.sync(
         { encoding: 'utf8' }
     );
 
-    console.log(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
+    logger.message(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
 });

@@ -1,8 +1,8 @@
-const { green } = require('chalk');
 const portfinder = require('portfinder');
 const {
     loadUmeboshiConfig, evaluate, resolveConfig
 } = require('umeboshi-dev-utils');
+const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const env = { server: false };
@@ -24,8 +24,8 @@ portfinder.getPortPromise({ port }).then((p) => {
     });
 
     app.listen(p, () => {
-        console.log(green('Static server listening at:\n')); //eslint-disable-line no-console
-        console.log(green(`- http://localhost:${p}`)); //eslint-disable-line no-console
-        console.log(green(`- http://${api.address}:${p}`)); //eslint-disable-line no-console
+        logger.message('Static server listening at:\n');
+        logger.message(`- http://localhost:${p}`);
+        logger.message(`- http://${api.address}:${p}`);
     });
 });
