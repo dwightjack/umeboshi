@@ -1,5 +1,5 @@
 const merge = require('lodash/merge');
-const { AsyncParallelHook, SyncBailHook } = require('tapable');
+const { AsyncParallelHook, SyncBailHook, SyncHook } = require('tapable');
 const { evaluate, APP_PATH } = require('../index');
 const paths = require('./paths');
 
@@ -14,7 +14,8 @@ const createConfig = (env = {}) => {
     return {
         hooks: {
             devServer: new AsyncParallelHook(['options', 'env']),
-            bundlerCompile: new SyncBailHook(['err', 'stats']),
+            bundlerAfterCompile: new SyncBailHook(['err', 'stats']),
+            bundlerCompiler: new SyncHook(['compiler']),
             bundlerConfig: new SyncBailHook(['config', 'env'])
         },
 
