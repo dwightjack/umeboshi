@@ -22,7 +22,7 @@ module.exports = (config, { port = 9000 }) => {
 
     config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
 
-        compiler.hooks.done.tap('jamServerStart', once(({ compilation }) => {
+        compiler.hooks.done.tap('jamServerStart', once(() => {
             execa('ume-jam-server', {
                 env: {
                     TARGET_ENV: 'node'
