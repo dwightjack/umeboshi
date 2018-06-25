@@ -1,12 +1,13 @@
+const path = require('path');
+const webpack = require('webpack');
+const execa = require('execa');
+const proxy = require('koa-proxy');
+const once = require('lodash/once');
 const {
     staticMiddleware
 } = require('umeboshi-config-spa/middlewares');
-const webpack = require('webpack');
 const WebpackJamPlugin = require('./lib/webpack-jam');
 
-const proxy = require('koa-proxy');
-const once = require('lodash/once');
-const execa = require('execa');
 
 module.exports = (config, { port = 9000 }) => {
 
@@ -23,7 +24,7 @@ module.exports = (config, { port = 9000 }) => {
     config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
 
         compiler.hooks.done.tap('jamServerStart', once(() => {
-            execa('ume-jam-server', {
+            execa('node', [path.resolve(__dirname, '../scripts/jam-server.js')], {
                 env: {
                     TARGET_ENV: 'node'
                 },

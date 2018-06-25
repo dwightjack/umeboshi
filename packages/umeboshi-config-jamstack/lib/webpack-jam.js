@@ -1,3 +1,4 @@
+const path = require('path');
 const execa = require('execa');
 const logger = require('umeboshi-dev-utils/lib/logger');
 /* eslint-disable class-methods-use-this */
@@ -11,7 +12,7 @@ class WebpackRenderPlugin {
                 logger.warning(`Unable to find ssr bundle. Emitted assets: ${Object.keys(assets).join(', ')} `);
                 return;
             }
-            execa('ume-jam-render', {
+            execa('node', [path.resolve(__dirname, '../scripts/jam-render.js')], {
                 env: {
                     SSR: assets[bundle].existsAt,
                     TARGET_ENV: 'node'
