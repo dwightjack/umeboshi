@@ -5,7 +5,7 @@ const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
-const env = { production: PRODUCTION };
+const env = { production: PRODUCTION, analyze: process.env.WEBPACK_ANALYZE };
 const { api } = resolveConfig(createConfig(env)).evaluate();
 
 api.hooks.bundlerConfig.tap('bundlerConfig', identity);
