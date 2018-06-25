@@ -8,9 +8,9 @@ const {
 } = require('umeboshi-config-spa/middlewares');
 
 
-module.exports = (config, { port = 9000 }) => {
+module.exports = (config, { port = 9000, index }) => {
 
-    config.set('jamstack', { port });
+    config.set('jamstack', { port, index });
 
     config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
         const serverConfig = require('umeboshi-scripts/webpack')(Object.assign({}, env, { target: 'node' }));
@@ -28,7 +28,6 @@ module.exports = (config, { port = 9000 }) => {
                 stdio: ['inherit', 'inherit', 'inherit']
             });
         }));
-
     });
 
     config.tap('webpack', (...args) => {

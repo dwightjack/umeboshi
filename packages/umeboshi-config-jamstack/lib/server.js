@@ -15,7 +15,7 @@ const sseReloadMiddleware = require('../lib/sse-reload.middleware');
 //const compiler = webpack(config);
 
 
-const jamServe = ({ templatePath, compiler }) => {
+const jamServe = ({ templatePath, compiler, index }) => {
 
     const sse = new SseChannel({
         cors: { origins: ['*'] },
@@ -31,7 +31,8 @@ const jamServe = ({ templatePath, compiler }) => {
                 middlewares: [
                     ssrMiddleware({
                         templatePath,
-                        compiler
+                        compiler,
+                        index
                     }),
                     sseClientMiddleware(
                         `http://${address}:${port}`

@@ -15,6 +15,7 @@ const compiler = webpack(webpackConfig);
 
 const server = jamServe({
     compiler,
+    index: config.jamstack.index,
     templatePath: api.paths.toAbsPath('tmp/templates')
 });
 

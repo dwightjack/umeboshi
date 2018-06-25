@@ -7,7 +7,7 @@ const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 const { getTemplate } = require('../lib/utils');
 
-const { api } = resolveConfig(createConfig({})).evaluate();
+const { config, api } = resolveConfig(createConfig({})).evaluate();
 
 let render;
 
@@ -15,7 +15,7 @@ if (process.env.SSR) {
     render = require(process.env.SSR).render; //eslint-disable-line prefer-destructuring
 }
 
-const templatePath = api.paths.toAbsPath('src.root/templates/');
+const templatePath = api.paths.toAbsPath('tmp/templates/');
 const manifest = process.env.MANIFEST && require(process.env.MANIFEST);
 
 
@@ -38,8 +38,9 @@ globby.sync(
         assets: manifest
     });
 
-    const outPath = api.paths.toAbsPath(`dist.root/${page.replace(/\.js$/, '.html')}`);
-
+    const outPath = api.paths.toAbsPath(
+        `dist.root/${page === config.jamstack.index ? 'index.html' : page.replace(/\.js$/, '.html')}`
+    );
     makeDir.sync(path.dirname(outPath));
 
     fs.writeFileSync(
