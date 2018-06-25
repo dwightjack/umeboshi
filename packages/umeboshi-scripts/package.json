@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-scripts",
-  "version": "0.6.1-14",
+  "version": "0.6.1-15",
   "description": "Umeboshi build scripts",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "mkdirp": "^0.5.0",
     "modernizr": "~3.6.0",
     "portfinder": "~1.0.0",
-    "umeboshi-dev-utils": "^0.4.3-12",
+    "umeboshi-dev-utils": "^0.4.3-13",
     "webpack-serve": "1.0.2"
   },
   "devDependencies": {
