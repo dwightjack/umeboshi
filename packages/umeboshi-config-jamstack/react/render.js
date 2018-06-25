@@ -10,6 +10,8 @@ const render = ({
         page += `${path}/index.js`;
     } else if (path.endsWith('.html')) {
         page += path.replace(/\.html$/, '.js');
+    } else {
+        page = path;
     }
 
     page = page.replace(/\/+/g, '/').replace(/^\//, '');
