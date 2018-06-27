@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const globby = require('globby');
 const makeDir = require('make-dir');
 const { resolveConfig } = require('umeboshi-dev-utils');
 const logger = require('umeboshi-dev-utils/lib/logger');
@@ -33,19 +32,27 @@ Object.keys(router.routes).forEach((page) => {
             head
         });
 
-        const outPath = api.paths.toAbsPath(
-            `dist.root/${page === config.jamstack.index ? 'index.html' : page.replace(/\.js$/, '.html')}`
-        );
-        makeDir.sync(path.dirname(outPath));
+        const pagePath = path.join(page, page.endsWith('index') ? '' : 'index');
+        const outPath = path.normalize(api.paths.toAbsPath(`dist.root/${pagePath}.html`));
 
-        fs.writeFileSync(
-            outPath,
-            output,
-            { encoding: 'utf8' }
-        );
+        try {
+            makeDir.sync(path.dirname(outPath));
 
+            fs.writeFileSync(
+                outPath,
+                output,
+                { encoding: 'utf8' }
+            );
+            return Promise.resolve(outPath);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+
+
+    }).then((outPath) => {
         logger.message(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
-
+    }).catch((e) => {
+        logger.error(e);
     });
 
 });

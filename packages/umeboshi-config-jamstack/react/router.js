@@ -1,8 +1,11 @@
+const { normalize } = require('path');
+
 const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
 
-    const MODULE_MATCH_REGEXP = /.jsx?$/;
+    const MODULE_MATCH_REGEXP = /^\.(.*?)(\/index|)\.jsx?$/;
     return ctx.keys().reduce((routes, key) => {
-        const path = key.replace(MODULE_MATCH_REGEXP, '/');
+
+        const path = normalize(key.replace(MODULE_MATCH_REGEXP, '$1/'));
         let Component = ctx(key);
 
         if (Component && Component.default) {
@@ -18,7 +21,7 @@ const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
     }, {});
 };
 
-const router = () => {
+const createRouter = () => {
 
     const routes = importPages();
 
@@ -35,6 +38,6 @@ const router = () => {
 };
 
 module.exports = {
-    router,
+    createRouter,
     importPages
 };
