@@ -1,6 +1,8 @@
-module.exports = (config, { paths }) => {
+module.exports = (config, { paths }, { server }) => {
 
     const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+
+    config.cache(!!server);
 
     config.plugin('html')
         .tap(([options]) => [
