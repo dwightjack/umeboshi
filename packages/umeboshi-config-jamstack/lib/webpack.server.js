@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-const WebpackJamPlugin = require('./webpack-jam');
+const WebpackRenderPlugin = require('./webpack-render-plugin');
 
 module.exports = (config, { paths }, env = {}) => {
 
@@ -92,7 +92,7 @@ module.exports = (config, { paths }, env = {}) => {
     } else {
         config
             .plugin('jamstack')
-                .use(WebpackJamPlugin);
+                .use(WebpackRenderPlugin);
     }
     /* eslint-enable indent */
 
