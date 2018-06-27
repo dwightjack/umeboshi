@@ -5,7 +5,6 @@ const { getTemplate } = require('./utils');
 const ssrMiddleware = ({
     templatePath,
     compiler,
-    index,
     match = /(\/|\.html?)$/
 }) => {
 
@@ -27,15 +26,11 @@ const ssrMiddleware = ({
 
         if (matcher(ctx)) {
 
-            const path = ctx.path === '/' && index ? index : ctx.path;
-
-            try {
-                const {
-                    html,
-                    head = {},
-                    template = 'default'
-                } = render({ path });
-
+            return render(ctx).then(({
+                html,
+                head = {},
+                template
+            }) => {
                 const pageTmpl = getTemplate(template, templatePath);
 
                 const output = pageTmpl({
@@ -44,9 +39,11 @@ const ssrMiddleware = ({
                 });
 
                 ctx.body = output;
-            } catch (e) {
+                return next();
+            }).catch((e) => {
                 logger.error(e);
-            }
+                return next();
+            });
         }
 
         return next();
