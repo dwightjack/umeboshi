@@ -27,7 +27,7 @@ Object.keys(router.routes).forEach((page) => {
     }) => {
         const pageTmpl = getTemplate(template, templatePath);
 
-        const output = pageTmpl({
+        let output = pageTmpl({
             html,
             head
         });
@@ -37,6 +37,22 @@ Object.keys(router.routes).forEach((page) => {
 
         try {
             makeDir.sync(path.dirname(outPath));
+
+            if (process.env.MINIFY) {
+                const { minify } = require('html-minifier');
+                output = minify(output, {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: false,
+                    removeStyleLinkTypeAttributes: true,
+                    keepClosingSlash: true,
+                    minifyJS: true,
+                    minifyCSS: true,
+                    minifyURLs: true
+                });
+            }
 
             fs.writeFileSync(
                 outPath,

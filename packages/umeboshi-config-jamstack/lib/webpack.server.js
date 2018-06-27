@@ -32,8 +32,6 @@ module.exports = (config, { paths }, env = {}) => {
 
     config.cache(false);
 
-    config.plugins
-        .delete('html');
     config.plugin('single-chunk')
         .use(webpack.optimize.LimitChunkCountPlugin, [{ maxChunks: 1 }]);
 
@@ -48,6 +46,7 @@ module.exports = (config, { paths }, env = {}) => {
             },
             chunks: 'all'
         });
+    config.optimization.delete('minimizer');
 
 
     ['css', 'scss'].forEach((lang) => {
@@ -88,15 +87,18 @@ module.exports = (config, { paths }, env = {}) => {
                 }
             });
 
-        config
-            .watch(true)
-            .plugin('ignore')
-                .use(webpack.WatchIgnorePlugin, [[/manifest\.json/]]);
+        config.watch(true);
 
     } else {
         config
             .plugin('jamstack')
-                .use(WebpackRenderPlugin);
+                .use(WebpackRenderPlugin, [{
+                    minify: !!env.production
+                }]);
+    }
+
+    if (env.production) {
+        config.plugins.delete('extract');
     }
     /* eslint-enable indent */
 

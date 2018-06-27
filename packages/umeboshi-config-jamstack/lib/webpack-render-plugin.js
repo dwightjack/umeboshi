@@ -4,6 +4,10 @@ const logger = require('umeboshi-dev-utils/lib/logger');
 /* eslint-disable class-methods-use-this */
 class WebpackRenderPlugin {
 
+    constructor(options = {}) {
+        this.options = Object.assign({ minify: false }, options);
+    }
+
     apply(compiler) {
 
         compiler.hooks.afterEmit.tap('renderBundle', ({ assets }) => {
@@ -15,6 +19,7 @@ class WebpackRenderPlugin {
             execa('node', [path.resolve(__dirname, '../scripts/jam-render.js')], {
                 env: {
                     SSR: assets[bundle].existsAt,
+                    MINIFY: !!this.options.minify,
                     TARGET_ENV: 'node'
                 },
                 cwd: process.cwd(),

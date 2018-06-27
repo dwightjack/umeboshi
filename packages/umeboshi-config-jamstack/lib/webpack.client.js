@@ -5,6 +5,7 @@ module.exports = (config, { paths }) => {
     config.plugin('html')
         .tap(([options]) => [
             Object.assign(options, {
+                minify: false,
                 alwaysWriteToDisk: true,
                 filename: paths.toAbsPath('tmp/templates/default.ejs'),
                 template: paths.toPath('src.root/templates/default.ejs')
