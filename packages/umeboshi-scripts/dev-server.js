@@ -52,7 +52,7 @@ portfinder.getPortPromise({ port }).then((p) => {
     );
 
 
-    api.hooks.devServer.promise(options, { port: p })
+    api.hooks.devServer.promise(options, { port: p }, api)
         .then(() => serve(options))
         .then((server) => {
             server.on('listening', () => {

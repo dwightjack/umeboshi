@@ -13,7 +13,7 @@ const createConfig = (env = {}) => {
 
     return {
         hooks: {
-            devServer: new AsyncParallelHook(['options', 'env']),
+            devServer: new AsyncParallelHook(['options', 'env', 'api']),
             bundlerAfterCompile: new SyncBailHook(['err', 'stats']),
             bundlerCompiler: new SyncHook(['compiler']),
             bundlerConfig: new SyncBailHook(['config', 'env'])
@@ -50,8 +50,18 @@ const createConfig = (env = {}) => {
             $extends.get(key).push(fn);
             return this;
         },
+
+        resolveFrag(key, value, api, e) {
+            const frag = evaluate(value, api, e);
+            if ($extends.has(key)) {
+                return $extends.get(key).reduce((f, fn) => {
+                    return fn(f, api, e) || f;
+                }, frag);
+            }
+            return frag;
+        },
         evaluate() {
-            const e = this.get('env');
+            const e = this.resolveFrag('env', this.get('env'));
             const api = {
                 paths: paths(APP_PATH, evaluate(this.get('paths') || {}, e)),
                 address: require('ip').address(),
@@ -59,16 +69,13 @@ const createConfig = (env = {}) => {
                 hooks: this.hooks
             };
             const config = [...$store].reduce((acc, [key, value]) => {
-                let frag = evaluate(value, api, e);
-                if ($extends.has(key)) {
-                    frag = $extends.get(key).reduce((f, fn) => {
-                        return fn(f, api, e) || f;
-                    }, frag);
-                }
-                acc[key] = frag;
+                //exclude env, we already resolved it
+                if (key === 'env') { return acc; }
+
+                acc[key] = this.resolveFrag(key, value, api, e);
 
                 return acc;
-            }, {});
+            }, { env: e });
             return { api, config };
         }
     };
