@@ -12,8 +12,9 @@ module.exports = (config, { paths }, env = {}) => {
     config
         .externals(nodeExternals({
             whitelist: [
-                /^umeboshi-config-jamstack/
-            ].filter((x) => x)
+                /^umeboshi-config-jamstack/,
+                /\.s?css$/
+            ]
         }));
 
 
@@ -43,13 +44,16 @@ module.exports = (config, { paths }, env = {}) => {
         .splitChunks({
             cacheGroups: {
                 default: false,
-                vendors: false //disable vendor splitting(not sure if you want it)
+                vendors: false
             },
             chunks: 'all'
         });
 
 
     ['css', 'scss'].forEach((lang) => {
+        if (!config.module.rules.has(lang)) {
+            return;
+        }
         const rule = config.module.rule(lang);
 
         //we don't need this on the server
@@ -64,7 +68,7 @@ module.exports = (config, { paths }, env = {}) => {
     });
 
     config.entryPoints.clear();
-    config.entry('ssr').add(`.${path.sep}${paths.toPath('./src.assets/js/ssr.js')}`);
+    config.entry('ssr').add(env.jamstackSSR || `.${path.sep}${paths.toPath('./src.assets/js/ssr.js')}`);
 
     config.output.merge({
         path: paths.toAbsPath('tmp'),
