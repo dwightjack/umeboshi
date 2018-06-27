@@ -6,7 +6,7 @@ const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 const { getTemplate } = require('../lib/utils');
 
-const { config, api } = resolveConfig(createConfig({})).evaluate();
+const { api } = resolveConfig(createConfig({})).evaluate();
 
 let render;
 let router;
