@@ -11,7 +11,7 @@ const LOG_LEVELS = {
 const colors = ['gray', 'white', 'green', 'yellow', 'red'];
 const levelsArray = Object.keys(LOG_LEVELS).map((l) => LOG_LEVELS[l]);
 
-let LOG_LEVEL = 1;
+let LOG_LEVEL = process.env.LOG_LEVEL || 1;
 
 module.exports.setLevel = (level) => {
     if (Number.isFinite(level) && levelsArray.indexOf(level) !== -1) {
