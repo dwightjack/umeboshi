@@ -1,19 +1,26 @@
 const fs = require('fs');
 const path = require('path');
+const { promisify } = require('util');
 
-let clientScript = fs.readFileSync(path.resolve(__dirname, './client.js'), { encoding: 'utf8' });
+const readFileAsync = promisify(fs.readFile);
 
-clientScript = clientScript.replace(/[\n\s]+/g, ' ');
+const readClientScript = (host) => {
+    const filepath = path.resolve(__dirname, '../client/sse.js');
+    return readFileAsync(filepath, { encoding: 'utf8' }).then((src) => (
+        src.replace(/[\n\s]+/g, ' ').replace('{{HOST}}', host)
+    ));
+};
 
-const sseClientMiddleware = (host) => {
+const sseClientMiddleware = (host = '') => {
 
-    clientScript = clientScript.replace('{{HOST}}', host);
+    const clientScript = readClientScript(host);
 
     return (ctx, next) => {
-        if (ctx.body && ctx.body.includes('</head>')) {
-            ctx.body = ctx.body.replace('</head>', `<script>${clientScript}</script>`);
-        }
-        return next();
+        return next().then(() => clientScript).then((src) => {
+            if (ctx.body && ctx.body.includes('</head>')) {
+                ctx.body = ctx.body.replace('</head>', `<script>${src}</script>`);
+            }
+        });
     };
 };
 
