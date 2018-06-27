@@ -1,31 +1,89 @@
-const path = require('path');
 const webpack = require('webpack');
-const execa = require('execa');
-const proxy = require('koa-proxy');
+const k2c = require('koa-connect');
 const once = require('lodash/once');
-const {
-    staticMiddleware
-} = require('umeboshi-config-spa/middlewares');
+const { staticMiddleware } = require('umeboshi-config-spa/middlewares');
+const SseChannel = require('sse-channel');
+const logger = require('umeboshi-dev-utils/lib/logger');
+const ssrMiddleware = require('./lib/ssr.middleware');
+const sseReloadMiddleware = require('./lib/sse-reload.middleware');
 
+module.exports = (config, { ssr }) => {
 
-module.exports = (config, { port = 9000, index }) => {
-
-    config.set('jamstack', { port, index });
+    config.tap('env', (env) => {
+        return Object.assign(env, {
+            jamstackSSR: ssr
+        });
+    });
 
     config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
         const serverConfig = require('umeboshi-scripts/webpack')(Object.assign({}, env, { target: 'node' }));
         return [clientConfig, serverConfig];
     });
 
-    config.hooks.devServer.tap('jamStackDevServer', ({ compiler }) => {
+    config.hooks.devServer.tap('jamStackDevServer', (options, env, api) => {
 
-        compiler.hooks.done.tap('jamServerStart', once(() => {
-            execa('node', [path.resolve(__dirname, './scripts/jam-server.js')], {
-                env: {
-                    TARGET_ENV: 'node'
-                },
-                cwd: process.cwd(),
-                stdio: ['inherit', 'inherit', 'inherit']
+
+
+        const serverConfig = require('umeboshi-scripts/webpack')({
+            analyze: false, production: false, server: true, target: 'node'
+        });
+        const { compiler: clientCompiler, add } = options;
+        const compiler = webpack(serverConfig);
+
+        const sse = new SseChannel({
+            cors: { origins: ['*'] },
+            jsonEncode: true
+        });
+
+        options.add = (app) => { //eslint-disable-line no-param-reassign
+            add(app);
+            app.use(ssrMiddleware({
+                templatePath: api.paths.toAbsPath('tmp/templates'),
+                compiler
+            }));
+            app.use(k2c(sseReloadMiddleware(sse)));
+        };
+
+
+
+        clientCompiler.hooks.done.tap('jamServerStart', once(() => {
+            logger.log('Starting rendering server in watch mode...');
+            let isFirst = true;
+
+            const watcher = compiler.watch(
+                {},
+                (err, stats) => {
+                    if (isFirst) {
+                        logger.message('Rendering server started!');
+                        isFirst = false;
+                        return;
+                    }
+                    if (err) {
+                        logger.error(err);
+                        sse.send({ message: err.toString(), event: 'error' });
+                        return;
+                    }
+
+                    if (stats.hasErrors()) {
+                        const { errors } = stats.toJson();
+                        logger.error(errors);
+                        sse.send({ message: 'Compilation error', event: 'error' });
+                        return;
+                    }
+
+                    logger.log('Server bundle rendered. Reloading...');
+                    if (logger.hasLevel(0)) {
+                        const data = stats.toJson('minimal');
+                        logger.verbose(data);
+                    }
+                    sse.send({ event: 'reload' });
+                }
+            );
+
+            clientCompiler.hooks.watchClose.tap('onClose', () => {
+                watcher.close(() => {
+                    logger.verbose('Rendering server stopped.');
+                });
             });
         }));
     });
@@ -61,13 +119,10 @@ module.exports = (config, { port = 9000, index }) => {
         }
     });
 
-    config.set('middlewares', ({ paths, address }) => {
+    config.set('middlewares', ({ paths }) => {
         return [
-            proxy({
-                host: `http://${address}:${port}`,
-                match: /(\.html?|\/)$/
-            }),
-            staticMiddleware(paths.toAbsPath('dist.root'))
+            staticMiddleware(paths.toAbsPath('dist.root')),
+            require('./lib/sse.middleware')()
         ];
     });
 
