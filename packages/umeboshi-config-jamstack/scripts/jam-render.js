@@ -10,44 +10,42 @@ const { getTemplate } = require('../lib/utils');
 const { config, api } = resolveConfig(createConfig({})).evaluate();
 
 let render;
+let router;
 
 if (process.env.SSR) {
     render = require(process.env.SSR).render; //eslint-disable-line prefer-destructuring
+    router = require(process.env.SSR).router; //eslint-disable-line prefer-destructuring
 }
 
 const templatePath = api.paths.toAbsPath('tmp/templates/');
-const manifest = process.env.MANIFEST && require(process.env.MANIFEST);
 
+Object.keys(router.routes).forEach((page) => {
 
-globby.sync(
-    ['**/*.js'],
-    { cwd: api.paths.toAbsPath('src.assets/js/pages') }
-).forEach((page) => {
-
-    const {
+    render({ path: page }).then(({
         html,
         head = {},
-        template = 'default'
-    } = render({ path: page });
+        template
+    }) => {
+        const pageTmpl = getTemplate(template, templatePath);
 
-    const pageTmpl = getTemplate(template, templatePath);
+        const output = pageTmpl({
+            html,
+            head
+        });
 
-    const output = pageTmpl({
-        html,
-        head,
-        assets: manifest
+        const outPath = api.paths.toAbsPath(
+            `dist.root/${page === config.jamstack.index ? 'index.html' : page.replace(/\.js$/, '.html')}`
+        );
+        makeDir.sync(path.dirname(outPath));
+
+        fs.writeFileSync(
+            outPath,
+            output,
+            { encoding: 'utf8' }
+        );
+
+        logger.message(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
+
     });
 
-    const outPath = api.paths.toAbsPath(
-        `dist.root/${page === config.jamstack.index ? 'index.html' : page.replace(/\.js$/, '.html')}`
-    );
-    makeDir.sync(path.dirname(outPath));
-
-    fs.writeFileSync(
-        outPath,
-        output,
-        { encoding: 'utf8' }
-    );
-
-    logger.message(`Rendered file ${path.relative(api.paths.toAbsPath('dist.root'), outPath)}`);
 });
