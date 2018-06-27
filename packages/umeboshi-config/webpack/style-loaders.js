@@ -15,7 +15,7 @@ const createStyleLoader = (loader, defs = {}) => (options) => ({
 
 const applyLoaders = (rule, loaders = [], extract = false, styleLoader = 'style-loader') => {
     if (extract) {
-        rule.use('extract-css-loader').loader(MiniCssExtractPlugin.loader);
+        rule.use(styleLoader).loader(MiniCssExtractPlugin.loader);
     } else {
         rule.use(styleLoader).loader(styleLoader).options({ sourceMap });
     }
