@@ -7,6 +7,8 @@ module.exports = (config, { paths }, env = {}) => {
 
     config.plugins.delete('html');
 
+    config.set('name', 'server-jamstack');
+
     config
         .externals(nodeExternals({
             whitelist: [

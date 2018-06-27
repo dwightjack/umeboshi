@@ -18,6 +18,7 @@ module.exports = ({ paths } /*env*/) => {
 
     /* eslint-disable indent */
     config
+        .set('name', 'client')
         .target('web') // Make web variables accessible to webpack, e.g. window,
         .context(process.cwd())
         .stats({
