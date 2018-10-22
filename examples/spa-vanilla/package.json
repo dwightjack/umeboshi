@@ -1,0 +1,49 @@
+{
+    "name": "spa-vanilla",
+    "description": "e",
+    "version": "0.0.1",
+    "license": "MIT",
+    "author": {
+        "name": "ewr"
+    },
+    "contributors": [],
+    "main": "app/assets/js/app.js",
+    "engines": {
+        "node": ">=6.9.0"
+    },
+    "scripts": {
+        "start": "npm run clean && npm run modernizr && node ./node_modules/umeboshi-scripts/dev-server",
+        "server": "node ./node_modules/umeboshi-scripts/server",
+        "test": "cross-env BABEL_ENV=test jest --config ./node_modules/umeboshi-scripts/jest.loader.js",
+        "bundle": "node ./node_modules/umeboshi-scripts/bundler",
+        "bundle:production": "cross-env NODE_ENV=production npm run bundle",
+        "bundle:analyze": "cross-env NODE_ENV=production npm run bundle -- --env.analyze",
+        "modernizr": "node ./node_modules/umeboshi-scripts/modernizr",
+        "modernizr:production": "cross-env NODE_ENV=production npm run modernizr",
+        "clean": "node ./node_modules/umeboshi-scripts/clean",
+        "build": "npm run clean && npm run lint && npm run modernizr && npm run bundle",
+        "build:production": "cross-env NODE_ENV=production npm run build",
+        "eslint": "eslint -c ./app/assets/js/.eslintrc.json \"./app/assets/js/**/*.js\"",
+        "stylelint": "stylelint \"./app/assets/**/*.{scss,css}\" --config .stylelintrc.json",
+        "lint": "npm run eslint && npm run stylelint"
+    },
+    "dependencies": {
+        "normalize.css": "^8.0.0",
+        "sass-mq": "^4.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "7.1.2",
+        "babel-preset-umeboshi": "0.6.0-alpha.0",
+        "cross-env": "~5.1.0",
+        "eslint": ">= 5.7.0",
+        "eslint-config-umeboshi": "0.5.2-alpha.0",
+        "eslint-config-umeboshi-node": "0.4.0-alpha.0",
+        "jest": "^23.6.0",
+        "stylelint": "^9.6.0",
+        "stylelint-config-umeboshi": "0.3.3-alpha.0",
+        "umeboshi-config": "0.7.0-alpha.0",
+        "umeboshi-scripts": "0.7.0-alpha.0",
+        "webpack": "^4.0.0",
+        "webpack-bundle-analyzer": "^2.0.0"
+    }
+}

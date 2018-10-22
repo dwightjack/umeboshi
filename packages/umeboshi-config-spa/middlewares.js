@@ -5,18 +5,21 @@ const staticMiddleware = (contentBase) => serveStatic(contentBase);
 
 const historyMiddleware = (conf) => history(conf);
 
-const spaRenderMiddleware = ({ compiler, templatePath }) => {
+const spaRenderMiddleware = ({ templatePath }) => {
     const testRegexp = /(\.html|\/)$/;
 
-    return ({ method, path }, res, next) => {
+    return ({ method, path, app }, res, next) => {
         if (method === 'GET' && testRegexp.test(path)) {
-            compiler.outputFileSystem.readFile(templatePath, (err, file) => {
-                if (err) {
-                    next(err);
-                    return;
+            app.compiler.outputFileSystem.readFile(
+                templatePath,
+                (err, file) => {
+                    if (err) {
+                        next(err);
+                        return;
+                    }
+                    res.send(file.toString());
                 }
-                res.send(file.toString());
-            });
+            );
             return;
         }
         next();
