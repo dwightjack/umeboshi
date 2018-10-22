@@ -127,6 +127,16 @@ describe('babel-preset-umeboshi', () => {
                 require.resolve('@babel/plugin-proposal-object-rest-spread')
             );
         });
+
+        test('includes dynamic import plugin', () => {
+            process.env.NODE_ENV = 'development';
+            process.env.BABEL_ENV = '';
+            ({ plugins } = presetFn());
+            expect(plugins).toContain(
+                require.resolve('@babel/plugin-syntax-dynamic-import')
+            );
+            process.env.NODE_ENV = 'test';
+        });
     });
 
     describe('runtime plugin', () => {

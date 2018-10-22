@@ -41,7 +41,9 @@ module.exports = (context, opts = {}) => {
         plugins: [
             IS_NODE &&
                 require.resolve('@babel/plugin-transform-modules-commonjs'),
-            IS_NODE && require.resolve('babel-plugin-dynamic-import-node'),
+            IS_NODE
+                ? require.resolve('babel-plugin-dynamic-import-node')
+                : require.resolve('@babel/plugin-syntax-dynamic-import'),
             require.resolve('@babel/plugin-proposal-class-properties'),
             require.resolve('@babel/plugin-proposal-object-rest-spread'),
             require.resolve('@babel/plugin-transform-runtime'),

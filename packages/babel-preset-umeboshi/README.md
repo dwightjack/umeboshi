@@ -5,6 +5,7 @@
 This preset includes:
 
 -   [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env) with `loose=true` and `useBuiltIns='usage'`.
+-   ['@babel/plugin-syntax-dynamic-import'](https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import)
 -   [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties.html)
 -   [@babel/plugin-proposal-object-rest-spread](https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread)
 -   `@babel/plugin-transform-modules-commonjs` on test environments (`BABEL_ENV = 'test'` or `NODE_ENV = 'test'`)
