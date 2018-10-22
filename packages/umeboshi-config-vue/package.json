@@ -15,7 +15,7 @@
     "node": ">=6.9.0"
   },
   "peerDependencies": {
-    "@vue/test-utils": "~1.0.0-beta.16",
+    "@vue/test-utils": "~1.0.0-beta.25",
     "css-loader": "^0.28.0",
     "jest": "^22.0.0",
     "vue": "~2.5.0",
@@ -32,9 +32,9 @@
     "lodash.merge": "^4.6.0",
     "umeboshi-config": "^0.6.1-16",
     "umeboshi-dev-utils": "^0.4.3-14",
-    "vinyl": "^2.1.0",
+    "vinyl": "^2.2.0",
     "vue-jest": "~2.5.0",
-    "vue-loader": "^15.0.0",
+    "vue-loader": "^15.4.0",
     "vue-style-loader": "~4.1.0"
   },
   "devDependencies": {

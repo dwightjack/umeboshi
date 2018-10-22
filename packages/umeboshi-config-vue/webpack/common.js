@@ -1,5 +1,11 @@
 const {
-    css, scss, resolveUrl, postcss, addCSSRule, applyLoaders, umeStyles
+    css,
+    scss,
+    resolveUrl,
+    postcss,
+    addCSSRule,
+    applyLoaders,
+    umeStyles
 } = require('umeboshi-config/webpack/style-loaders');
 const { paths } = require('umeboshi-dev-utils');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -32,13 +38,10 @@ const createLoaderRule = (config, name, test, loaders = []) => {
         PRODUCTION,
         'vue-style-loader'
     );
-
 };
 
 module.exports = (config) => {
-
-    config.resolve.extensions
-        .merge(['.js', '.vue', '.json']);
+    config.resolve.extensions.merge(['.js', '.vue', '.json']);
 
     config.module.rules.delete('css');
     createLoaderRule(config, 'css', /\.css$/);
@@ -51,20 +54,18 @@ module.exports = (config) => {
     /* eslint-disable indent */
     config.module
         .rule('vue')
-            .test(/\.vue$/)
-            .include
-                .add(paths.toAbsPath('src.assets/js'))
-                .end()
-            .use('vue-loader')
-                .loader('vue-loader')
-                .options({
-                    compilerOptions: {
-                        preserveWhitespace: false
-                    }
-                });
+        .test(/\.vue$/)
+        .include.add(paths.toAbsPath('src.assets/js'))
+        .end()
+        .use('vue-loader')
+        .loader('vue-loader')
+        .options({
+            compilerOptions: {
+                preserveWhitespace: false
+            }
+        });
     /* eslint-enable indent */
-    config.plugin('vue')
-        .use(VueLoaderPlugin);
+    config.plugin('vue').use(VueLoaderPlugin);
 
     return config;
 };
