@@ -5,7 +5,9 @@ const recurseMatch = (arr, matcher) => {
         const item = arr[i];
         if (Array.isArray(item)) {
             const result = recurseMatch(item, matcher);
-            if (result === true) { return true; }
+            if (result === true) {
+                return true;
+            }
         }
 
         if (matcher(item) === true) {
@@ -25,29 +27,22 @@ const recurseFind = (arr, match) => {
 };
 
 describe('babel-preset-umeboshi', () => {
-
-
     describe('presets', () => {
-
-
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
         });
 
-        test('has `env` as first preset', () => {
+        test('has `env` preset', () => {
             const { presets } = presetFn();
-            expect(presets[0][0]).toBe(require.resolve('babel-preset-env'));
+            expect(presets).toEqual([
+                [require.resolve('@babel/preset-env'), expect.any(Object)]
+            ]);
         });
 
-        test('enforces useBuiltIns option to `entry`', () => {
+        test('enforces useBuiltIns option to `usage`', () => {
             const { presets } = presetFn();
             const options = presets[0][1];
-            expect(options).toMatchObject({ useBuiltIns: 'entry' });
-        });
-
-        test('has `stage-2` preset as 2nd entry', () => {
-            const { presets } = presetFn();
-            expect(presets[1]).toBe(require.resolve('babel-preset-stage-2'));
+            expect(options).toMatchObject({ useBuiltIns: 'usage' });
         });
 
         afterEach(() => {
@@ -56,7 +51,6 @@ describe('babel-preset-umeboshi', () => {
     });
 
     describe('NODE_ENV=test presets', () => {
-
         test('should set env preset to current node on test', () => {
             process.env.NODE_ENV = 'test';
             const { presets } = presetFn();
@@ -71,18 +65,17 @@ describe('babel-preset-umeboshi', () => {
             expect(presets[0][1].targets).toEqual({ node: 'current' });
 
             process.env.NODE_ENV = 'test';
-
         });
     });
 
     describe('test plugins', () => {
-
         let commonJSTransform;
-
 
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
-            commonJSTransform = require.resolve('babel-plugin-transform-es2015-modules-commonjs');
+            commonJSTransform = require.resolve(
+                '@babel/plugin-transform-modules-commonjs'
+            );
         });
 
         afterEach(() => {
@@ -90,35 +83,59 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'test';
         });
 
-        test('DOES NOT add `transform-es2015-modules-commonjs` plugin on `NODE_ENV != "test"`', () => {
+        test('DOES NOT add `@babel/plugin-transform-modules-commonjs` plugin on `NODE_ENV != "test"`', () => {
             process.env.NODE_ENV = 'development';
             process.env.BABEL_ENV = '';
             const { plugins } = presetFn();
-            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(false);
+            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(
+                false
+            );
         });
 
-        test('adds `transform-es2015-modules-commonjs` plugin on `BABEL_ENV != "test"`', () => {
+        test('adds `@babel/plugin-transform-modules-commonjs` plugin on `BABEL_ENV != "test"`', () => {
             process.env.NODE_ENV = 'development';
             process.env.BABEL_ENV = 'test';
             const { plugins } = presetFn();
-            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(true);
+            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).toBe(
+                true
+            );
         });
 
-        test('adds `transform-es2015-modules-commonjs` plugin on test environments', () => {
+        test('adds `@babel/plugin-transform-modules-commonjs` plugin on test environments', () => {
             const { plugins } = presetFn();
-            expect(recurseMatch(plugins, (i) => i === commonJSTransform)).not.toBe(false);
+            expect(
+                recurseMatch(plugins, (i) => i === commonJSTransform)
+            ).not.toBe(false);
+        });
+    });
+
+    describe('syntax plugins', () => {
+        let plugins;
+
+        beforeEach(() => {
+            ({ plugins } = presetFn());
         });
 
+        test('includes class properties plugin', () => {
+            expect(plugins).toContain(
+                require.resolve('@babel/plugin-proposal-class-properties')
+            );
+        });
+
+        test('includes rest spread plugin', () => {
+            expect(plugins).toContain(
+                require.resolve('@babel/plugin-proposal-object-rest-spread')
+            );
+        });
     });
 
     describe('runtime plugin', () => {
-
         let runtime;
         let match;
 
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
-            runtime = require.resolve('babel-plugin-transform-runtime');
+            runtime = require.resolve('@babel/plugin-transform-runtime');
             const { plugins } = presetFn();
             match = recurseFind(plugins, runtime);
         });
@@ -128,39 +145,8 @@ describe('babel-preset-umeboshi', () => {
             process.env.NODE_ENV = 'test';
         });
 
-        test('should have runtime-plugin with options', () => {
-            expect(match).toBeInstanceOf(Array);
-        });
-
-        test('should have runtime-plugin with options', () => {
-            expect(match[0]).toBe(runtime);
-        });
-
-        test('polyfill is disabled', () => {
-            expect(match[1].polyfill).toBe(false);
-        });
-
-        test('regenerator is on by default', () => {
-            expect(match[1].regenerator).toBe(true);
-        });
-
-        test('can disable regenerator with a configuration flag', () => {
-            const { plugins } = presetFn(null, { async: false, asyncImport: false });
-            const [, matched] = recurseFind(plugins, runtime);
-            expect(matched.regenerator).toBe(false);
-        });
-
-        test('includes regenerator if `async` option is true', () => {
-            const { plugins } = presetFn(null, { async: true, asyncImport: false });
-            const [, matched] = recurseFind(plugins, runtime);
-            expect(matched.regenerator).toBe(true);
-        });
-
-        test('includes regenerator if `asyncImport` option is true', () => {
-            const { plugins } = presetFn(null, { async: false, asyncImport: true });
-            const [, matched] = recurseFind(plugins, runtime);
-            expect(matched.regenerator).toBe(true);
+        test('should have runtime-plugin', () => {
+            expect(match).toBe(runtime);
         });
     });
-
 });

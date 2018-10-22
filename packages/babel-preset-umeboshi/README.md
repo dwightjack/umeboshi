@@ -1,13 +1,13 @@
 # babel-preset-umeboshi
 
-> Standard Babel preset for Umeboshi templates
+> Standard Babel 7 preset for Umeboshi templates
 
 This preset includes:
 
-* [babel-preset-env](https://github.com/babel/babel/tree/master/experimental/babel-preset-env) with [`loose=true`](https://github.com/babel/babel/tree/master/experimental/babel-preset-env#modules) and [`useBuiltIns='entry'`](https://github.com/babel/babel/tree/master/experimental/babel-preset-env#usebuiltins) options. Target browsers: `['> 0.25%', 'not op_mini all', 'not ie < 11']`
-* [babel-preset-stage-2](https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2)
-* `transform-runtime` plugin excluding polyfill.
-* `transform-es2015-modules-commonjs` on test environments (`BABEL_ENV = 'test'` or `NODE_ENV = 'test'`)
+-   [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env) with `loose=true` and `useBuiltIns='usage'`.
+-   [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties.html)
+-   [@babel/plugin-proposal-object-rest-spread](https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread)
+-   `@babel/plugin-transform-modules-commonjs` on test environments (`BABEL_ENV = 'test'` or `NODE_ENV = 'test'`)
 
 Regenerator transform and generator polyfill are always included in order to support [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and [dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function). If you won't use these features and wish to save some KB you can disable them via [preset options](#preset-options).
 
@@ -31,7 +31,7 @@ Add the preset to `.babelrc` file in your project's root folder.
 
 ```json
 {
-  "presets": ["umeboshi"]
+    "presets": ["umeboshi"]
 }
 ```
 
@@ -44,25 +44,31 @@ If you plan not to use such features, or your target browsers already support th
 
 ```json
 {
-  "presets": [
-      ["umeboshi", {
-          async: false,
-          asyncImport: false
-    }]
-  ]
+    "presets": [
+        [
+            "umeboshi",
+            {
+                "async": false,
+                "asyncImport": false
+            }
+        ]
+    ]
 }
 ```
 
-### Custom browserslist query
+### Custom targets
 
-By default this plugin sets browserslist's support to `['> 0.25%', 'not op_mini all', 'not ie < 11']`. If you wish to use a different setup or prefer [another source for queries](https://github.com/browserslist/browserslist#queries), just set `browserslist` option to `false`:
+You can setup `@babel/preset-env` target option by adding a target property on the preset options. Refer to the [official documentation](https://babeljs.io/docs/en/babel-preset-env#targets) for supported values:
 
 ```json
 {
-  "presets": [
-      ["umeboshi", {
-          browserslist: false
-    }]
-  ]
+    "presets": [
+        [
+            "umeboshi",
+            {
+                "targets": "> 0.25%, not dead"
+            }
+        ]
+    ]
 }
 ```
