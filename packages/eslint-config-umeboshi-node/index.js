@@ -8,7 +8,6 @@ const airbnb = [
 ].map(require.resolve);
 
 module.exports = {
-
     plugins: ['node'],
 
     env: {
@@ -16,13 +15,10 @@ module.exports = {
         es6: true
     },
 
-    extends: [
-        'eslint:recommended',
-        'plugin:node/recommended'
-    ].concat(airbnb),
+    extends: ['eslint:recommended', 'plugin:node/recommended'].concat(airbnb),
 
     rules: {
-        indent: ['error', 4],
+        indent: ['error', 2],
         'consistent-return': 'error',
         'arrow-body-style': 'off',
         'no-multiple-empty-lines': ['warn', { max: 3 }],
@@ -32,11 +28,10 @@ module.exports = {
         'spaced-comment': 'off',
         'object-curly-spacing': ['error', 'always'],
         'global-require': 'off',
-        'eol-last': ['warn', 'never'],
+        'eol-last': 'off',
         'max-len': 'off',
         'prefer-template': 'off',
         'function-paren-newline': 'off',
-
         'node/no-unpublished-require': 'off'
     }
 };
