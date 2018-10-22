@@ -43,6 +43,14 @@ module.exports = {
             files: ['*.test.js'],
             env: {
                 jest: true
+            },
+            rules: {
+                'import/no-extraneous-dependencies': [
+                    'error',
+                    {
+                        devDependencies: ['**/*.test.js']
+                    }
+                ]
             }
         }
     ]
