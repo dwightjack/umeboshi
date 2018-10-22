@@ -34,7 +34,8 @@ module.exports = {
         'object-curly-spacing': ['error', 'always'],
         'global-require': 'off',
         'prefer-template': 'off',
-        'function-paren-newline': 'off'
+        'function-paren-newline': 'off',
+        'prettier/prettier': ['error']
     },
 
     overrides: [
