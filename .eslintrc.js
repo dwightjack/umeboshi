@@ -10,7 +10,7 @@ const airbnb = [
 module.exports = {
     root: true,
 
-    plugins: ['node', 'prettier'],
+    plugins: ['node', 'import', 'prettier'],
 
     env: {
         node: true,
