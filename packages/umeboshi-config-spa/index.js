@@ -5,18 +5,17 @@ const {
 } = require('./middlewares');
 
 module.exports = (config) => {
-
     const { server } = config.get('env');
 
     config.set('middlewares', (api) => {
-
         const templatePath = api.paths.toAbsPath('dist.root/index.html');
 
-        return ({ compiler } = {}) => [
-            historyMiddleware(),
-            staticMiddleware(api.paths.toAbsPath('dist.root')),
-            server && spaRenderMiddleware({ compiler, templatePath })
-        ].filter((x) => x);
+        return ({ compiler } = {}) =>
+            [
+                historyMiddleware(),
+                staticMiddleware(api.paths.toAbsPath('dist.root')),
+                server && spaRenderMiddleware({ compiler, templatePath })
+            ].filter((x) => x);
     });
 
     config.set('createServer', require('./server'));

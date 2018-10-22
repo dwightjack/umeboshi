@@ -1,10 +1,10 @@
-const Koa = require('koa');
+const express = require('express');
 
 const createServer = ({
     //contentBase,
     middlewares = []
 } = {}) => {
-    const app = new Koa();
+    const app = express();
 
     if (middlewares.length > 0) {
         middlewares.forEach((middleware) => app.use(middleware));
