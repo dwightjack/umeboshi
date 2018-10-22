@@ -3,9 +3,7 @@ const { AsyncParallelHook, SyncBailHook, SyncHook } = require('tapable');
 const { evaluate, APP_PATH } = require('../index');
 const paths = require('./paths');
 
-
 const createConfig = (env = {}) => {
-
     const $store = new Map();
     const $extends = new Map();
 
@@ -40,7 +38,6 @@ const createConfig = (env = {}) => {
                 } else {
                     this.set(key, merge(this.get(key), value));
                 }
-
             });
         },
         tap(key, fn) {
@@ -68,14 +65,19 @@ const createConfig = (env = {}) => {
                 hosts: this.get('hosts') || {},
                 hooks: this.hooks
             };
-            const config = [...$store].reduce((acc, [key, value]) => {
-                //exclude env, we already resolved it
-                if (key === 'env') { return acc; }
+            const config = [...$store].reduce(
+                (acc, [key, value]) => {
+                    //exclude env, we already resolved it
+                    if (key === 'env') {
+                        return acc;
+                    }
 
-                acc[key] = this.resolveFrag(key, value, api, e);
+                    acc[key] = this.resolveFrag(key, value, api, e);
 
-                return acc;
-            }, { env: e });
+                    return acc;
+                },
+                { env: e }
+            );
             return { api, config };
         }
     };

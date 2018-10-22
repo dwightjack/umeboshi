@@ -18,7 +18,9 @@ const UME_CONFIG_REGEXP = /^umeboshi-config-/;
 
 //deps chain...
 const { devDependencies = {}, dependencies = {} } = pkg;
-const depsArray = Object.keys(Object.assign({}, devDependencies, dependencies)).sort();
+const depsArray = Object.keys(
+    Object.assign({}, devDependencies, dependencies)
+).sort();
 const umeboshiScripts = depsArray.filter((p) => UME_SCRIPTS_REGEXP.test(p));
 const umeboshiConfigs = depsArray.filter((p) => UME_CONFIG_REGEXP.test(p));
 
@@ -41,9 +43,8 @@ const CONFIG_LOAD_PATHS = [
  * @param {...*} [args] Function arguments
  * @return {*}
  */
-const evaluate = (value, ...args) => (
-    isFunction(value) ? value(...args) : value
-);
+const evaluate = (value, ...args) =>
+    isFunction(value) ? value(...args) : value;
 
 /**
  * Merges two configuration objects. If `source` is a function, executes it with `config` as it's first argument.
@@ -100,7 +101,6 @@ const exists = (filepath) => {
     return fileCheckCache[filepath];
 };
 
-
 /**
  * Checks if a given path exists in the project root folder.
  *
@@ -136,9 +136,8 @@ const resolvePath = (...paths) => {
  * @param {string[]} paths - Array of base paths to use in path resolution
  * @returns {string|boolean}
  */
-const resolve = (filepath, paths) => resolvePath(
-    ...paths.map((p) => path.join(p, filepath))
-);
+const resolve = (filepath, paths) =>
+    resolvePath(...paths.map((p) => path.join(p, filepath)));
 
 /**
  * Tries to resolve and load a module given it's relative path an array of base paths.
@@ -151,7 +150,11 @@ const resolve = (filepath, paths) => resolvePath(
 const load = (filepath, resolvePaths) => {
     const realpath = resolve(filepath, resolvePaths);
     if (realpath === false) {
-        throw new Error(`Unable to load file ${filepath}. Resolve folders: ${resolvePaths.join(', ')}`);
+        throw new Error(
+            `Unable to load file ${filepath}. Resolve folders: ${resolvePaths.join(
+                ', '
+            )}`
+        );
     }
     return require(realpath);
 };
@@ -198,9 +201,7 @@ const loadUmeboshiConfig = (frag) => {
         logger.error(e);
         return undefined;
     }
-
 };
-
 
 const resolveExtends = (config = {}, $config) => {
     if (config.extends) {
@@ -214,7 +215,6 @@ const resolveExtends = (config = {}, $config) => {
     }
     return $config;
 };
-
 
 const resolveConfig = ($config) => {
     const config = loadUmeboshiConfig();
