@@ -1,5 +1,4 @@
 module.exports = {
-
     src: {
         root: 'app',
         assets: 'app/assets'

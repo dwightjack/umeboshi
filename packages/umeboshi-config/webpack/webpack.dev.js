@@ -10,12 +10,10 @@ module.exports = (api, env) => {
     config
         .cache(true)
         .entry('app')
-            .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`)
-            .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
+        .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`)
+        .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
 
-    config
-        .plugin('named-chunks')
-            .use(webpack.NamedChunksPlugin);
+    config.plugin('named-chunks').use(webpack.NamedChunksPlugin);
     /* eslint-enable indent */
 
     return config;

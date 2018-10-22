@@ -39,88 +39,74 @@ module.exports = ({ paths } /*env*/) => {
         .devtool(PRODUCTION ? '#source-map' : '#cheap-module-source-map')
         .mode(PRODUCTION ? 'production' : 'development');
 
-    config
-        .performance
-            .hints(false);
+    config.performance.hints(false);
 
-    config
-        .output
-            .path(destPath)
-            .publicPath(paths.get('publicPath'))
-            .chunkFilename(paths.get('js') + '/[name].js')
-            .filename(paths.get('js') + '/[name].js');
+    config.output
+        .path(destPath)
+        .publicPath(paths.get('publicPath'))
+        .chunkFilename(paths.get('js') + '/[name].js')
+        .filename(paths.get('js') + '/[name].js');
 
-    config
-        .node
-        .merge({
-            fs: 'empty',
-            net: 'empty',
-            tls: 'empty'
-        });
+    config.node.merge({
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    });
 
-    config
-        .resolve
-            .alias
-                .merge({
-                    styles: paths.toAbsPath('src.assets/styles'),
-                    images: paths.toAbsPath('src.assets/images'),
-                    '@': paths.toAbsPath('src.assets/js')
-                });
+    config.resolve.alias.merge({
+        styles: paths.toAbsPath('src.assets/styles'),
+        images: paths.toAbsPath('src.assets/images'),
+        '@': paths.toAbsPath('src.assets/js')
+    });
 
-    config
-        .resolve
-        .modules
-            .add(paths.toAbsPath('src.assets/vendors'))
-            .add('node_modules');
+    config.resolve.modules
+        .add(paths.toAbsPath('src.assets/vendors'))
+        .add('node_modules');
 
-    config
-        .module
-            .rule('parser')
-                .parser({ amd: false });
+    config.module.rule('parser').parser({ amd: false });
 
     config.module
         .rule('js')
-            .test(/\.js$/)
-            .include
-                .merge([
-                    paths.toAbsPath('src.assets/js'),
-                    paths.toAbsPath('src.assets/styles')
-                ])
-                .end()
-            .use('babel')
-                .merge({
-                    loader: 'babel-loader',
-                    options: {
-                        cacheDirectory: true
-                    }
-                });
+        .test(/\.js$/)
+        .include.merge([
+            paths.toAbsPath('src.assets/js'),
+            paths.toAbsPath('src.assets/styles')
+        ])
+        .end()
+        .use('babel')
+        .merge({
+            loader: 'babel-loader',
+            options: {
+                cacheDirectory: true
+            }
+        });
 
     config.module
         .rule('html')
-            .test(/\.html$/)
-            .exclude
-                .add(/(node_modules|vendors)/)
-                .end()
-            .use('raw')
-                .loader('raw-loader');
+        .test(/\.html$/)
+        .exclude.add(/(node_modules|vendors)/)
+        .end()
+        .use('raw')
+        .loader('raw-loader');
 
     config.module
         .rule('assets')
-            .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac|eot|svg|ttf|woff|woff2|jpe?g|png|gif)(\?.*)?$/)
-            .include
-                .merge([
-                    paths.toAbsPath('src.assets/images'),
-                    paths.toAbsPath('src.assets/fonts')
-                ])
-                .end()
-            .use('file-loader')
-                .merge({
-                    loader: 'file-loader',
-                    options: {
-                        name: `[path][name]${PRODUCTION ? '.[hash:10]' : ''}.[ext]`,
-                        context: paths.toPath('src.assets')
-                    }
-                });
+        .test(
+            /\.(mp4|webm|ogg|mp3|wav|flac|aac|eot|svg|ttf|woff|woff2|jpe?g|png|gif)(\?.*)?$/
+        )
+        .include.merge([
+            paths.toAbsPath('src.assets/images'),
+            paths.toAbsPath('src.assets/fonts')
+        ])
+        .end()
+        .use('file-loader')
+        .merge({
+            loader: 'file-loader',
+            options: {
+                name: `[path][name]${PRODUCTION ? '.[hash:10]' : ''}.[ext]`,
+                context: paths.toPath('src.assets')
+            }
+        });
 
     const baseStyleLoaders = [css(), postcss()];
 
@@ -136,15 +122,18 @@ module.exports = ({ paths } /*env*/) => {
             name: 'scss',
             extract: PRODUCTION,
             test: /\.scss$/,
-            loaders: [...baseStyleLoaders, resolveUrl(), scss({
-                includePaths: [
-                    paths.toAbsPath('src.assets/styles'),
-                    'node_modules'
-                ]
-            })]
+            loaders: [
+                ...baseStyleLoaders,
+                resolveUrl(),
+                scss({
+                    includePaths: [
+                        paths.toAbsPath('src.assets/styles'),
+                        'node_modules'
+                    ]
+                })
+            ]
         });
     }
-
 
     config.optimization
         .occurrenceOrder(true)
@@ -163,34 +152,39 @@ module.exports = ({ paths } /*env*/) => {
 
     // PLUGINS
 
-
     config
         .plugin('define')
-            .use(webpack.DefinePlugin, [{
+        .use(webpack.DefinePlugin, [
+            {
                 __PRODUCTION__: PRODUCTION
-            }])
-            .end()
+            }
+        ])
+        .end()
         .plugin('html')
-            .use(HtmlWebpackPlugin, [{
+        .use(HtmlWebpackPlugin, [
+            {
                 template: paths.toPath('src.root/templates/index.ejs'),
                 filename: paths.toAbsPath('dist.root/index.html'),
                 modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
                 chunksSortMode: 'dependency',
                 inject: true,
-                minify: (PRODUCTION ? {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: false,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true
-                } : false)
-            }])
-            .end();
+                minify: PRODUCTION
+                    ? {
+                          removeComments: true,
+                          collapseWhitespace: true,
+                          removeRedundantAttributes: true,
+                          useShortDoctype: true,
+                          removeEmptyAttributes: false,
+                          removeStyleLinkTypeAttributes: true,
+                          keepClosingSlash: true,
+                          minifyJS: true,
+                          minifyCSS: true,
+                          minifyURLs: true
+                      }
+                    : false
+            }
+        ])
+        .end();
 
     return config;
     /* eslint-enable indent */

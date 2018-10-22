@@ -1,7 +1,6 @@
 const { options } = require('./dev');
 
 module.exports = ({ paths }) => ({
-
     cache: true,
 
     devFile: false,
@@ -15,10 +14,7 @@ module.exports = ({ paths }) => ({
     uglify: true,
 
     // Define any tests you want to explicitly include
-    tests: [
-        'pointerevents',
-        'touchevents'
-    ],
+    tests: ['pointerevents', 'touchevents'],
 
     // Useful for excluding any tests that this tool will match
     // e.g. you use .notification class for notification elements,

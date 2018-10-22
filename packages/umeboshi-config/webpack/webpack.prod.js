@@ -11,8 +11,8 @@ module.exports = (api, env) => {
     config
         .cache(true)
         .entry('app')
-            .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`) //eslint-disable-line indent
-            .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`); //eslint-disable-line indent
+        .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`) //eslint-disable-line indent
+        .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`); //eslint-disable-line indent
 
     config.output
         .filename(paths.toPath('js/[name].[chunkhash].js'))
@@ -20,36 +20,39 @@ module.exports = (api, env) => {
 
     /* eslint-disable indent */
 
-    config.optimization
-        .minimizer([
-            new UglifyJSPlugin({
-                uglifyOptions: {
-                    compressor: {
-                        warnings: false
-                    }
-                },
-                sourceMap: true
-            }),
-            new OptimizeCssAssetsPlugin({
-                canPrint: false,
-                cssProcessorOptions: {
-                    safe: true,
-                    autoprefixer: { disable: true },
-                    mergeLonghand: false
+    config.optimization.minimizer([
+        new UglifyJSPlugin({
+            uglifyOptions: {
+                compressor: {
+                    warnings: false
                 }
-            })
-        ]);
+            },
+            sourceMap: true
+        }),
+        new OptimizeCssAssetsPlugin({
+            canPrint: false,
+            cssProcessorOptions: {
+                safe: true,
+                autoprefixer: { disable: true },
+                mergeLonghand: false
+            }
+        })
+    ]);
 
     config
         .plugin('hashed-modules')
-            .use(webpack.HashedModuleIdsPlugin)
-            .end()
+        .use(webpack.HashedModuleIdsPlugin)
+        .end()
         .plugin('extract')
-            .use(MiniCssExtractPlugin, [{
-                chunkFilename: paths.toPath('styles/[name].[contenthash:10].css'),
+        .use(MiniCssExtractPlugin, [
+            {
+                chunkFilename: paths.toPath(
+                    'styles/[name].[contenthash:10].css'
+                ),
                 filename: paths.toPath('styles/[name].[contenthash:10].css')
-            }])
-            .end();
+            }
+        ])
+        .end();
     /* eslint-enable indent */
     return config;
 };
