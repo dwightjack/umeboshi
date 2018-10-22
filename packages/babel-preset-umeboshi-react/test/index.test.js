@@ -1,19 +1,21 @@
 const preset = require('../index');
 
 describe('babel-preset-umeboshi-react', () => {
-
     describe('presets', () => {
-
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
         });
 
         test('has `umeboshi` as first preset. Without options', () => {
-            expect(preset().presets[0]).toBe(require.resolve('babel-preset-umeboshi'));
+            expect(preset().presets[0]).toBe(
+                require.resolve('babel-preset-umeboshi')
+            );
         });
 
         test('has `react` as second preset. Without options', () => {
-            expect(preset().presets[1]).toBe(require.resolve('babel-preset-react'));
+            expect(preset().presets[1]).toBe(
+                require.resolve('@babel/preset-react')
+            );
         });
 
         afterEach(() => {
@@ -22,7 +24,6 @@ describe('babel-preset-umeboshi-react', () => {
     });
 
     describe('plugins', () => {
-
         beforeEach(() => {
             process.env.NODE_ENV = 'development';
         });
@@ -41,14 +42,15 @@ describe('babel-preset-umeboshi-react', () => {
             process.env.NODE_ENV = 'production';
 
             const expected = [
-                require.resolve('babel-plugin-transform-react-constant-elements'),
-                require.resolve('babel-plugin-transform-react-inline-elements'),
-                require.resolve('babel-plugin-transform-react-remove-prop-types')
+                [
+                    require.resolve(
+                        'babel-plugin-transform-react-remove-prop-types'
+                    ),
+                    expect.any(Object)
+                ]
             ];
 
             expect(preset().plugins).toEqual(expected);
         });
-
     });
-
 });

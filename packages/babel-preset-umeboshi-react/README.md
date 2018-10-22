@@ -4,14 +4,12 @@
 
 This preset includes:
 
-* [babel-preset-umeboshi](https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi)
-* [babel-preset-react](https://www.npmjs.com/package/babel-preset-react)
+-   [babel-preset-umeboshi](https://github.com/dwightjack/umeboshi/tree/master/packages/babel-preset-umeboshi)
+-   [@babel/preset-react](https://babeljs.io/docs/en/babel-preset-react)
 
 In production it will apply the following transforms:
 
-* [transform-react-constant-elements](https://www.npmjs.com/package/babel-plugin-transform-react-constant-elements)
-* [transform-react-inline-elements](https://www.npmjs.com/package/babel-plugin-transform-react-inline-elements)
-* [transform-react-remove-prop-types](https://www.npmjs.com/package/babel-plugin-transform-react-remove-prop-types)
+-   [transform-react-remove-prop-types](https://www.npmjs.com/package/babel-plugin-transform-react-remove-prop-types)
 
 ## Install
 
@@ -33,6 +31,6 @@ Add the preset to `.babelrc` file in your project's root folder.
 
 ```json
 {
-  "presets": ["umeboshi-react"]
+    "presets": ["umeboshi-react"]
 }
 ```
