@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config",
-  "version": "0.6.1-16",
+  "version": "0.7.0-alpha.0",
   "description": "Umeboshi standard configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -40,6 +40,6 @@
     "sass-loader": "^7.0.0",
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "1.2.5",
-    "umeboshi-dev-utils": "^0.4.3-14"
+    "umeboshi-dev-utils": "^0.4.4-alpha.0"
   }
 }
