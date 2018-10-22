@@ -35,5 +35,14 @@ module.exports = {
         'global-require': 'off',
         'prefer-template': 'off',
         'function-paren-newline': 'off'
-    }
+    },
+
+    overrides: [
+        {
+            files: ['*.test.js'],
+            env: {
+                jest: true
+            }
+        }
+    ]
 };
