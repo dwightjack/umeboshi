@@ -1,7 +1,6 @@
 const pkg = require('../package.json');
 
 describe('stylelint-config-umeboshi', () => {
-
     let config;
 
     beforeEach(() => {
@@ -9,7 +8,6 @@ describe('stylelint-config-umeboshi', () => {
     });
 
     describe('Dependencies', () => {
-
         test('stylelint is a peer', () => {
             expect(pkg).toHaveProperty('peerDependencies.stylelint');
         });
@@ -23,12 +21,9 @@ describe('stylelint-config-umeboshi', () => {
                 expect(pkg.dependencies).toHaveProperty(key);
             });
         });
-
-
     });
 
     describe('Features', () => {
-
         test('extends stylelint-config-standard`', () => {
             expect(config.extends).toEqual(['stylelint-config-standard']);
         });
@@ -43,7 +38,6 @@ describe('stylelint-config-umeboshi', () => {
     });
 
     describe('Rules', () => {
-
         let rules;
 
         beforeAll(() => {
@@ -51,7 +45,7 @@ describe('stylelint-config-umeboshi', () => {
         });
 
         test('4 space indentation', () => {
-            expect(rules.indentation).toBe(4);
+            expect(rules.indentation[0]).toBe(4);
         });
 
         test('uses scss/at-rule-no-unknown instead of at-rule-no-unknown', () => {
@@ -60,9 +54,7 @@ describe('stylelint-config-umeboshi', () => {
         });
     });
 
-
     describe('css-modules', () => {
-
         let rules;
 
         beforeAll(() => {
@@ -71,21 +63,23 @@ describe('stylelint-config-umeboshi', () => {
 
         ['export', 'import', 'global', 'local'].forEach((key) => {
             test(`allows css-modules "${key}" keyword`, () => {
-                const ignored = rules['selector-pseudo-class-no-unknown'][1].ignorePseudoClasses;
+                const ignored =
+                    rules['selector-pseudo-class-no-unknown'][1]
+                        .ignorePseudoClasses;
                 expect(ignored).toContain(key);
             });
         });
 
         ['composes', 'compose-with'].forEach((key) => {
             test(`allows css-modules "${key}" property`, () => {
-                const ignored = rules['property-no-unknown'][1].ignoreProperties;
+                const ignored =
+                    rules['property-no-unknown'][1].ignoreProperties;
                 expect(ignored).toContain(key);
             });
         });
     });
 
     describe('order plugin', () => {
-
         test('has a custom properties order', () => {
             const rule = config.rules['order/properties-order'];
             expect(rule).toBeInstanceOf(Array);
@@ -102,7 +96,4 @@ describe('stylelint-config-umeboshi', () => {
             expect(rule).toBeUndefined();
         });
     });
-
-
-
 });
