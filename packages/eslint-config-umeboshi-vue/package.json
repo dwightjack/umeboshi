@@ -15,14 +15,14 @@
     "vue"
   ],
   "peerDependencies": {
-    "eslint": ">= 4.8.0"
+    "eslint": ">= 5.7.0"
   },
   "dependencies": {
     "eslint-config-umeboshi": "^0.5.1",
-    "eslint-plugin-vue": "^4.5.0"
+    "eslint-plugin-vue": "^4.7.0"
   },
   "devDependencies": {
-    "eslint": ">= 4.8.0"
+    "eslint": ">= 5.7.0"
   },
   "engines": {
     "node": ">= 6.9.0"
