@@ -1,11 +1,14 @@
 const { loadUmeboshiConfig } = require('umeboshi-dev-utils');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const umeStyles = Object.assign({
-    modules: true,
-    sourceMap: true,
-    scss: true
-}, loadUmeboshiConfig('styles'));
+const umeStyles = Object.assign(
+    {
+        modules: true,
+        sourceMap: true,
+        scss: true
+    },
+    loadUmeboshiConfig('styles')
+);
 const { modules, sourceMap } = umeStyles;
 
 const createStyleLoader = (loader, defs = {}) => (options) => ({
@@ -13,39 +16,44 @@ const createStyleLoader = (loader, defs = {}) => (options) => ({
     options: Object.assign({}, defs, options)
 });
 
-const applyLoaders = (rule, loaders = [], extract = false, styleLoader = 'style-loader') => {
+const applyLoaders = (
+    rule,
+    loaders = [],
+    extract = false,
+    styleLoader = 'style-loader'
+) => {
     if (extract) {
         rule.use(styleLoader).loader(MiniCssExtractPlugin.loader);
     } else {
-        rule.use(styleLoader).loader(styleLoader).options({ sourceMap });
+        rule.use(styleLoader)
+            .loader(styleLoader)
+            .options({ sourceMap });
     }
     loaders.forEach(({ loader, options }) => {
-        rule.use(loader).loader(loader).options(options);
+        rule.use(loader)
+            .loader(loader)
+            .options(options);
     });
 };
 
-
 /* eslint-disable indent */
-const addCSSRule = (config, {
-    test, loaders = [], name, extract = false, styleLoader = 'style-loader'
-}) => {
-
+const addCSSRule = (
+    config,
+    { test, loaders = [], name, extract = false, styleLoader = 'style-loader' }
+) => {
     const rule = config.module
         .rule(name)
-            .test(test)
-            .exclude
-                .add(/(node_modules|vendors)/)
-                .end();
+        .test(test)
+        .exclude.add(/(node_modules|vendors)/)
+        .end();
 
     if (!loaders || loaders.length === 0) {
         return rule;
     }
 
-
     applyLoaders(rule, loaders, extract, styleLoader);
 
     return rule;
-
 };
 /* eslint-enable indent */
 
@@ -69,7 +77,6 @@ const scss = createStyleLoader('sass-loader', {
     ],
     outputStyle: 'expanded'
 });
-
 
 module.exports = {
     createStyleLoader,

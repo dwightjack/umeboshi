@@ -5,8 +5,6 @@ module.exports = (api, env) => {
     const config = require('./webpack.base')(api, env);
     const { paths } = api;
 
-    /* eslint-disable indent */
-
     config
         .cache(true)
         .entry('app')
@@ -14,7 +12,10 @@ module.exports = (api, env) => {
         .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
 
     config.plugin('named-chunks').use(webpack.NamedChunksPlugin);
-    /* eslint-enable indent */
+
+    if (env.server) {
+        config.plugin('hmr').use(webpack.HotModuleReplacementPlugin);
+    }
 
     return config;
 };

@@ -10,12 +10,11 @@ module.exports = (config) => {
     config.set('middlewares', (api) => {
         const templatePath = api.paths.toAbsPath('dist.root/index.html');
 
-        return ({ compiler } = {}) =>
-            [
-                historyMiddleware(),
-                staticMiddleware(api.paths.toAbsPath('dist.root')),
-                server && spaRenderMiddleware({ compiler, templatePath })
-            ].filter((x) => x);
+        return [
+            historyMiddleware(),
+            staticMiddleware(api.paths.toAbsPath('dist.root')),
+            server && spaRenderMiddleware({ templatePath })
+        ].filter((x) => x);
     });
 
     config.set('createServer', require('./server'));

@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
-const serve = require('webpack-dev-server');
+const Server = require('webpack-dev-server');
 const {
     loadUmeboshiConfig,
     mergeConfig,
@@ -18,7 +18,7 @@ const webpackConfig = require('./webpack')({
 let clientConfig;
 
 if (Array.isArray(webpackConfig)) {
-    clientConfig = webpackConfig.find(({ target }) => target === 'web');
+    clientConfig = webpackConfig.filter(({ target }) => target === 'web');
 } else {
     clientConfig = webpackConfig;
 }
@@ -27,13 +27,10 @@ if (!clientConfig) {
     throw new TypeError('Invalid webpack configuration');
 }
 
-const compiler = webpack(clientConfig);
-
 const env = {
     analyze: false,
     production: false,
-    server: true,
-    compiler
+    server: true
 };
 const { config, api } = resolveConfig(createConfig(env)).evaluate();
 const { middlewares, devServer } = config;
@@ -51,12 +48,11 @@ portfinder.getPortPromise({ port }).then((p) => {
         : evaluate(middlewares, env);
     const args = [
         { port: p, publicPath: webpackConfig.output.publicPath },
-        webpackConfig,
-        compiler
+        webpackConfig
     ];
     const options = Object.assign(
         {
-            setup(app) {
+            before(app) {
                 if (appMiddlewares && appMiddlewares.length > 0) {
                     appMiddlewares.forEach((middleware) => app.use(middleware));
                 }
@@ -66,8 +62,15 @@ portfinder.getPortPromise({ port }).then((p) => {
     );
 
     api.hooks.devServer.promise(options, { port: p }, api).then(() => {
-        const server = serve(compiler, options);
-        server.on('listening', () => {
+        Server.addDevServerEntrypoints(clientConfig, options);
+
+        const compiler = webpack(clientConfig);
+
+        const server = new Server(compiler, options);
+
+        server.app.compiler = compiler;
+
+        server.listen(options.port, options.host, () => {
             logger.message('`\nStarted a server at:\n');
             logger.message(`- http://localhost:${p}`);
             logger.message(`- http://${api.address}:${p}\n`);
