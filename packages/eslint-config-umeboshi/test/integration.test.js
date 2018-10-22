@@ -4,13 +4,14 @@ const { CLIEngine } = require('eslint');
 
 const mockWebpackConf = require('./fixtures/webpack.conf.js');
 
-
 describe('eslint-config-umeboshi [integration tests]', () => {
-
     let cli;
     let conf;
 
-    const getFixture = (filename) => fs.readFileSync(path.resolve(__dirname, 'fixtures', filename), { encoding: 'utf8' })
+    const getFixture = (filename) =>
+        fs.readFileSync(path.resolve(__dirname, 'fixtures', filename), {
+            encoding: 'utf8'
+        });
     const lint = (text) => cli.executeOnText(text).results[0];
 
     const expectZero = (results, key) => {
@@ -28,7 +29,6 @@ describe('eslint-config-umeboshi [integration tests]', () => {
     jest.mock('umeboshi-scripts/webpack', () => mockWebpackConf);
 
     beforeEach(() => {
-
         conf = require('../index');
 
         cli = new CLIEngine({
@@ -36,7 +36,10 @@ describe('eslint-config-umeboshi [integration tests]', () => {
             baseConfig: conf,
             rules: {
                 // It is okay to import devDependencies in tests.
-                'import/no-extraneous-dependencies': [2, { devDependencies: true }]
+                'import/no-extraneous-dependencies': [
+                    2,
+                    { devDependencies: true }
+                ]
             }
         });
     });
@@ -54,10 +57,8 @@ describe('eslint-config-umeboshi [integration tests]', () => {
     });
 
     describe('specific rules', () => {
-
-        const filterUnresolved = (messages) => (
-            messages.filter(({ ruleId }) => ruleId === 'import/no-unresolved')
-        );
+        const filterUnresolved = (messages) =>
+            messages.filter(({ ruleId }) => ruleId === 'import/no-unresolved');
 
         test('import/no-unresolved ignores styles', () => {
             const code = `
@@ -79,14 +80,11 @@ describe('eslint-config-umeboshi [integration tests]', () => {
         });
     });
 
-
     describe('webpack resolver', () => {
-
         test('should resolve aliased folders', () => {
             const code = getFixture('resolver.js');
             const results = lint(code);
             expectZero(results, ['errorCount', 'warningCount']);
         });
     });
-
 });

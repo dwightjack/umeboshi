@@ -1,10 +1,9 @@
 const next = (value) => value + 1;
 
 class Counter {
+    num = 0;
 
-    num = 0
-
-    static mult = 2
+    static mult = 2;
 
     get value() {
         return this.num * Counter.mult;
@@ -13,7 +12,6 @@ class Counter {
     next() {
         this.num = next(this.num);
     }
-
 }
 
 const counter = new Counter();

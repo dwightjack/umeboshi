@@ -36,12 +36,12 @@ module.exports = {
     },
 
     rules: {
-        indent: [2, 2],
+        indent: [2, 4],
         'no-multiple-empty-lines': [2, { max: 3 }],
         'spaced-comment': 0,
         'comma-dangle': [2, 'never'],
-        'eol-last': [1, 'never'],
-        'padded-blocks': [1, { classes: 'always' }],
+        'eol-last': 0,
+        'padded-blocks': 0,
         'max-len': 0,
         'no-underscore-dangle': 0,
         'arrow-parens': [1, 'always'],
