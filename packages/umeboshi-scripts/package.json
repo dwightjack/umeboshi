@@ -26,9 +26,10 @@
     "modernizr": "~3.6.0",
     "portfinder": "~1.0.0",
     "umeboshi-dev-utils": "^0.4.3-14",
-    "webpack-serve": "1.0.2"
+    "webpack-dev-server": "^3.1.9"
   },
   "devDependencies": {
+    "webpack": "^4.0.0",
     "webpack-bundle-analyzer": "^2.0.0"
   }
 }

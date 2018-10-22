@@ -14,27 +14,31 @@ api.hooks.bundlerAfterCompile.tap('bundlerLogger', (err, stats) => {
     if (err) {
         logger.error(`An Error occurred while compiling the bundle: ${err}`);
     } else {
-        logger.log(stats.toString({
-            colors: true,
-            hash: false,
-            timings: false,
-            chunks: false,
-            chunkModules: false,
-            modules: false,
-            children: true,
-            version: true,
-            cached: false,
-            cachedAssets: false,
-            reasons: false,
-            source: false,
-            errorDetails: false
-        }));
+        logger.log(
+            stats.toString({
+                colors: true,
+                hash: false,
+                timings: false,
+                chunks: false,
+                chunkModules: false,
+                modules: false,
+                children: true,
+                version: true,
+                cached: false,
+                cachedAssets: false,
+                reasons: false,
+                source: false,
+                errorDetails: false
+            })
+        );
         logger.message('Bundle created!');
     }
 });
 
-
-const webpackConfig = api.hooks.bundlerConfig.call(require('./webpack')(env), env);
+const webpackConfig = api.hooks.bundlerConfig.call(
+    require('./webpack')(env),
+    env
+);
 
 logger.log('Starting bundle compilation...');
 

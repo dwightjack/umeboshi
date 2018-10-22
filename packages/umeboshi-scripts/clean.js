@@ -1,7 +1,5 @@
 const del = require('del');
-const {
-    resolveConfig
-} = require('umeboshi-dev-utils');
+const { resolveConfig } = require('umeboshi-dev-utils');
 const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
@@ -19,4 +17,3 @@ del([
         logger.verbose(`Delete files and folders: ${deleted.join('\n')}`);
     }
 });
-
