@@ -17,9 +17,7 @@
   "peerDependencies": {
     "enzyme": "~3.3.0",
     "enzyme-adapter-react-16": "~1.1.0",
-    "jest": "^22.0.0"
-  },
-  "dependencies": {
+    "jest": "^22.0.0",
     "umeboshi-config": "^1.0.0-rc.0"
   },
   "devDependencies": {

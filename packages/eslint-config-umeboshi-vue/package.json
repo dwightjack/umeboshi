@@ -15,10 +15,10 @@
     "vue"
   ],
   "peerDependencies": {
-    "eslint": ">= 5.7.0"
+    "eslint": ">= 5.7.0",
+    "eslint-config-umeboshi": "^1.0.0-rc.0"
   },
   "dependencies": {
-    "eslint-config-umeboshi": "^1.0.0-rc.0",
     "eslint-plugin-vue": "next"
   },
   "devDependencies": {
