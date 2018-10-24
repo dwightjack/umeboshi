@@ -1,7 +1,6 @@
 const { normalize } = require('path');
 
-// require.context('@/pages/', true, /\.jsx?$/)
-const importPages = (ctx = {}) => {
+const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
     const MODULE_MATCH_REGEXP = /^\.(.*?)(\/index|)\.jsx?$/;
     return ctx.keys().reduce((routes, key) => {
         const path = normalize(key.replace(MODULE_MATCH_REGEXP, '$1/'));
