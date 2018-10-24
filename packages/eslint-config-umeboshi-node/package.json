@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi-node",
-  "version": "0.4.0-alpha.0",
+  "version": "1.0.0-rc.0",
   "description": "Node.js ESLint shareable config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",

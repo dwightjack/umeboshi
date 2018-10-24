@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-react",
-  "version": "0.6.0-alpha.0",
+  "version": "1.0.0-rc.0",
   "description": "Umeboshi React configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "jest": "^22.0.0"
   },
   "dependencies": {
-    "umeboshi-config": "^0.7.0-alpha.0"
+    "umeboshi-config": "^1.0.0-rc.0"
   },
   "devDependencies": {
     "enzyme": "~3.3.0",

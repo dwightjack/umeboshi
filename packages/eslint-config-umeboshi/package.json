@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-umeboshi",
-  "version": "0.5.2-alpha.0",
+  "version": "1.0.0-rc.0",
   "description": "Default ESLint config for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",

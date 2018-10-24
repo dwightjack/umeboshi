@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-spa",
-  "version": "0.2.0-alpha.0",
+  "version": "1.0.0-rc.0",
   "description": "Umeboshi config to serve Single Page Application",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
