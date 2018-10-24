@@ -4,35 +4,31 @@ const nodeExternals = require('webpack-node-externals');
 const WebpackRenderPlugin = require('./webpack-render-plugin');
 
 module.exports = (config, { paths }, env = {}) => {
-
     config.plugins.delete('html');
 
     config.set('name', 'server-jamstack');
 
-    config
-        .externals(nodeExternals({
-            whitelist: [
-                /^umeboshi-config-jamstack/,
-                /\.s?css$/
-            ]
-        }));
+    config.externals(
+        nodeExternals({
+            whitelist: [/^umeboshi-config-jamstack/, /\.s?css$/]
+        })
+    );
 
-
-    config.node
-        .clear().merge({
-            console: false,
-            global: false,
-            process: false,
-            Buffer: false,
-            __filename: false,
-            __dirname: false
-        });
+    config.node.clear().merge({
+        console: false,
+        global: false,
+        process: false,
+        Buffer: false,
+        __filename: false,
+        __dirname: false
+    });
 
     config.target('node');
 
     config.cache(false);
 
-    config.plugin('single-chunk')
+    config
+        .plugin('single-chunk')
         .use(webpack.optimize.LimitChunkCountPlugin, [{ maxChunks: 1 }]);
 
     config.optimization
@@ -48,7 +44,6 @@ module.exports = (config, { paths }, env = {}) => {
         });
     config.optimization.delete('minimizer');
 
-
     ['css', 'scss'].forEach((lang) => {
         if (!config.module.rules.has(lang)) {
             return;
@@ -61,13 +56,20 @@ module.exports = (config, { paths }, env = {}) => {
         if (rule.use('css-loader').has('options')) {
             const { modules } = rule.use('css-loader').get('options');
             if (modules) {
-                rule.use('css-loader').loader(require.resolve('css-loader/locals'));
+                rule.use('css-loader').loader(
+                    require.resolve('css-loader/locals')
+                );
             }
         }
     });
 
     config.entryPoints.clear();
-    config.entry('ssr').add(env.jamstackSSR || `.${path.sep}${paths.toPath('./src.assets/js/ssr.js')}`);
+    config
+        .entry('ssr')
+        .add(
+            env.jamstackSSR ||
+                `.${path.sep}${paths.toPath('./src.assets/js/ssr.js')}`
+        );
 
     config.output.merge({
         path: paths.toAbsPath('tmp'),
@@ -80,26 +82,23 @@ module.exports = (config, { paths }, env = {}) => {
         /* eslint-disable indent */
 
         //config.plugins.clear();
-        [...config.plugins.store]
-            .forEach(([key]) => {
-                if (key !== 'define') {
-                    config.plugins.delete(key);
-                }
-            });
+        [...config.plugins.store].forEach(([key]) => {
+            if (key !== 'define') {
+                config.plugins.delete(key);
+            }
+        });
 
         config.watch(true);
-
     } else {
-        config
-            .plugin('jamstack')
-                .use(WebpackRenderPlugin, [{
-                    minify: !!env.production
-                }]);
+        config.plugin('jamstack').use(WebpackRenderPlugin, [
+            {
+                minify: !!env.production
+            }
+        ]);
     }
 
     if (env.production) {
         config.plugins.delete('extract');
     }
     /* eslint-enable indent */
-
 };

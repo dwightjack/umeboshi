@@ -1,26 +1,39 @@
 const fs = require('fs');
 const path = require('path');
-const { promisify } = require('util');
 
-const readFileAsync = promisify(fs.readFile);
+const readFileAsync = (filename, opts) =>
+    new Promise((resolve, reject) => {
+        fs.readFile(filename, opts, (err, data) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(data);
+        });
+    });
 
 const readClientScript = (host) => {
     const filepath = path.resolve(__dirname, '../client/sse.js');
-    return readFileAsync(filepath, { encoding: 'utf8' }).then((src) => (
+    return readFileAsync(filepath, 'utf8').then((src) =>
         src.replace(/[\n\s]+/g, ' ').replace('{{HOST}}', host)
-    ));
+    );
 };
 
 const sseClientMiddleware = (host = '') => {
-
     const clientScript = readClientScript(host);
 
-    return (ctx, next) => {
-        return next().then(() => clientScript).then((src) => {
-            if (ctx.body && ctx.body.includes('</head>')) {
-                ctx.body = ctx.body.replace('</head>', `<script>${src}</script>`);
-            }
-        });
+    return (req, res, next) => {
+        clientScript
+            .then((src) => {
+                if (res.body && res.body.includes('</head>')) {
+                    res.body = res.body.replace(
+                        '</head>',
+                        `<script>${src}</script>`
+                    );
+                }
+                next();
+            })
+            .catch((err) => next(err));
     };
 };
 

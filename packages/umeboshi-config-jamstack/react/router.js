@@ -1,10 +1,8 @@
 const { normalize } = require('path');
 
 const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
-
     const MODULE_MATCH_REGEXP = /^\.(.*?)(\/index|)\.jsx?$/;
     return ctx.keys().reduce((routes, key) => {
-
         const path = normalize(key.replace(MODULE_MATCH_REGEXP, '$1/'));
         let Component = ctx(key);
 
@@ -12,7 +10,8 @@ const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
             Component = Component.default;
         }
 
-        routes[path] = { //eslint-disable-line no-param-reassign
+        routes[path] = {
+            //eslint-disable-line no-param-reassign
             Component,
             template: Component && Component.template
         };
@@ -22,7 +21,6 @@ const importPages = (ctx = require.context('@/pages/', true, /\.jsx?$/)) => {
 };
 
 const createRouter = () => {
-
     const routes = importPages();
 
     return {
