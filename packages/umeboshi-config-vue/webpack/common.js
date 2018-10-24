@@ -7,7 +7,6 @@ const {
     applyLoaders,
     umeStyles
 } = require('umeboshi-config/webpack/style-loaders');
-const { paths } = require('umeboshi-dev-utils');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
@@ -40,7 +39,7 @@ const createLoaderRule = (config, name, test, loaders = []) => {
     );
 };
 
-module.exports = (config) => {
+module.exports = (config, { paths }) => {
     config.resolve.extensions.merge(['.js', '.vue', '.json']);
 
     config.module.rules.delete('css');
