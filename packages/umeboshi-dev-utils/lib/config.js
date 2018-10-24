@@ -12,6 +12,7 @@ const createConfig = (env = {}) => {
     return {
         hooks: {
             devServer: new AsyncParallelHook(['options', 'env', 'api']),
+            devServerStart: new SyncHook(['server', 'options']),
             bundlerAfterCompile: new SyncBailHook(['err', 'stats']),
             bundlerCompiler: new SyncHook(['compiler']),
             bundlerConfig: new SyncBailHook(['config', 'env'])
