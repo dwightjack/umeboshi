@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const portfinder = require('portfinder');
 const Server = require('webpack-dev-server');
+const identity = require('lodash/identity');
 const {
     loadUmeboshiConfig,
     mergeConfig,
@@ -35,6 +36,8 @@ const env = {
 const { config, api } = resolveConfig(createConfig(env)).evaluate();
 const { middlewares, devServer } = config;
 const { port } = api.hosts.local;
+
+api.hooks.devServerStart.tap('devServerStart', identity);
 
 //get the port and start the server
 portfinder.getPortPromise({ port }).then((p) => {
@@ -71,6 +74,7 @@ portfinder.getPortPromise({ port }).then((p) => {
         server.app.compiler = compiler;
 
         server.listen(options.port, options.host, () => {
+            api.hooks.devServerStart.call(server, options);
             logger.message('`\nStarted a server at:\n');
             logger.message(`- http://localhost:${p}`);
             logger.message(`- http://${api.address}:${p}\n`);
