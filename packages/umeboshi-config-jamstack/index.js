@@ -45,55 +45,52 @@ module.exports = (config, { ssr }) => {
                 })
             );
             app.sse = sse;
+            app.serverCompiler = compiler;
             app.use(sseReloadMiddleware(sse));
         };
     });
 
     config.hooks.devServerStart.tap('jamStackDevServerStart', (server) => {
-        const { compiler: clientCompiler, sse } = server.app;
-        clientCompiler.hooks.done.tap(
-            'jamServerStart',
-            once(() => {
-                logger.log('Starting rendering server in watch mode...');
-                let isFirst = true;
+        const { serverCompiler, compiler: clientCompiler, sse } = server.app;
 
-                const watcher = clientCompiler.watch({}, (err, stats) => {
-                    if (isFirst) {
-                        logger.message('Rendering server started!');
-                        isFirst = false;
-                        return;
-                    }
-                    if (err) {
-                        logger.error(err);
-                        sse.send({ message: err.toString(), event: 'error' });
-                        return;
-                    }
+        logger.log('Starting rendering server in watch mode...');
+        let isFirst = true;
 
-                    if (stats.hasErrors()) {
-                        const { errors } = stats.toJson();
-                        logger.error(errors);
-                        sse.send({
-                            message: 'Compilation error',
-                            event: 'error'
-                        });
-                        return;
-                    }
+        const watcher = serverCompiler.watch({}, (err, stats) => {
+            if (isFirst) {
+                logger.message('Rendering server started!');
+                isFirst = false;
+                return;
+            }
+            if (err) {
+                logger.error(err);
+                sse.send({ message: err.toString(), event: 'error' });
+                return;
+            }
 
-                    logger.log('Server bundle rendered. Reloading...');
-                    if (logger.hasLevel(0)) {
-                        const data = stats.toJson('minimal');
-                        logger.verbose(data);
-                    }
-                    sse.send({ event: 'reload' });
+            if (stats.hasErrors()) {
+                const { errors } = stats.toJson();
+                logger.error(errors);
+                sse.send({
+                    message: 'Compilation error',
+                    event: 'error'
                 });
+                return;
+            }
 
-                clientCompiler.hooks.watchClose.tap('onClose', () => {
-                    watcher.close(() => {
-                        logger.verbose('Rendering server stopped.');
-                    });
-                });
-            })
-        );
+            logger.log('Server bundle rendered. Reloading...');
+            if (logger.hasLevel(0)) {
+                const data = stats.toJson('minimal');
+                logger.verbose(data);
+            }
+            sse.send({ event: 'reload' });
+        });
+
+        clientCompiler.hooks.watchClose.tap('onClose', () => {
+            watcher.close(() => {
+                logger.verbose('Rendering server stopped.');
+            });
+        });
     });
 
     config.tap('webpack', (...args) => {

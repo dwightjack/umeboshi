@@ -11,7 +11,11 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
             .find((k) => k.endsWith('.js'));
 
         if (bundle) {
-            render = requireUncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
+            try {
+                render = requireUncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
+            } catch (e) {
+                logger.error(e);
+            }
         } else {
             logger.warning(
                 `Unable to find ssr bundle. Emitted assets: ${Object.keys(
@@ -24,11 +28,11 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
     const matcher =
         typeof match === 'function'
             ? match
-            : (ctx) => ctx.method === 'GET' && match.test(ctx.path);
+            : (req) => req.method === 'GET' && match.test(req.path);
 
-    return (ctx, next) => {
-        if (matcher(ctx)) {
-            return render(ctx)
+    return (req, res, next) => {
+        if (matcher(req)) {
+            render(req)
                 .then(({ html, head = {}, template }) => {
                     const pageTmpl = getTemplate(template, templatePath);
 
@@ -37,16 +41,15 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
                         head
                     });
 
-                    ctx.body = output;
-                    return next();
+                    res.send(output);
                 })
                 .catch((e) => {
                     logger.error(e);
-                    return next();
+                    next(e);
                 });
+            return;
         }
-
-        return next();
+        next();
     };
 };
 
