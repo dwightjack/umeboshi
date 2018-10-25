@@ -1,0 +1,34 @@
+{
+  "name": "umeboshi-jamstack-react",
+  "version": "1.0.0-rc.0",
+  "description": "umeboshi-config-jamstack client-side helpers for React",
+  "author": "Marco Solazzi @dwightjack",
+  "license": "MIT",
+  "repository": "https://github.com/dwightjack/umeboshi/tree/master/packages/umeboshi-jamstack-react",
+  "bugs": "https://github.com/dwightjack/umeboshi/issues",
+  "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
+  "module": "dist/index.m.js",
+  "source": "src/index.js",
+  "amdName": "umeboshiJamReact",
+  "keywords": [
+    "umeboshi"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "react-helmet": "*"
+  },
+  "devDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "react-helmet": "*"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run bundle",
+    "bundle": "microbundle"
+  }
+}

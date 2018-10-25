@@ -15,7 +15,8 @@
     "umeboshi"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "bundle": "lerna run bundle"
   },
   "devDependencies": {
     "eslint": "^5.7.0",
@@ -26,6 +27,7 @@
     "eslint-plugin-prettier": "^3.0.0",
     "jest": "^22.0.0",
     "lerna": "^3.4.3",
+    "microbundle": "^0.6.0",
     "prettier": "^1.14.3",
     "stylelint": "^9.0.0",
     "webpack": "^4.8.3"

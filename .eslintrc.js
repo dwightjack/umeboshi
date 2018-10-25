@@ -17,7 +17,10 @@ module.exports = {
         es6: true
     },
 
-    extends: ['eslint:recommended', 'plugin:node/recommended'].concat(),
+    extends: ['eslint:recommended', 'plugin:node/recommended'].concat(
+        airbnb,
+        'plugin:prettier/recommended'
+    ),
 
     parserOptions: {
         ecmaVersion: 2018

@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const once = require('lodash/once');
 const { staticMiddleware } = require('umeboshi-config-spa/middlewares');
 const SseChannel = require('sse-channel');
 const logger = require('umeboshi-dev-utils/lib/logger');
@@ -35,6 +34,7 @@ module.exports = (config, { ssr }) => {
             jsonEncode: true
         });
 
+        // eslint-disable-next-line no-param-reassign
         options.before = (app) => {
             //eslint-disable-line no-param-reassign
             before(app);
@@ -44,8 +44,10 @@ module.exports = (config, { ssr }) => {
                     compiler
                 })
             );
+            /* eslint-disable no-param-reassign */
             app.sse = sse;
             app.serverCompiler = compiler;
+            /* eslint-enable no-param-reassign */
             app.use(sseReloadMiddleware(sse));
         };
     });
