@@ -34,7 +34,7 @@ module.exports = {
 
 ## Configuration options
 
-* `port`: Port at which the server-side rendering server will run. Defaults to `9000`. If the port is unavailable it will search the next available port. 
+-   `port`: Port at which the server-side rendering server will run. Defaults to `9000`. If the port is unavailable it will search the next available port.
 
 ```js
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
 
 ## Usage
 
-In some scenarios you would want your application to work differently whether you're rendering in the client or on the server. 
+In some scenarios you would want your application to work differently whether you're rendering in the client or on the server.
 
 To that end, the config exposes a global `__SERVER__` variable which is `true` on server and `false` on the client.
 
@@ -65,4 +65,77 @@ To prevent _undefined variable_ error in Eslint just add the following lines to 
         "__SERVER__": true
     }
 }
+```
+
+### Usage with React Router
+
+```js
+// pages/router.js
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Index from './index';
+import Posts from './posts';
+
+const routes = [
+    {
+        path: '/',
+        component: Index
+    },
+    {
+        path: '/posts',
+        component: Posts
+    }
+];
+
+const Router = ({ routes }) => {
+    return (
+        <Switch>
+            {routes.map(({ path, component }) => (
+                <Route exact path={path} component={component} />
+            ))}
+        </Switch>
+    );
+};
+
+export { Router, routes };
+```
+
+```js
+// app.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Router, routes } from '@/pages/router';
+
+ReactDOM.hydrate(
+    <BrowserRouter>
+        <Router routes={routes} />
+    </BrowserRouter>,
+    document.getElementById('app-root')
+);
+```
+
+```js
+// ssr.js
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
+import { Router, routes } from '@/pages/router';
+
+const render = (ctx) => {
+    const context = {};
+    const html = ReactDOMServer.renderToString(
+        <StaticRouter location={ctx.url} context={context}>
+            <Router routes={routes} />
+        </StaticRouter>
+    );
+
+    return Promise.resolve({
+        html,
+        head: {},
+        template: context.template || 'default'
+    });
+};
+
+export { render };
 ```
