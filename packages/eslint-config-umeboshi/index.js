@@ -46,6 +46,7 @@ module.exports = {
         'no-underscore-dangle': 0,
         'arrow-parens': [1, 'always'],
         'arrow-body-style': 0,
+        'import/prefer-default-export': 0,
         'import/no-unresolved': [2, { ignore: ['[a-z]+.s?css$'] }],
         'import/no-extraneous-dependencies': [
             'error',
