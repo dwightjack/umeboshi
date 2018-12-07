@@ -20,15 +20,15 @@ const appMiddlewares = umeMiddlewares
 
 const { port } = api.hosts.local;
 
-portfinder.getPortPromise({ port }).then((p) => {
+(async () => {
+    const p = await portfinder.getPortPromise({ port });
     const app = (umeServer || createServer)({
         middlewares: appMiddlewares,
         port: p
     });
-
     app.listen(p, () => {
         logger.message('Static server listening at:\n');
         logger.message(`- http://localhost:${p}`);
         logger.message(`- http://${api.address}:${p}`);
     });
-});
+})();

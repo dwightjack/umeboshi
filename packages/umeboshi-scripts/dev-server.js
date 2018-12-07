@@ -39,8 +39,9 @@ const { port } = api.hosts.local;
 
 api.hooks.devServerStart.tap('devServerStart', identity);
 
-//get the port and start the server
-portfinder.getPortPromise({ port }).then((p) => {
+(async () => {
+    //get the port and start the server
+    const p = await portfinder.getPortPromise({ port });
     const {
         devServer: umeDevServer,
         middlewares: umeMiddlewares
@@ -64,20 +65,20 @@ portfinder.getPortPromise({ port }).then((p) => {
         mergeConfig(devServer(...args), umeDevServer, ...args)
     );
 
-    api.hooks.devServer.promise(options, { port: p }, api).then(() => {
-        Server.addDevServerEntrypoints(clientConfig, options);
+    await api.hooks.devServer.promise(options, { port: p }, api);
 
-        const compiler = webpack(clientConfig);
+    Server.addDevServerEntrypoints(clientConfig, options);
 
-        const server = new Server(compiler, options);
+    const compiler = webpack(clientConfig);
 
-        server.app.compiler = compiler;
+    const server = new Server(compiler, options);
 
-        server.listen(options.port, options.host, () => {
-            api.hooks.devServerStart.call(server, options);
-            logger.message('`\nStarted a server at:\n');
-            logger.message(`- http://localhost:${p}`);
-            logger.message(`- http://${api.address}:${p}\n`);
-        });
+    server.app.compiler = compiler;
+
+    server.listen(options.port, options.host, () => {
+        api.hooks.devServerStart.call(server, options);
+        logger.message('`\nStarted a server at:\n');
+        logger.message(`- http://localhost:${p}`);
+        logger.message(`- http://${api.address}:${p}\n`);
     });
-});
+})();
