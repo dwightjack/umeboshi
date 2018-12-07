@@ -17,10 +17,6 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "devDependencies": {
-    "eslint": ">= 5.7.0",
-    "eslint-plugin-import": "~2.14.0"
-  },
   "dependencies": {
     "eslint-config-airbnb": "~17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -28,6 +24,7 @@
     "eslint-plugin-react": "^7.11.0"
   },
   "peerDependencies": {
+    "eslint": ">= 5.7.0",
     "eslint-config-umeboshi": "^1.0.0-rc.0"
   }
 }

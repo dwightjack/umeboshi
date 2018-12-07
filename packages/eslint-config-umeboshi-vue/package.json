@@ -21,9 +21,6 @@
   "dependencies": {
     "eslint-plugin-vue": "next"
   },
-  "devDependencies": {
-    "eslint": ">= 5.7.0"
-  },
   "engines": {
     "node": ">= 6.9.0"
   }

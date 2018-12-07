@@ -24,12 +24,8 @@
     "lodash": "~4.17.0",
     "mkdirp": "^0.5.0",
     "modernizr": "~3.6.0",
-    "portfinder": "~1.0.0",
+    "portfinder": "~1.0.20",
     "umeboshi-dev-utils": "^1.0.0-rc.0",
-    "webpack-dev-server": "^3.1.9"
-  },
-  "devDependencies": {
-    "webpack": "^4.0.0",
-    "webpack-bundle-analyzer": "^2.0.0"
+    "webpack-dev-server": "^3.1.10"
   }
 }

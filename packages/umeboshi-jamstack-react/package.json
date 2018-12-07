@@ -22,11 +22,6 @@
     "react-dom": "*",
     "react-helmet": "*"
   },
-  "devDependencies": {
-    "react": "*",
-    "react-dom": "*",
-    "react-helmet": "*"
-  },
   "scripts": {
     "prepublishOnly": "npm run bundle",
     "bundle": "microbundle"

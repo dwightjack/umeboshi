@@ -18,16 +18,16 @@
     "@vue/test-utils": "~1.0.0-beta.25",
     "css-loader": "^0.28.0",
     "jest": "^22.0.0",
-    "vue": "~2.5.0",
-    "vue-template-compiler": "~2.5.0",
     "umeboshi-config": "^1.0.0-rc.0",
+    "vue": "^2.5.0",
+    "vue-template-compiler": "^2.5.0",
     "webpack": "^4.0.0"
   },
   "dependencies": {
     "@vue/component-compiler-utils": "^1.0.0",
     "babel-core": "^6.25.0",
     "babel-jest": "^22.0.0",
-    "css-loader": "*",
+    "css-loader": "1.0.1",
     "globby": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "lodash.merge": "^4.6.0",
@@ -36,8 +36,5 @@
     "vue-jest": "~2.5.0",
     "vue-loader": "^15.4.0",
     "vue-style-loader": "~4.1.0"
-  },
-  "devDependencies": {
-    "vue": "~2.5.0"
   }
 }

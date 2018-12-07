@@ -3,10 +3,15 @@
   "private": true,
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "examples/*"
+    ],
+    "nohoist": [
+      "eslint"
+    ]
+  },
   "engines": {
     "node": ">=6.9.0"
   },
@@ -19,7 +24,8 @@
     "bundle": "lerna run bundle"
   },
   "devDependencies": {
-    "eslint": "^5.7.0",
+    "documentation": "~6.3.0",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "~13.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "~2.14.0",
@@ -28,9 +34,7 @@
     "jest": "^22.0.0",
     "lerna": "^3.4.3",
     "microbundle": "^0.6.0",
-    "prettier": "^1.14.3",
-    "stylelint": "^9.0.0",
-    "webpack": "^4.8.3"
+    "prettier": "^1.14.3"
   },
   "jest": {
     "verbose": true,
@@ -48,5 +52,20 @@
     "testMatch": [
       "**/*.test.js"
     ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.2.0",
+    "@vue/test-utils": "~1.0.0-beta.25",
+    "css-loader": "^0.28.0",
+    "enzyme": "~3.3.0",
+    "enzyme-adapter-react-16": "~1.1.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-helmet": "^5.2.0",
+    "stylelint": "^9.0.0",
+    "vue": "^2.5.0",
+    "vue-template-compiler": "^2.5.0",
+    "webpack-bundle-analyzer": "^2.0.0",
+    "webpack": "^4.8.3"
   }
 }
