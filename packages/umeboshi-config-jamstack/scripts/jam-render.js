@@ -18,58 +18,51 @@ if (process.env.SSR) {
 
 const templatePath = api.paths.toAbsPath('tmp/templates/');
 
-router.routes.forEach((page) => {
-    render(page)
-        .then(({ html, head = {}, template }) => {
-            const pageTmpl = getTemplate(template, templatePath);
+router.routes.forEach(async (page) => {
+    try {
+        const { html, head = {}, template } = await render(page);
+        const pageTmpl = getTemplate(template, templatePath);
 
-            let output = pageTmpl({
-                html,
-                head
-            });
-
-            const pagePath = path.join(
-                page.path,
-                page.path.endsWith('index') ? '' : 'index'
-            );
-            const outPath = path.normalize(
-                api.paths.toAbsPath(`dist.root/${pagePath}.html`)
-            );
-
-            try {
-                makeDir.sync(path.dirname(outPath));
-
-                if (process.env.MINIFY) {
-                    const { minify } = require('html-minifier');
-                    output = minify(output, {
-                        removeComments: true,
-                        collapseWhitespace: true,
-                        removeRedundantAttributes: true,
-                        useShortDoctype: true,
-                        removeEmptyAttributes: false,
-                        removeStyleLinkTypeAttributes: true,
-                        keepClosingSlash: true,
-                        minifyJS: true,
-                        minifyCSS: true,
-                        minifyURLs: true
-                    });
-                }
-
-                fs.writeFileSync(outPath, output, { encoding: 'utf8' });
-                return Promise.resolve(outPath);
-            } catch (e) {
-                return Promise.reject(e);
-            }
-        })
-        .then((outPath) => {
-            logger.message(
-                `Rendered file ${path.relative(
-                    api.paths.toAbsPath('dist.root'),
-                    outPath
-                )}`
-            );
-        })
-        .catch((e) => {
-            logger.error(e);
+        let output = pageTmpl({
+            html,
+            head
         });
+
+        const pagePath = path.join(
+            page.path,
+            page.path.endsWith('index') ? '' : 'index'
+        );
+        const outPath = path.normalize(
+            api.paths.toAbsPath(`dist.root/${pagePath}.html`)
+        );
+
+        await makeDir(path.dirname(outPath));
+
+        if (process.env.MINIFY) {
+            const { minify } = require('html-minifier');
+            output = minify(output, {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: false,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true
+            });
+        }
+
+        fs.writeFileSync(outPath, output, 'utf8');
+
+        logger.message(
+            `Rendered file ${path.relative(
+                api.paths.toAbsPath('dist.root'),
+                outPath
+            )}`
+        );
+    } catch (e) {
+        logger.error(e);
+    }
 });

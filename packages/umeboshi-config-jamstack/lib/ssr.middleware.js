@@ -40,26 +40,22 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
 
     const sseScript = readSSEClientScript();
 
-    return (req, res, next) => {
+    return async (req, res, next) => {
         if (matcher(req)) {
-            render(req)
-                .then(({ html, head = {}, template }) => {
-                    const pageTmpl = getTemplate(template, templatePath);
+            try {
+                const { html, head = {}, template } = await render(req);
+                const pageTmpl = getTemplate(template, templatePath);
 
-                    const output = pageTmpl({
-                        html,
-                        head
-                    }).replace(
-                        '</head>',
-                        `<script>${sseScript}</script></head>`
-                    );
+                const output = pageTmpl({
+                    html,
+                    head
+                }).replace('</head>', `<script>${sseScript}</script></head>`);
 
-                    res.send(output);
-                })
-                .catch((e) => {
-                    logger.error(e);
-                    next(e);
-                });
+                res.send(output);
+            } catch (e) {
+                logger.error(e);
+                next(e);
+            }
             return;
         }
         next();

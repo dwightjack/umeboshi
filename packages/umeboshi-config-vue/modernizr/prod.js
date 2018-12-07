@@ -13,15 +13,13 @@ module.exports = (config, { paths }) => {
             '!' + paths.toPath('src.assets/js') + '/**/*.{spec,conf,test}.js',
             paths.toPath('src.assets/styles') + '/**/*.{scss,css}'
         ])
-        .map((file) =>
-            toFile(file, fs.readFileSync(file, { encoding: 'utf8' }))
-        );
+        .map((file) => toFile(file, fs.readFileSync(file, 'utf8')));
 
     //test vue files...
     const vue = glob
         .sync([paths.toPath('src.assets/js') + '/**/*.vue'])
         .reduce((acc, file) => {
-            const source = fs.readFileSync(file, { encoding: 'utf8' });
+            const source = fs.readFileSync(file, 'utf8');
             const { styles = [], script } = parse({ source, needMap: false });
             if (script) {
                 const { content, lang = 'js' } = script;

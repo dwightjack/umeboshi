@@ -42,7 +42,7 @@ module.exports = (config, { paths }, env = {}) => {
             },
             chunks: 'all'
         });
-    config.optimization.delete('minimizer');
+    config.optimization.minimizers.delete('css');
 
     ['css', 'scss'].forEach((lang) => {
         if (!config.module.rules.has(lang)) {

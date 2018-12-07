@@ -6,35 +6,13 @@ const isFunction = require('lodash/isFunction');
 const WebpackChain = require('webpack-chain');
 const logger = require('./lib/logger');
 
-const { pkg, path: pkgPath } = readPkgUp.sync({
+const { path: pkgPath } = readPkgUp.sync({
     cwd: fs.realpathSync(process.cwd())
 });
 
 const fileCheckCache = {};
 
 const APP_PATH = path.dirname(pkgPath);
-const UME_SCRIPTS_REGEXP = /^umeboshi-scripts-/;
-const UME_CONFIG_REGEXP = /^umeboshi-config-/;
-
-//deps chain...
-const { devDependencies = {}, dependencies = {} } = pkg;
-const depsArray = Object.keys(
-    Object.assign({}, devDependencies, dependencies)
-).sort();
-const umeboshiScripts = depsArray.filter((p) => UME_SCRIPTS_REGEXP.test(p));
-const umeboshiConfigs = depsArray.filter((p) => UME_CONFIG_REGEXP.test(p));
-
-const SCRIPTS_LOAD_PATHS = [
-    path.resolve(APP_PATH, 'scripts'),
-    ...umeboshiScripts.map((p) => path.resolve(APP_PATH, 'node_modules', p)),
-    path.resolve(APP_PATH, 'node_modules', 'umeboshi-scripts')
-];
-
-const CONFIG_LOAD_PATHS = [
-    //path.resolve(APP_PATH, 'config'),
-    ...umeboshiConfigs.map((p) => path.resolve(APP_PATH, 'node_modules', p)),
-    path.resolve(APP_PATH, 'node_modules', 'umeboshi-config')
-];
 
 /**
  * Checks if value is a function and executes it with passed-in `args`, else returns it as-is.
@@ -140,48 +118,6 @@ const resolve = (filepath, paths) =>
     resolvePath(...paths.map((p) => path.join(p, filepath)));
 
 /**
- * Tries to resolve and load a module given it's relative path an array of base paths.
- *
- * @see resolve
- * @param {string} filepath - File path to load
- * @param {string[]} resolvePaths - Array of base paths to use in path resolution
- * @return {*}
- */
-const load = (filepath, resolvePaths) => {
-    const realpath = resolve(filepath, resolvePaths);
-    if (realpath === false) {
-        throw new Error(
-            `Unable to load file ${filepath}. Resolve folders: ${resolvePaths.join(
-                ', '
-            )}`
-        );
-    }
-    return require(realpath);
-};
-
-/**
- * Loads a script. Default resolution order: current project, `umeboshi-script-*` custom packages, `umeboshi-scripts` package.
- *
- * @see load
- * @param {string} filepath - File path to load
- * @param {string[]} [resolvePaths] - Array of base paths to use in path resolution
- */
-const loadScript = (filepath, resolvePaths = SCRIPTS_LOAD_PATHS) => {
-    return load(filepath, resolvePaths);
-};
-
-/**
- * Loads a configuration. Default resolution order: current project, `umeboshi-config-*` custom packages `umeboshi-config` package.
- *
- * @see load
- * @param {string} filepath - File path to load
- * @param {string[]} [resolvePaths] - Array of base paths to use in path resolution
- */
-const loadConfig = (filepath, resolvePaths = CONFIG_LOAD_PATHS) => {
-    return load(filepath, resolvePaths);
-};
-
-/**
  * Tries to load a `umeboshi.config.js` file from the project root folder and returns it.
  *
  * If not found returns `undefined`.
@@ -230,14 +166,10 @@ const webpackConfig = () => new WebpackChain();
 
 module.exports = {
     APP_PATH,
-    SCRIPTS_LOAD_PATHS,
-    CONFIG_LOAD_PATHS,
     toLocalPath,
     exists,
     existsLocal,
     resolvePath,
-    loadScript,
-    loadConfig,
     loadUmeboshiConfig,
     resolve,
     evaluate,
