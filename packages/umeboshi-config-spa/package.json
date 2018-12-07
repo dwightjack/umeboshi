@@ -10,7 +10,7 @@
     "umeboshi"
   ],
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=8.10.0"
   },
   "dependencies": {
     "connect-history-api-fallback": "^1.5.0",

@@ -15,7 +15,7 @@
     "umeboshi"
   ],
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=8.10.0"
   },
   "peerDependencies": {
     "react": "*",

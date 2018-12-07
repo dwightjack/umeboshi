@@ -13,7 +13,7 @@
     "umeboshi"
   ],
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=8.10.0"
   },
   "dependencies": {
     "stylelint-config-standard": "^18.2.0",
