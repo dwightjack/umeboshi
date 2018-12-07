@@ -1,5 +1,3 @@
-const rules = require('./rules');
-
 module.exports = {
     extends: [
         require.resolve('eslint-config-umeboshi'),
@@ -12,5 +10,16 @@ module.exports = {
             jsx: true
         }
     },
-    rules
+    rules: {
+        'eol-last': 0,
+        'import/extensions': [
+            'error',
+            'always',
+            {
+                js: 'never',
+                vue: 'never'
+            }
+        ],
+        'vue/html-indent': ['error', 4]
+    }
 };
