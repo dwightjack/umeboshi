@@ -67,6 +67,44 @@ To prevent _undefined variable_ error in Eslint just add the following lines to 
 }
 ```
 
+### Independent Server and Client apps
+
+```sh
+yarn add umeboshi-jamstack-react
+```
+
+```js
+// app.js
+import { importStyles } from 'umeboshi-jamstack-react';
+const ctx = require.context('@/components/', true, /\.s?css$/);
+importStyles(ctx)(ctx.keys());
+
+// other client-side js here...
+```
+
+```js
+// ssr.js
+import {
+    createRender,
+    createRouter,
+    importPages
+} from 'umeboshi-jamstack-react';
+
+// dynamically load all files within the pages folder
+const ctx = require.context('@/pages/', true, /\.jsx?$/);
+
+// convert files to a routing structure
+const routes = importPages(ctx)(ctx.keys());
+
+// create a router
+const router = createRouter(routes);
+
+// create a renderer suitable for umeboshi-config-jamstack
+const render = createRender({ router });
+
+export { render, router };
+```
+
 ### Usage with React Router
 
 ```js
@@ -137,5 +175,9 @@ const render = (ctx) => {
     });
 };
 
-export { render };
+const router = {
+    routes
+};
+
+export { render, router };
 ```
