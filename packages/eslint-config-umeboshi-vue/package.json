@@ -19,7 +19,7 @@
     "eslint-config-umeboshi": "^1.0.0-rc.0"
   },
   "dependencies": {
-    "eslint-plugin-vue": "next"
+    "eslint-plugin-vue": "^5.0.0"
   },
   "engines": {
     "node": ">= 6.9.0"

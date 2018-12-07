@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const requireUncached = require('require-uncached');
+const uncached = require('import-fresh');
 const logger = require('umeboshi-dev-utils/lib/logger');
 const { getTemplate } = require('./utils');
 
@@ -20,7 +20,7 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
 
         if (bundle) {
             try {
-                render = requireUncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
+                render = uncached(assets[bundle].existsAt).render; //eslint-disable-line prefer-destructuring
             } catch (e) {
                 logger.error(e);
             }

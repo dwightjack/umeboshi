@@ -21,8 +21,8 @@
     "glob": "~7.1.0",
     "ip": "~1.1.0",
     "lodash": "~4.17.0",
-    "read-pkg-up": "^3.0.0",
+    "read-pkg-up": "^4.0.0",
     "tapable": "^1.1.1",
-    "webpack-chain": "~4.6.0"
+    "webpack-chain": "~5.0.1"
   }
 }

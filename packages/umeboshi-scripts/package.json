@@ -14,9 +14,9 @@
     "node": ">=6.9.0"
   },
   "peerDependencies": {
-    "jest": "^22.0.0",
+    "jest": "^23.0.0",
     "webpack": "^4.0.0",
-    "webpack-bundle-analyzer": "^2.0.0"
+    "webpack-bundle-analyzer": "^3.0.0"
   },
   "dependencies": {
     "customizr": "1.0.0-alpha",

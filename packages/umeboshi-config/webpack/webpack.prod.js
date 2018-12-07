@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -20,24 +20,12 @@ module.exports = (api, env) => {
 
     /* eslint-disable indent */
 
-    config.optimization.minimizer([
-        new UglifyJSPlugin({
-            uglifyOptions: {
-                compressor: {
-                    warnings: false
-                }
-            },
-            sourceMap: true
-        }),
-        new OptimizeCssAssetsPlugin({
-            canPrint: false,
-            cssProcessorOptions: {
-                safe: true,
-                autoprefixer: { disable: true },
-                mergeLonghand: false
-            }
-        })
-    ]);
+    config.optimization.minimizer('js').use(TerserPlugin);
+    config.optimization
+        .minimizer('css')
+        .use(OptimizeCssAssetsPlugin, [
+            { cssProcessorOptions: { safe: true } }
+        ]);
 
     config
         .plugin('hashed-modules')
