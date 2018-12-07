@@ -1,6 +1,6 @@
 const sseReloadMiddleware = (sse) => {
     return (req, res, next) => {
-        if (req.url.indexOf('/channel/ssr-server') === 0) {
+        if (req.url.startsWith('/channel/ssr-server')) {
             sse.addClient(req, res);
             sse.send({ event: 'attached' });
         } else {
