@@ -18,8 +18,8 @@ if (process.env.SSR) {
 
 const templatePath = api.paths.toAbsPath('tmp/templates/');
 
-Object.keys(router.routes).forEach((page) => {
-    render({ path: page })
+router.routes.forEach((page) => {
+    render(page)
         .then(({ html, head = {}, template }) => {
             const pageTmpl = getTemplate(template, templatePath);
 
@@ -29,8 +29,8 @@ Object.keys(router.routes).forEach((page) => {
             });
 
             const pagePath = path.join(
-                page,
-                page.endsWith('index') ? '' : 'index'
+                page.path,
+                page.path.endsWith('index') ? '' : 'index'
             );
             const outPath = path.normalize(
                 api.paths.toAbsPath(`dist.root/${pagePath}.html`)

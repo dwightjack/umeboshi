@@ -1,6 +1,14 @@
+const fs = require('fs');
+const path = require('path');
 const requireUncached = require('require-uncached');
 const logger = require('umeboshi-dev-utils/lib/logger');
 const { getTemplate } = require('./utils');
+
+const readSSEClientScript = (host = '') => {
+    const filepath = path.resolve(__dirname, '../client/sse.js');
+    const src = fs.readFileSync(filepath, 'utf8');
+    return src.replace(/[\n\s]+/g, ' ').replace('{{HOST}}', host);
+};
 
 const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
     let render;
@@ -30,6 +38,8 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
             ? match
             : (req) => req.method === 'GET' && match.test(req.path);
 
+    const sseScript = readSSEClientScript();
+
     return (req, res, next) => {
         if (matcher(req)) {
             render(req)
@@ -39,7 +49,10 @@ const ssrMiddleware = ({ templatePath, compiler, match = /(\/|\.html?)$/ }) => {
                     const output = pageTmpl({
                         html,
                         head
-                    });
+                    }).replace(
+                        '</head>',
+                        `<script>${sseScript}</script></head>`
+                    );
 
                     res.send(output);
                 })

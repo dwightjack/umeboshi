@@ -125,9 +125,6 @@ module.exports = (config, { ssr }) => {
     });
 
     config.set('middlewares', ({ paths }) => {
-        return [
-            staticMiddleware(paths.toAbsPath('dist.root')),
-            require('./lib/sse.middleware')()
-        ];
+        return [staticMiddleware(paths.toAbsPath('dist.root'))];
     });
 };
