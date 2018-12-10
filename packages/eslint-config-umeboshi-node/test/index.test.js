@@ -12,9 +12,7 @@
 
 // const lint = (text) => cli.executeOnText(text).results[0];
 
-
 describe('eslint-config-umeboshi-node', () => {
-
     let config;
 
     beforeEach(() => {
@@ -22,7 +20,6 @@ describe('eslint-config-umeboshi-node', () => {
     });
 
     describe('Features', () => {
-
         test('uses `eslint-plugin-node`', () => {
             expect(config.plugins).toEqual(['node']);
         });
@@ -51,11 +48,9 @@ describe('eslint-config-umeboshi-node', () => {
 
             expect(rules).toEqual(expected);
         });
-
     });
 
     describe('Environment', () => {
-
         test('should allow es6 syntax', () => {
             const { env } = require('../index');
             expect(env.es6).toBe(true);
@@ -65,11 +60,9 @@ describe('eslint-config-umeboshi-node', () => {
             const { env } = require('../index');
             expect(env.node).toBe(true);
         });
-
     });
 
     describe('Specific rules', () => {
-
         test('should disable `node/no-unpublished-require` rule', () => {
             const { rules } = require('../index');
             expect(rules).toMatchObject({
@@ -83,7 +76,5 @@ describe('eslint-config-umeboshi-node', () => {
                 'global-require': 'off'
             });
         });
-
     });
-
 });

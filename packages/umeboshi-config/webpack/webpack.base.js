@@ -1,6 +1,4 @@
-const webpack = require('webpack');
 const { webpackConfig } = require('umeboshi-dev-utils');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const {
     css,
@@ -12,6 +10,9 @@ const {
 } = require('./style-loaders');
 
 module.exports = ({ paths } /*env*/) => {
+    const webpack = require('webpack');
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+
     const config = webpackConfig();
     const PRODUCTION = process.env.NODE_ENV === 'production';
     const destPath = paths.toAbsPath('dist.assets');
@@ -166,22 +167,7 @@ module.exports = ({ paths } /*env*/) => {
                 template: paths.toPath('src.root/templates/index.ejs'),
                 filename: paths.toAbsPath('dist.root/index.html'),
                 modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
-                chunksSortMode: 'dependency',
-                inject: true,
-                minify: PRODUCTION
-                    ? {
-                          removeComments: true,
-                          collapseWhitespace: true,
-                          removeRedundantAttributes: true,
-                          useShortDoctype: true,
-                          removeEmptyAttributes: false,
-                          removeStyleLinkTypeAttributes: true,
-                          keepClosingSlash: true,
-                          minifyJS: true,
-                          minifyCSS: true,
-                          minifyURLs: true
-                      }
-                    : false
+                chunksSortMode: 'dependency'
             }
         ])
         .end();

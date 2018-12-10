@@ -1,5 +1,4 @@
 describe('eslint-config-umeboshi', () => {
-
     let config;
 
     beforeEach(() => {
@@ -7,7 +6,6 @@ describe('eslint-config-umeboshi', () => {
     });
 
     describe('Features', () => {
-
         test('should extend airbnb-base', () => {
             expect(config.extends).toEqual(['eslint-config-airbnb-base']);
         });
@@ -15,7 +13,6 @@ describe('eslint-config-umeboshi', () => {
         test('uses babel-eslint as parser', () => {
             expect(config.parser).toBe('babel-eslint');
         });
-
     });
 
     describe('Globals', () => {
@@ -28,7 +25,6 @@ describe('eslint-config-umeboshi', () => {
     });
 
     describe('webpack importer', () => {
-
         let mockWebpackConf;
 
         beforeEach(() => {
@@ -50,7 +46,5 @@ describe('eslint-config-umeboshi', () => {
 
             expect(settings).toEqual(expected);
         });
-
     });
-
 });

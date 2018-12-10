@@ -32,9 +32,4 @@ describe('eslint-config-umeboshi-vue', () => {
             expect(parserOptions.ecmaFeatures.jsx).toBe(true);
         });
     });
-
-    test('should expose shared rules', () => {
-        const rules = require('../rules');
-        expect(config.rules).toBe(rules);
-    });
 });

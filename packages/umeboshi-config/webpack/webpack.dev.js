@@ -1,7 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
-
 module.exports = (api, env) => {
+    const path = require('path');
+    const {
+        NamedChunksPlugin,
+        HotModuleReplacementPlugin
+    } = require('webpack');
     const config = require('./webpack.base')(api, env);
     const { paths } = api;
 
@@ -11,10 +13,10 @@ module.exports = (api, env) => {
         .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`)
         .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
 
-    config.plugin('named-chunks').use(webpack.NamedChunksPlugin);
+    config.plugin('named-chunks').use(NamedChunksPlugin);
 
     if (env.server) {
-        config.plugin('hmr').use(webpack.HotModuleReplacementPlugin);
+        config.plugin('hmr').use(HotModuleReplacementPlugin);
     }
 
     return config;

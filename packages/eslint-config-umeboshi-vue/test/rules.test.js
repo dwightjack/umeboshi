@@ -1,17 +1,12 @@
 describe('eslint-config-vue/rules', () => {
-
     let rules;
 
     beforeEach(() => {
-        rules = require('../rules');
+        ({ rules } = require('../index'));
     });
 
     test('should allow extension omission for .js and .vue files', () => {
-        const expected = [
-            'error',
-            'always',
-            { js: 'never', vue: 'never' }
-        ];
+        const expected = ['error', 'always', { js: 'never', vue: 'never' }];
         expect(rules['import/extensions']).toEqual(expected);
     });
 
@@ -23,5 +18,4 @@ describe('eslint-config-vue/rules', () => {
         expect(rules['vue/html-indent'][0]).toBe('error');
         expect(rules['vue/html-indent'][1]).toBe(4);
     });
-
 });
