@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.2.0",
-    "@vue/test-utils": "~1.0.0-beta.25",
+    "@vue/test-utils": "~1.0.0-beta.27",
     "css-loader": "^2.0.0",
     "enzyme": "~3.7.0",
     "enzyme-adapter-react-16": "~1.7.0",
