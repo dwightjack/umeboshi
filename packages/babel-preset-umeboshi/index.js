@@ -1,6 +1,7 @@
-module.exports = (context, opts = {}) => {
-    const IS_TEST =
-        process.env.BABEL_ENV === 'test' || process.env.NODE_ENV === 'test';
+module.exports = (api, opts = {}) => {
+    api.assertVersion(7);
+
+    const IS_TEST = api.env('test');
 
     const IS_NODE = IS_TEST || process.env.TARGET_ENV === 'node';
 
