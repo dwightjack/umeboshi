@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Umeboshi standard configuration files",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -36,6 +36,6 @@
     "sass-loader": "^7.0.0",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.1.0",
-    "umeboshi-dev-utils": "^1.0.0-rc.0"
+    "umeboshi-dev-utils": "^1.0.0-rc.1"
   }
 }

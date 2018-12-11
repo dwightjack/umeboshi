@@ -1,6 +1,6 @@
 {
   "name": "umeboshi-config-jamstack",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Umeboshi config to render JAMstack-like websites",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "lodash": "^4.17.10",
     "make-dir": "^1.3.0",
     "sse-channel": "^3.1.0",
-    "umeboshi-config-spa": "^1.0.0-rc.0",
-    "umeboshi-dev-utils": "^1.0.0-rc.0",
+    "umeboshi-config-spa": "^1.0.0-rc.1",
+    "umeboshi-dev-utils": "^1.0.0-rc.1",
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-umeboshi-react",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "React Babel preset for Umeboshi",
   "author": "Marco Solazzi @dwightjack",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "react-hot-loader": "~4.3.12"
   },
   "peerDependencies": {
-    "babel-preset-umeboshi": "^1.0.0-rc.0",
-    "@babel/core": "^7.2.0"
+    "@babel/core": "^7.2.0",
+    "babel-preset-umeboshi": "^1.0.0-rc.0"
   }
 }
