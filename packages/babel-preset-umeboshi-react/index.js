@@ -1,13 +1,14 @@
-const presetUmeboshi = require.resolve('babel-preset-umeboshi');
 const presetReact = require.resolve('@babel/preset-react');
 
-module.exports = () => {
-    const isProduction = process.env.NODE_ENV === 'production';
+module.exports = (api) => {
+    api.assertVersion(7);
+
+    const IS_PRODUCTION = api.env('production');
 
     return {
-        presets: [presetUmeboshi, presetReact],
+        presets: [presetReact],
 
-        plugins: isProduction
+        plugins: IS_PRODUCTION
             ? [
                   [
                       require.resolve(

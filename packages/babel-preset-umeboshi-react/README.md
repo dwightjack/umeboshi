@@ -16,21 +16,21 @@ In production it will apply the following transforms:
 With [npm](https://www.npmjs.com):
 
 ```sh
-npm install --save-dev babel-preset-umeboshi-react
+npm install --save-dev babel-preset-umeboshi babel-preset-umeboshi-react
 ```
 
 Or [yarn](https://yarnpkg.com):
 
 ```sh
-yarn add babel-preset-umeboshi-react --dev
+yarn add babel-preset-umeboshi babel-preset-umeboshi-react  --dev
 ```
 
 ## Usage
 
-Add the preset to `.babelrc` file in your project's root folder.
+Add the presets to `.babelrc` file in your project's root folder.
 
 ```json
 {
-    "presets": ["umeboshi-react"]
+    "presets": ["umeboshi", "umeboshi-react"]
 }
 ```

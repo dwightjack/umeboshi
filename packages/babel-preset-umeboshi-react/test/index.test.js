@@ -6,16 +6,10 @@ describe('babel-preset-umeboshi-react', () => {
             process.env.NODE_ENV = 'development';
         });
 
-        test('has `umeboshi` as first preset. Without options', () => {
-            expect(preset().presets[0]).toBe(
-                require.resolve('babel-preset-umeboshi')
-            );
-        });
-
         test('has `react` as second preset. Without options', () => {
-            expect(preset().presets[1]).toBe(
+            expect(preset().presets).toEqual([
                 require.resolve('@babel/preset-react')
-            );
+            ]);
         });
 
         afterEach(() => {
@@ -38,7 +32,7 @@ describe('babel-preset-umeboshi-react', () => {
             expect(preset().plugins).toEqual(['react-hot-loader/babel']);
         });
 
-        test('adds 3 plugins in production', () => {
+        test('production plugins', () => {
             process.env.NODE_ENV = 'production';
 
             const expected = [
