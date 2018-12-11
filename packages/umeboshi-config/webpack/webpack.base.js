@@ -30,13 +30,21 @@ module.exports = ({ paths }, env) => {
 
     config.performance.hints(false);
 
+    config
+        .cache(true)
+        .entry('app')
+        .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`)
+        .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`);
+
+    const filename = `${paths.get('js')}/[name].${
+        IS_MODERN ? 'module' : 'bundle'
+    }${PRODUCTION ? '.[chunkhash]' : ''}.js`;
+
     config.output
         .path(destPath)
         .publicPath(paths.get('publicPath'))
-        .chunkFilename(paths.get('js') + '/[name].js')
-        .filename(
-            `${paths.get('js')}/[name].${IS_MODERN ? 'module' : 'bundle'}.js`
-        );
+        .chunkFilename(filename)
+        .filename(filename);
 
     config.node.merge({
         fs: 'empty',

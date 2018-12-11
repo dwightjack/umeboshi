@@ -1,4 +1,3 @@
-const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -7,16 +6,6 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = (api, env) => {
     const config = require('./webpack.base')(api, env);
     const { paths } = api;
-
-    config
-        .cache(true)
-        .entry('app')
-        .add(`.${path.sep}${paths.toPath('./src.assets/styles/index.js')}`) //eslint-disable-line indent
-        .add(`.${path.sep}${paths.toPath('./src.assets/js/app.js')}`); //eslint-disable-line indent
-
-    config.output
-        .filename(paths.toPath('js/[name].[chunkhash].js'))
-        .chunkFilename(paths.toPath('js/[name].[chunkhash].js'));
 
     /* eslint-disable indent */
 
