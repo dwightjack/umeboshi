@@ -15,7 +15,7 @@ const createConfig = (env = {}) => {
             devServerStart: new SyncHook(['server', 'options']),
             bundlerAfterCompile: new SyncBailHook(['err', 'stats']),
             bundlerCompiler: new SyncHook(['compiler']),
-            bundlerConfig: new SyncBailHook(['config', 'env'])
+            bundlerConfig: new SyncBailHook(['config', 'env', 'createConfig'])
         },
 
         get(key) {
