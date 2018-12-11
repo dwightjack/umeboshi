@@ -17,7 +17,5 @@ module.exports = (config) => {
         devServer
     });
 
-    const branch = analyze || production ? 'prod' : 'dev';
-
-    config.set('webpack', require(`./webpack/webpack.${branch}`));
+    config.set('webpack', require('./webpack'));
 };
