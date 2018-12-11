@@ -1,6 +1,15 @@
+const resolvePreset = (preset) => {
+    try {
+        return require.resolve(preset);
+    } catch (e) {
+        console.warn(`Unable to resolve preset ${preset}`);
+    }
+    return '';
+};
+
 module.exports = require('babel-loader').custom((babel) => {
-    const babelPresetEnv = require.resolve('@babel/preset-env');
-    const babelPresetUme = require.resolve('babel-preset-umeboshi');
+    const babelPresetEnv = resolvePreset('@babel/preset-env');
+    const babelPresetUme = resolvePreset('babel-preset-umeboshi');
 
     return {
         customOptions({ modern, ...loader }) {
@@ -18,9 +27,12 @@ module.exports = require('babel-loader').custom((babel) => {
             let idx = -1;
             let resolved;
 
-            const { presets } = cfg.options;
+            const { presets = [] } = cfg.options;
 
             [babelPresetUme, babelPresetEnv].some((preset) => {
+                if (!preset) {
+                    return false;
+                }
                 resolved = preset;
                 idx = presets.findIndex(
                     (item) => item.file.resolved === preset
@@ -38,7 +50,7 @@ module.exports = require('babel-loader').custom((babel) => {
                         [
                             resolved,
                             {
-                                ...preset.options,
+                                ...(preset.options || {}),
                                 targets: {
                                     esmodules: true
                                 }
