@@ -12,45 +12,51 @@ module.exports = (config, { ssr }) => {
         });
     });
 
-    config.hooks.bundlerConfig.tap('jamStackBundle', (clientConfig, env) => {
-        const serverConfig = require('umeboshi-scripts/webpack')(
-            Object.assign({}, env, { target: 'node' })
-        );
-        return [].concat(clientConfig, serverConfig);
-    });
-
-    config.hooks.devServer.tap('jamStackDevServer', (options, env, api) => {
-        const serverConfig = require('umeboshi-scripts/webpack')({
-            analyze: false,
-            production: false,
-            server: true,
-            target: 'node'
-        });
-        const { before } = options;
-        const compiler = webpack(serverConfig);
-
-        const sse = new SseChannel({
-            cors: { origins: ['*'] },
-            jsonEncode: true
-        });
-
-        // eslint-disable-next-line no-param-reassign
-        options.before = (app) => {
-            //eslint-disable-line no-param-reassign
-            before(app);
-            app.use(
-                ssrMiddleware({
-                    templatePath: api.paths.toAbsPath('tmp/templates'),
-                    compiler
-                })
+    config.hooks.bundlerConfig.tap(
+        'jamStackBundle',
+        (clientConfig, env, createConfig) => {
+            const serverConfig = createConfig(
+                Object.assign({}, env, { target: 'node' })
             );
-            /* eslint-disable no-param-reassign */
-            app.sse = sse;
-            app.serverCompiler = compiler;
-            /* eslint-enable no-param-reassign */
-            app.use(sseReloadMiddleware(sse));
-        };
-    });
+            return [].concat(clientConfig, serverConfig);
+        }
+    );
+
+    config.hooks.devServer.tap(
+        'jamStackDevServer',
+        (options, env, api, createConfig) => {
+            const serverConfig = createConfig({
+                analyze: false,
+                production: false,
+                server: true,
+                target: 'node'
+            });
+            const { before } = options;
+            const compiler = webpack(serverConfig);
+
+            const sse = new SseChannel({
+                cors: { origins: ['*'] },
+                jsonEncode: true
+            });
+
+            // eslint-disable-next-line no-param-reassign
+            options.before = (app) => {
+                //eslint-disable-line no-param-reassign
+                before(app);
+                app.use(
+                    ssrMiddleware({
+                        templatePath: api.paths.toAbsPath('tmp/templates'),
+                        compiler
+                    })
+                );
+                /* eslint-disable no-param-reassign */
+                app.sse = sse;
+                app.serverCompiler = compiler;
+                /* eslint-enable no-param-reassign */
+                app.use(sseReloadMiddleware(sse));
+            };
+        }
+    );
 
     config.hooks.devServerStart.tap('jamStackDevServerStart', (server) => {
         const { serverCompiler, compiler: clientCompiler, sse } = server.app;

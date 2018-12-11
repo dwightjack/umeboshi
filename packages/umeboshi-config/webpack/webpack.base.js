@@ -1,3 +1,4 @@
+const path = require('path');
 const { webpackConfig } = require('umeboshi-dev-utils');
 
 const {
@@ -9,34 +10,21 @@ const {
     umeStyles
 } = require('./style-loaders');
 
-module.exports = ({ paths } /*env*/) => {
+module.exports = ({ paths }, env) => {
+    const { target, production: PRODUCTION } = env;
+
     const webpack = require('webpack');
     const HtmlWebpackPlugin = require('html-webpack-plugin');
 
     const config = webpackConfig();
-    const PRODUCTION = process.env.NODE_ENV === 'production';
+    const IS_MODERN = target === 'modern';
     const destPath = paths.toAbsPath('dist.assets');
 
     /* eslint-disable indent */
     config
-        .set('name', 'client')
+        .set('name', `client:${IS_MODERN ? 'modern' : 'legacy'}`)
         .target('web') // Make web variables accessible to webpack, e.g. window,
         .context(process.cwd())
-        .stats({
-            colors: true,
-            hash: false,
-            timings: true,
-            chunks: false,
-            chunkModules: false,
-            modules: false,
-            children: true,
-            version: true,
-            cached: false,
-            cachedAssets: false,
-            reasons: false,
-            source: false,
-            errorDetails: false
-        })
         .devtool(PRODUCTION ? '#source-map' : '#cheap-module-source-map')
         .mode(PRODUCTION ? 'production' : 'development');
 
@@ -46,7 +34,9 @@ module.exports = ({ paths } /*env*/) => {
         .path(destPath)
         .publicPath(paths.get('publicPath'))
         .chunkFilename(paths.get('js') + '/[name].js')
-        .filename(paths.get('js') + '/[name].js');
+        .filename(
+            `${paths.get('js')}/[name].${IS_MODERN ? 'module' : 'bundle'}.js`
+        );
 
     config.node.merge({
         fs: 'empty',
@@ -76,8 +66,9 @@ module.exports = ({ paths } /*env*/) => {
         .end()
         .use('babel')
         .merge({
-            loader: 'babel-loader',
+            loader: path.join(__dirname, 'babel-loader.js'),
             options: {
+                modern: IS_MODERN,
                 cacheDirectory: true
             }
         });

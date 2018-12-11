@@ -10,8 +10,8 @@ const {
 } = require('umeboshi-dev-utils');
 const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
-
-const webpackConfig = require('./webpack')({
+const webpackConfigCreator = require('./webpack');
+const webpackConfig = webpackConfigCreator({
     analyze: false,
     production: false,
     server: true
@@ -65,7 +65,12 @@ api.hooks.devServerStart.tap('devServerStart', identity);
         mergeConfig(devServer(...args), umeDevServer, ...args)
     );
 
-    await api.hooks.devServer.promise(options, { port: p }, api);
+    await api.hooks.devServer.promise(
+        options,
+        { port: p },
+        api,
+        webpackConfigCreator
+    );
 
     Server.addDevServerEntrypoints(clientConfig, options);
 

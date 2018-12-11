@@ -5,10 +5,16 @@ const logger = require('umeboshi-dev-utils/lib/logger');
 const createConfig = require('umeboshi-dev-utils/lib/config');
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
-const env = { production: PRODUCTION, analyze: process.env.WEBPACK_ANALYZE };
-const { api } = resolveConfig(createConfig(env)).evaluate();
+const envIn = { production: PRODUCTION, analyze: process.env.WEBPACK_ANALYZE };
+const { api, config } = resolveConfig(createConfig(envIn)).evaluate();
 
-api.hooks.bundlerConfig.tap('bundlerConfig', identity);
+api.hooks.bundlerConfig.tap('bundlerConfig', (cfg, env, create) => {
+    if (env.modernBuild) {
+        return [].concat(cfg, create({ ...env, target: 'modern' }));
+    }
+    return cfg;
+});
+
 api.hooks.bundlerCompiler.tap('bundlerConfig', identity);
 api.hooks.bundlerAfterCompile.tap('bundlerLogger', (err, stats) => {
     if (err) {
@@ -35,9 +41,12 @@ api.hooks.bundlerAfterCompile.tap('bundlerLogger', (err, stats) => {
     }
 });
 
+const webpackCreator = require('./webpack');
+
 const webpackConfig = api.hooks.bundlerConfig.call(
-    require('./webpack')(env),
-    env
+    webpackCreator(config.env),
+    config.env,
+    webpackCreator
 );
 
 logger.log('Starting bundle compilation...');

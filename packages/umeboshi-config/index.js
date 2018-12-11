@@ -5,8 +5,12 @@ const customizr = require('./modernizr/prod');
 const modernizr = require('./modernizr/dev');
 const devServer = require('./server/dev');
 
-module.exports = (config) => {
-    const { production, analyze } = config.get('env');
+module.exports = (config, { modernBuild = false }) => {
+    config.tap('env', (env) => {
+        return Object.assign(env, {
+            modernBuild
+        });
+    });
 
     config.merge({
         hosts,

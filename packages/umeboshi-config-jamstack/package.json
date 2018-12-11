@@ -28,7 +28,6 @@
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
-    "umeboshi-scripts": "^1.0.0-rc.0",
     "webpack": "^4.22.0"
   }
 }
