@@ -4,6 +4,18 @@ const jest = require('./jest.config');
 const customizr = require('./modernizr/prod');
 const modernizr = require('./modernizr/dev');
 const devServer = require('./server/dev');
+const HtmlModuleScriptWebpackPlugin = require('./webpack/html-plugin');
+
+let modernBuildHTMLPlugin;
+
+const factoryHTMLPlugin = () => {
+    if (!modernBuildHTMLPlugin) {
+        modernBuildHTMLPlugin = new HtmlModuleScriptWebpackPlugin({
+            matchModule: /\.module\./
+        });
+    }
+    return modernBuildHTMLPlugin;
+};
 
 module.exports = (config, { modernBuild = false }) => {
     config.tap('env', (env) => {
@@ -22,4 +34,19 @@ module.exports = (config, { modernBuild = false }) => {
     });
 
     config.set('webpack', require('./webpack'));
+
+    if (modernBuild) {
+        config.tap('webpack', (webpackConfig) => {
+            if (
+                webpackConfig.target('web') &&
+                webpackConfig.plugins.has('html')
+            ) {
+                webpackConfig
+                    .plugin('html-multi')
+                    .after('html')
+                    .use(HtmlModuleScriptWebpackPlugin)
+                    .init(factoryHTMLPlugin);
+            }
+        });
+    }
 };
