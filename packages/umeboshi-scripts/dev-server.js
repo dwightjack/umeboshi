@@ -16,15 +16,11 @@ const webpackConfig = webpackConfigCreator({
     production: false,
     server: true
 });
-let clientConfig;
+const clientConfig = []
+    .concat(webpackConfig)
+    .filter((c) => c && c.target === 'web');
 
-if (Array.isArray(webpackConfig)) {
-    clientConfig = webpackConfig.filter(({ target }) => target === 'web');
-} else {
-    clientConfig = webpackConfig;
-}
-
-if (!clientConfig) {
+if (clientConfig.length === 0) {
     throw new TypeError('Invalid webpack configuration');
 }
 
@@ -51,8 +47,8 @@ api.hooks.devServerStart.tap('devServerStart', identity);
         ? evaluate(umeMiddlewares, evaluate(middlewares, env), env)
         : evaluate(middlewares, env);
     const args = [
-        { port: p, publicPath: webpackConfig.output.publicPath },
-        webpackConfig
+        { port: p, publicPath: clientConfig[0].output.publicPath },
+        clientConfig
     ];
     const options = Object.assign(
         {
