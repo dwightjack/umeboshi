@@ -15,7 +15,7 @@ module.exports = ({ paths }, env) => {
 
     const webpack = require('webpack');
     const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+    const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
     const config = webpackConfig();
     const IS_MODERN = target === 'modern';
     const destPath = paths.toAbsPath('dist.assets');
@@ -167,6 +167,23 @@ module.exports = ({ paths }, env) => {
                 filename: paths.toAbsPath('dist.root/index.html'),
                 modernizr: paths.assetsPath('vendors/modernizr/modernizr.*'),
                 chunksSortMode: 'dependency'
+            }
+        ])
+        .end()
+        .plugin('html-preload')
+        .use(PreloadWebpackPlugin, [
+            {
+                rel: 'preload',
+                include: 'initial',
+                fileBlacklist: [/\.map$/, /hot-update\.js$/]
+            }
+        ])
+        .end()
+        .plugin('html-prefetch')
+        .use(PreloadWebpackPlugin, [
+            {
+                rel: 'prefetch',
+                include: 'asyncChunks'
             }
         ])
         .end();
