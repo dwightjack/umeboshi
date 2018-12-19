@@ -11,7 +11,7 @@ const {
 } = require('./style-loaders');
 
 module.exports = ({ paths }, env) => {
-    const { target, production: PRODUCTION } = env;
+    const { target, production: PRODUCTION, modern } = env;
 
     const webpack = require('webpack');
     const HtmlWebpackPlugin = require('html-webpack-plugin');

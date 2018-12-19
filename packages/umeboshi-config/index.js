@@ -42,10 +42,25 @@ module.exports = (config, { modernBuild = false }) => {
                 webpackConfig.plugins.has('html')
             ) {
                 webpackConfig
-                    .plugin('html-multi')
+                    .plugin('html-multi-pre')
+                    .after('html')
+                    .use(HtmlModuleScriptWebpackPlugin, [
+                        {
+                            matchModule: /\.module\./,
+                            name: 'modern',
+                            apply: 'pre'
+                        }
+                    ]);
+                webpackConfig
+                    .plugin('html-multi-post')
                     .after('html-prefetch')
-                    .use(HtmlModuleScriptWebpackPlugin)
-                    .init(factoryHTMLPlugin);
+                    .use(HtmlModuleScriptWebpackPlugin, [
+                        {
+                            matchModule: /\.module\./,
+                            name: 'modern',
+                            apply: 'post'
+                        }
+                    ]);
             }
         });
     }

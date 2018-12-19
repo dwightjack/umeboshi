@@ -25,27 +25,39 @@ const uniq = (arr) => {
  */
 class HtmlModuleScriptWebpackPlugin {
     constructor(options) {
-        this.options = options;
-        this.sharedAssets = { js: [], chunks: [] };
+        this.options = { name: 'default', apply: 'pre', ...options };
+    }
+
+    sharedAssets(value) {
+        const { store } = HtmlModuleScriptWebpackPlugin;
+        if (value !== undefined) {
+            store.set(this.options.name, value);
+            return value;
+        }
+        return store.get(this.options.name) || { js: [], chunks: [] };
     }
 
     apply(compiler) {
         compiler.hooks.compilation.tap(
             'HtmlModuleScriptWebpackPlugin',
             (compilation) => {
-                compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(
-                    'HtmlModuleScriptWebpackPlugin',
-                    this.beforeHtmlProcessing.bind(this)
-                );
-                compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(
-                    'HtmlModuleScriptWebpackPlugin',
-                    this.alterAssetTags.bind(this)
-                );
+                if (this.options.apply === 'pre') {
+                    compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tap(
+                        'HtmlModuleScriptWebpackPlugin',
+                        this.beforeHtmlProcessing.bind(this)
+                    );
+                }
+                if (this.options.apply === 'post') {
+                    compilation.hooks.htmlWebpackPluginAlterAssetTags.tap(
+                        'HtmlModuleScriptWebpackPlugin',
+                        this.alterAssetTags.bind(this)
+                    );
+                }
             }
         );
     }
 
-    beforeHtmlProcessing(htmlPluginData, callback) {
+    beforeHtmlProcessing(htmlPluginData) {
         // Avoid chunk name collisions, since they can be named the same between builds
         // { 'main': {} } to { 'main_modern': {} } if the filename matches
         const { chunks } = htmlPluginData.assets;
@@ -60,20 +72,20 @@ class HtmlModuleScriptWebpackPlugin {
             return acc;
         }, {});
 
-        this.sharedAssets = {
-            js: uniq([].concat(this.sharedAssets.js, htmlPluginData.assets.js)),
-            chunks: Object.assign(this.sharedAssets.chunks, renamedChunks)
-        };
-        Object.assign(htmlPluginData.assets, this.sharedAssets);
+        const assets = this.sharedAssets();
 
-        callback(null, htmlPluginData);
+        assets.js = uniq([...assets.js, ...htmlPluginData.assets.js]);
+        assets.chunks = Object.assign(assets.chunks, renamedChunks);
+
+        this.sharedAssets(assets);
+        Object.assign(htmlPluginData.assets, assets);
+        return htmlPluginData;
     }
 
-    alterAssetTags(htmlPluginData, callback) {
+    alterAssetTags(htmlPluginData) {
         const { matchModule } = this.options;
         if (!matchModule) {
-            callback(null, htmlPluginData);
-            return;
+            return htmlPluginData;
         }
         const modules = [];
         htmlPluginData.body.forEach((assetTag) => {
@@ -104,8 +116,10 @@ class HtmlModuleScriptWebpackPlugin {
             }
         });
 
-        callback(null, htmlPluginData);
+        return htmlPluginData;
     }
 }
+
+HtmlModuleScriptWebpackPlugin.store = new Map();
 
 module.exports = HtmlModuleScriptWebpackPlugin;
