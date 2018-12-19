@@ -75,16 +75,36 @@ class HtmlModuleScriptWebpackPlugin {
             callback(null, htmlPluginData);
             return;
         }
-        const body = htmlPluginData.body.map((assetTag) => {
+        const modules = [];
+        htmlPluginData.body.forEach((assetTag) => {
             const isModern = matchModule.test(assetTag.attributes.src);
-            const attributes = isModern
-                ? { type: 'module' }
-                : { nomodule: true };
-            Object.assign(assetTag.attributes, attributes);
+            if (isModern) {
+                modules.push(assetTag.attributes.src);
+                // eslint-disable-next-line no-param-reassign
+                assetTag.attributes.type = 'module';
+            } else {
+                // add an attribute value to prevent
+                // template compilation from breaking the HTML
+                // eslint-disable-next-line no-param-reassign
+                assetTag.attributes.nomodule = 'nomodule';
+            }
             return assetTag;
         });
 
-        callback(null, Object.assign(htmlPluginData, { body }));
+        htmlPluginData.head.forEach((tag) => {
+            const { attributes } = tag;
+            if (
+                attributes.href &&
+                modules.includes(attributes.href) &&
+                attributes.rel === 'preload' &&
+                attributes.as === 'script'
+            ) {
+                attributes.rel = 'modulepreload';
+                attributes.crossorigin = 'use-credentials';
+            }
+        });
+
+        callback(null, htmlPluginData);
     }
 }
 

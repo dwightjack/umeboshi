@@ -43,7 +43,7 @@ module.exports = (config, { modernBuild = false }) => {
             ) {
                 webpackConfig
                     .plugin('html-multi')
-                    .after('html')
+                    .after('html-prefetch')
                     .use(HtmlModuleScriptWebpackPlugin)
                     .init(factoryHTMLPlugin);
             }
