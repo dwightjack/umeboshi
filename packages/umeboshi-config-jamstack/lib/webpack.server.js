@@ -5,6 +5,11 @@ const WebpackRenderPlugin = require('./webpack-render-plugin');
 
 module.exports = (config, { paths }, env = {}) => {
     config.plugins.delete('html');
+    config.plugins.store.forEach((value, key) => {
+        if (key.startsWith('html-')) {
+            config.plugins.delete(key);
+        }
+    });
 
     config.set('name', 'server-jamstack');
 
@@ -54,11 +59,12 @@ module.exports = (config, { paths }, env = {}) => {
         rule.uses.delete('style-loader');
         //just export a reference for css modules (if used)
         if (rule.use('css-loader').has('options')) {
-            const { modules } = rule.use('css-loader').get('options');
-            if (modules) {
-                rule.use('css-loader').loader(
-                    require.resolve('css-loader/locals')
-                );
+            const options = rule.use('css-loader').get('options');
+            if (options.modules) {
+                rule.use('css-loader').set('options', {
+                    ...options,
+                    exportOnlyLocals: true
+                });
             }
         }
     });

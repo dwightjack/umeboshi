@@ -11,5 +11,9 @@ module.exports = (config, { paths }, { server }) => {
             template: paths.toPath('src.root/templates/default.ejs')
         })
     ]);
-    config.plugin('html-disk').use(HtmlWebpackHarddiskPlugin);
+
+    config
+        .plugin('html-disk')
+        .after('html')
+        .use(HtmlWebpackHarddiskPlugin);
 };
