@@ -63,7 +63,7 @@ class HtmlModuleScriptWebpackPlugin {
             return assetTag;
         });
 
-        htmlPluginData.head.forEach((tag) => {
+        const head = htmlPluginData.head.reduce((acc, tag) => {
             const { attributes } = tag;
             if (
                 attributes.href &&
@@ -73,11 +73,13 @@ class HtmlModuleScriptWebpackPlugin {
             ) {
                 attributes.rel = 'modulepreload';
                 attributes.crossorigin = 'use-credentials';
+                acc.push(tag);
             }
-        });
+            return acc;
+        }, []);
 
         this.sharedAssets(`${filename}body`, htmlPluginData.body);
-        this.sharedAssets(`${filename}head`, htmlPluginData.head);
+        this.sharedAssets(`${filename}head`, head);
 
         return {
             ...htmlPluginData,
