@@ -6,87 +6,47 @@ const uniq = (arr) => {
         return acc;
     }, []);
 };
-/**
- * Tweaked from original by Mike Engel
- * https://github.com/jantimon/html-webpack-plugin/issues/782#issuecomment-331229728
- *
- * Use this with multiple Webpack configurations that generate different builds
- * for modern and legacy browsers. But use the same instance of the plugin in both configurations.
- *
- * It keeps track of assets seen in each build configuration, and appends script tags for
- * all the assets to subsequent builds - using type=module or nomodule to cause the appropriate
- * version of each one to be loaded.
- *
- * The HTML file will be written for each configuration, but only the last-emitted one (which will
- * overwrite any previous ones) will have all the asset tags.
- *
- * Many browsers (IE10, IE11, Firefox 57 at least) will download (but not run) both versions of
- * every asset - see https://github.com/philipwalton/webpack-esnext-boilerplate/issues/1
- */
+
 class HtmlModuleScriptWebpackPlugin {
     constructor(options) {
         this.options = { name: 'default', apply: 'pre', ...options };
     }
 
-    sharedAssets(value) {
+    sharedAssets(key, arr) {
         const { store } = HtmlModuleScriptWebpackPlugin;
-        if (value !== undefined) {
-            store.set(this.options.name, value);
-            return value;
+        const name = `${this.options.name}@${key}`;
+
+        if (arr === undefined) {
+            return store.get(name) || [];
         }
-        return store.get(this.options.name) || { js: [], chunks: [] };
+
+        if (!store.has(name)) {
+            store.set(name, []);
+        }
+        const frag = store.get(name);
+        store.set(name, uniq([...frag, ...arr]));
+        return store.get(name);
     }
 
     apply(compiler) {
         compiler.hooks.compilation.tap(
             'HtmlModuleScriptWebpackPlugin',
             (compilation) => {
-                if (this.options.apply === 'pre') {
-                    compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tap(
-                        'HtmlModuleScriptWebpackPlugin',
-                        this.beforeHtmlProcessing.bind(this)
-                    );
-                }
-                if (this.options.apply === 'post') {
-                    compilation.hooks.htmlWebpackPluginAlterAssetTags.tap(
-                        'HtmlModuleScriptWebpackPlugin',
-                        this.alterAssetTags.bind(this)
-                    );
-                }
+                compilation.hooks.htmlWebpackPluginAlterAssetTags.tap(
+                    'HtmlModuleScriptWebpackPlugin',
+                    this.alterAssetTags.bind(this)
+                );
             }
         );
     }
 
-    beforeHtmlProcessing(htmlPluginData) {
-        // Avoid chunk name collisions, since they can be named the same between builds
-        // { 'main': {} } to { 'main_modern': {} } if the filename matches
-        const { chunks } = htmlPluginData.assets;
-        const { matchModule } = this.options;
-        const renamedChunks = Object.keys(chunks).reduce((acc, name) => {
-            const chunk = chunks[name];
-            const key =
-                matchModule && matchModule.test(chunk.entry)
-                    ? `${name}_module`
-                    : name;
-            acc[key] = chunk;
-            return acc;
-        }, {});
-
-        const assets = this.sharedAssets();
-
-        assets.js = uniq([...assets.js, ...htmlPluginData.assets.js]);
-        assets.chunks = Object.assign(assets.chunks, renamedChunks);
-
-        this.sharedAssets(assets);
-        Object.assign(htmlPluginData.assets, assets);
-        return htmlPluginData;
-    }
-
     alterAssetTags(htmlPluginData) {
+        const { filename = '' } = htmlPluginData.plugin.options;
         const { matchModule } = this.options;
         if (!matchModule) {
             return htmlPluginData;
         }
+
         const modules = [];
         htmlPluginData.body.forEach((assetTag) => {
             const isModern = matchModule.test(assetTag.attributes.src);
@@ -116,7 +76,14 @@ class HtmlModuleScriptWebpackPlugin {
             }
         });
 
-        return htmlPluginData;
+        this.sharedAssets(`${filename}body`, htmlPluginData.body);
+        this.sharedAssets(`${filename}head`, htmlPluginData.head);
+
+        return {
+            ...htmlPluginData,
+            body: this.sharedAssets(`${filename}body`),
+            head: this.sharedAssets(`${filename}head`)
+        };
     }
 }
 

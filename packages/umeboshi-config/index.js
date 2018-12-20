@@ -6,17 +6,6 @@ const modernizr = require('./modernizr/dev');
 const devServer = require('./server/dev');
 const HtmlModuleScriptWebpackPlugin = require('./webpack/html-plugin');
 
-let modernBuildHTMLPlugin;
-
-const factoryHTMLPlugin = () => {
-    if (!modernBuildHTMLPlugin) {
-        modernBuildHTMLPlugin = new HtmlModuleScriptWebpackPlugin({
-            matchModule: /\.module\./
-        });
-    }
-    return modernBuildHTMLPlugin;
-};
-
 module.exports = (config, { modernBuild = false }) => {
     config.tap('env', (env) => {
         return Object.assign(env, {
@@ -41,16 +30,6 @@ module.exports = (config, { modernBuild = false }) => {
                 webpackConfig.target('web') &&
                 webpackConfig.plugins.has('html')
             ) {
-                webpackConfig
-                    .plugin('html-multi-pre')
-                    .after('html')
-                    .use(HtmlModuleScriptWebpackPlugin, [
-                        {
-                            matchModule: /\.module\./,
-                            name: 'modern',
-                            apply: 'pre'
-                        }
-                    ]);
                 webpackConfig
                     .plugin('html-multi-post')
                     .after('html-prefetch')
