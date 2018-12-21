@@ -27,7 +27,7 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-prettier": "^3.0.0",
     "jest": "^23.0.0",
-    "lerna": "^3.4.3",
+    "lerna": "^3.8.0",
     "microbundle": "^0.8.3",
     "prettier": "^1.15.3"
   },
