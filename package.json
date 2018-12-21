@@ -28,7 +28,7 @@
     "eslint-plugin-prettier": "^3.0.0",
     "jest": "^23.0.0",
     "lerna": "^3.8.0",
-    "microbundle": "^0.8.3",
+    "microbundle": "^0.9.0",
     "prettier": "^1.15.3"
   },
   "jest": {
@@ -49,18 +49,18 @@
     ]
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
+    "@babel/core": "^7.2.2",
     "@vue/test-utils": "~1.0.0-beta.27",
-    "css-loader": "^2.0.0",
-    "enzyme": "~3.7.0",
-    "enzyme-adapter-react-16": "~1.7.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
+    "css-loader": "^2.0.1",
+    "enzyme": "~3.8.0",
+    "enzyme-adapter-react-16": "~1.7.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "react-helmet": "^5.2.0",
     "stylelint": "^9.9.0",
-    "vue": "^2.5.19",
-    "vue-template-compiler": "^2.5.19",
-    "webpack": "^4.27.1",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21",
+    "webpack": "^4.28.1",
     "webpack-bundle-analyzer": "^3.0.3"
   }
 }

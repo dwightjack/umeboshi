@@ -18,6 +18,6 @@
     "serve-static": "^1.13.2"
   },
   "peerDependencies": {
-    "umeboshi-dev-utils": "^1.0.0-rc.0"
+    "umeboshi-dev-utils": "^1.0.0-rc.1"
   }
 }
